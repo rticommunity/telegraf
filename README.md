@@ -46,11 +46,14 @@ Telegraf requires golang version 1.9 or newer, the Makefile requires GNU make.
 2. [Install dep](https://golang.github.io/dep/docs/installation.html) ==v0.5.0
 3. Download Telegraf source:
    ```
-   go get -d github.com/influxdata/telegraf
+   cd $GOPATH
+   mkdir -p src/github.com/influxdata
+   cd $GOPATH/src/github.com/influxdata
+   git clone https://github.com/kyoungho/telegraf.git
    ```
 4. Run make from the source directory
    ```
-   cd "$HOME/go/src/github.com/influxdata/telegraf"
+   cd "$GOPATH/src/github.com/influxdata/telegraf"
    make
    ```
 
