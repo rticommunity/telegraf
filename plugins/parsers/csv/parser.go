@@ -32,20 +32,6 @@ func (p *Parser) compile(r *bytes.Reader) (*csv.Reader, error) {
 	csvReader := csv.NewReader(r)
 	// ensures that the reader reads records of different lengths without an error
 	csvReader.FieldsPerRecord = -1
-	if p.Delimiter != "" {
-		runeStr := []rune(p.Delimiter)
-		if len(runeStr) > 1 {
-			return nil, fmt.Errorf("delimiter must be a single character, got: %s", p.Delimiter)
-		}
-		csvReader.Comma = runeStr[0]
-	}
-	if p.Comment != "" {
-		runeStr := []rune(p.Comment)
-		if len(runeStr) > 1 {
-			return nil, fmt.Errorf("comment must be a single character, got: %s", p.Comment)
-		}
-		csvReader.Comment = runeStr[0]
-	}
 	return csvReader, nil
 }
 
@@ -71,7 +57,9 @@ func (p *Parser) Parse(buf []byte) ([]telegraf.Metric, error) {
 			//concatenate header names
 			for i := range header {
 				name := header[i]
-				name = strings.Trim(name, " ")
+				if p.TrimSpace {
+					name = strings.Trim(name, " ")
+				}
 				if len(headerNames) <= i {
 					headerNames = append(headerNames, name)
 				} else {
@@ -140,7 +128,9 @@ func (p *Parser) parseRecord(record []string) (telegraf.Metric, error) {
 	for i, fieldName := range p.ColumnNames {
 		if i < len(record) {
 			value := record[i]
-			value = strings.Trim(value, " ")
+			if p.TrimSpace {
+				value = strings.Trim(value, " ")
+			}
 			// attempt type conversions
 			if iValue, err := strconv.ParseInt(value, 10, 64); err == nil {
 				recordFields[fieldName] = iValue
@@ -162,14 +152,14 @@ func (p *Parser) parseRecord(record []string) (telegraf.Metric, error) {
 	// will default to plugin name
 	measurementName := p.MetricName
 	if recordFields[p.MeasurementColumn] != nil {
-		measurementName = recordFields[p.MeasurementColumn].(string)
+		measurementName = fmt.Sprintf("%v", recordFields[p.MeasurementColumn])
 	}
 
 	for _, tagName := range p.TagColumns {
 		if recordFields[tagName] == nil {
 			return nil, fmt.Errorf("could not find field: %v", tagName)
 		}
-		tags[tagName] = recordFields[tagName].(string)
+		tags[tagName] = fmt.Sprintf("%v", recordFields[tagName])
 		delete(recordFields, tagName)
 	}
 
@@ -178,7 +168,7 @@ func (p *Parser) parseRecord(record []string) (telegraf.Metric, error) {
 		if recordFields[p.TimestampColumn] == nil {
 			return nil, fmt.Errorf("timestamp column: %v could not be found", p.TimestampColumn)
 		}
-		tStr := recordFields[p.TimestampColumn].(string)
+		tStr := fmt.Sprintf("%v", recordFields[p.TimestampColumn])
 		if p.TimestampFormat == "" {
 			return nil, fmt.Errorf("timestamp format must be specified")
 		}
