@@ -820,6 +820,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:31a6ef971a12d65efb6b1d0004d1e23bac104016b7cedeba342de9a358746e3b"
+  name = "github.com/rticommunity/rticonnextdds-connector-go"
+  packages = ["."]
+  pruneopts = ""
+  revision = "7bcfa416353535e3151ca611879378cbbd442906"
+
+[[projects]]
+  branch = "master"
   digest = "1:7fc2f428767a2521abc63f1a663d981f61610524275d6c0ea645defadd4e916f"
   name = "github.com/samuel/go-zookeeper"
   packages = ["zk"]
@@ -835,7 +843,7 @@
   version = "v1.2.0"
 
 [[projects]]
-  digest = "1:fce9909f20bc6a6363a6d589e478bdcf8111044b41566d37d7552bf92d955540"
+  digest = "1:02715a2fb4b9279af36651a59a51dd4164eb689bd6785874811899f43eeb2a54"
   name = "github.com/shirou/gopsutil"
   packages = [
     "cpu",
@@ -1235,6 +1243,7 @@
     "github.com/docker/docker/api/types/swarm",
     "github.com/docker/docker/client",
     "github.com/eclipse/paho.mqtt.golang",
+    "github.com/go-logfmt/logfmt",
     "github.com/go-redis/redis",
     "github.com/go-sql-driver/mysql",
     "github.com/gobwas/glob",
@@ -1266,6 +1275,7 @@
     "github.com/prometheus/client_model/go",
     "github.com/prometheus/common/expfmt",
     "github.com/prometheus/common/log",
+    "github.com/rticommunity/rticonnextdds-connector-go",
     "github.com/satori/go.uuid",
     "github.com/shirou/gopsutil/cpu",
     "github.com/shirou/gopsutil/disk",
