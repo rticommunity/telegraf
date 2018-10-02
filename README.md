@@ -43,6 +43,7 @@ Ansible role: https://github.com/rossmcdonald/telegraf
 Telegraf requires golang version 1.9 or newer, the Makefile requires GNU make.
 
 1. [Install Go](https://golang.org/doc/install) >=1.9
+   
 2. Install dep   
 Current dep does not support git submodule (Go Connector uses git submodule for Connector C library).   
 So you need to build dep including the fix ([Issue Link](https://github.com/golang/dep/pull/1909)).    
@@ -57,6 +58,7 @@ So you need to build dep including the fix ([Issue Link](https://github.com/gola
    ```
 You can find dep at $GOPATH/bin.   
 Please add this path to your $PATH environmental variable.   
+   
 3. Download Telegraf source:
    ```
    cd $GOPATH
@@ -64,6 +66,7 @@ Please add this path to your $PATH environmental variable.
    cd $GOPATH/src/github.com/influxdata
    git clone https://github.com/kyoungho/telegraf.git
    ```
+   
 4. Run make from the source directory
    ```
    cd "$GOPATH/src/github.com/influxdata/telegraf"
