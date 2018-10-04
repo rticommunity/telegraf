@@ -820,11 +820,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:31a6ef971a12d65efb6b1d0004d1e23bac104016b7cedeba342de9a358746e3b"
+  digest = "1:4668edc6a0995e3625a27a91595b17f44cca7e99eb803919686b82ce533d6dae"
   name = "github.com/rticommunity/rticonnextdds-connector-go"
   packages = ["."]
   pruneopts = ""
-  revision = "7bcfa416353535e3151ca611879378cbbd442906"
+  revision = "36dd3201d8b2544d869d104eff596f364dfc26f4"
 
 [[projects]]
   branch = "master"
