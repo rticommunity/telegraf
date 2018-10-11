@@ -89,6 +89,7 @@ func (d *DDSConsumer) Start(acc telegraf.Accumulator) error {
 }
 
 func (d *DDSConsumer) Stop() {
+	d.connector.Delete()
 }
 
 // Take DDS samples from the DataReader and ingest them to Telegraf outputs
