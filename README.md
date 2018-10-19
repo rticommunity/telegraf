@@ -48,7 +48,6 @@ Telegraf requires golang version 1.9 or newer, the Makefile requires GNU make.
 
 Current dep does not support git submodule (Go Connector uses git submodule for Connector C library).   
 So you need to build dep including the fix. (See this [Issue Link](https://github.com/golang/dep/pull/1909) for details).   
-
    ```
    cd $GOPATH
    mkdir -p src/github.com/golang
