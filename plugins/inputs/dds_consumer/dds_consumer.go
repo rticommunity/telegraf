@@ -38,11 +38,14 @@ type DDSConsumer struct {
 // Default configurations
 var sampleConfig = `
   ## XML configuration file path
-  config_path = "USER_QOS_PROFILES.xml"
+  config_path = "ShapeExample.xml"
+
   ## Configuration name for DDS Participant from a description in XML
-  participant_config = "MyParticipantLibrary::SubscriptionParticipant"
+  participant_config = "MyParticipantLibrary::Zero"
+
   ## Configuration name for DDS DataReader from a description in XML
-  reader_config = "MySubscriber::HelloWorldReader"
+  reader_config = "MySubscriber::MySquareReader"
+
   ## Data format to consume.
   ## Each data format has its own unique set of configuration options, read
   ## more about them here:
@@ -104,7 +107,7 @@ func (d *DDSConsumer) Stop() {
 
 // Take DDS samples from the DataReader and ingest them to Telegraf outputs
 func (d *DDSConsumer) process() {
-	for {
+	for  {
 		d.connector.Wait(-1)
 		d.reader.Take()
 		numOfSamples := d.reader.Samples.GetLength()
