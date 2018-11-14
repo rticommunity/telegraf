@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:////home/kyoungho/rti_connext_dds-5.3.1/bin/../resource/app/app_support/rtiddsgen/schema/rti_dds_topic_types.xsd">
+<struct name= "Time">
+  <member name="sec" type="int32"/>
+  <member name="nanosec" type="int32"/>
+</struct>
+<struct name= "Tag">
+  <member name="key" type="string"/>
+  <member name="value" type="string"/>
+</struct>
+<enum name="FieldValueKind">
+  <enumerator name="FIELD_STRING"/>
+  <enumerator name="FIELD_FLOAT"/>
+  <enumerator name="FIELD_INT"/>
+  <enumerator name="FIELD_BOOL"/>
+</enum> 
+<union name="FieldValue">
+<discriminator type="nonBasic" nonBasicTypeName="FieldValueKind"/>
+<case>
+  <caseDiscriminator value="(FIELD_STRING)"/>
+<member name="s" type="string"/>
+</case>
+<case>
+  <caseDiscriminator value="(FIELD_FLOAT)"/>
+<member name="f" type="float32"/>
+</case>
+<case>
+  <caseDiscriminator value="(FIELD_INT)"/>
+<member name="i" type="int32"/>
+</case>
+<case>
+  <caseDiscriminator value="(FIELD_BOOL)"/>
+<member name="b" type="boolean"/>
+</case>
+</union>
+<struct name= "Field">
+  <member name="key" type="string"/>
+  <member name="value" type="float64"/>
+</struct>
+<const name="MAX_TAGS" type="int32" value="32"/>
+<const name="MAX_FIELDS" type="int32" value="128"/>
+<struct name= "Metric">
+  <member name="name" type="string"/>
+  <member name="tags" sequenceMaxLength="MAX_TAGS" type="nonBasic"  nonBasicTypeName= "Tag"/>
+  <member name="fields" sequenceMaxLength="MAX_FIELDS" type="nonBasic"  nonBasicTypeName= "Field"/>
+  <member name="timestamp" type="nonBasic"  nonBasicTypeName= "Time"/>
+</struct>
+</types>
