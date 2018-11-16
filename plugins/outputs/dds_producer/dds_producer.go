@@ -13,6 +13,9 @@ package dds_producer
 import (
 	"fmt"
 	"time"
+	"runtime"
+	"errors"
+	"path"
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/outputs"
 	"github.com/influxdata/telegraf/plugins/serializers"
@@ -32,39 +35,31 @@ type DDSProducer struct {
 }
 
 var sampleConfig = `
-## XML configuration file path
-config_path = "USER_QOS_PROFILES.xml"
-
-## Configuration name for DDS Participant from a description in XML
-participant_config = "TelegrafParticipantLibrary::TelegrafParticipant"
-
-## Configuration name for DDS DataWriter from a description in XML
-writer_config = "TelegrafPublisher::TelegrafWriter"
-
-## Data format to consume.
-## Each data format has its own unique set of configuration options, read
-## more about them here:
-## https://github.com/influxdata/telegraf/blob/master/docs/DATA_FORMATS_INPUT.md
-data_format = "json"
 `
 
 func (d *DDSProducer) SetSerializer(serializer serializers.Serializer) {
 	d.serializer = serializer
 }
 
-func (d *DDSProducer) Connect() error {
-	var err error
+func (d *DDSProducer) Connect() (err error) {
+    // Find the file path to the XML configuration
+    _, cur_path, _, ok := runtime.Caller(0)
+    if !ok {
+        return errors.New("cannot get the path for XML config file")
+    }
+    filepath := path.Join(path.Dir(cur_path), "./dds_producer.xml")
 
-	// Create DDS entities
-	d.connector, err = rti.NewConnector(d.ParticipantConfig, d.ConfigFilePath)
-	if err != nil {
-		return err
-	}
+    // Create a Connector entity
+    d.connector, err = rti.NewConnector("MyParticipantLibrary::Zero", filepath)
+    if err != nil {
+        return err
+    }
 
-	d.writer, err = d.connector.GetOutput(d.WriterConfig)
-	if err != nil {
-		return err
-	}
+    // Get a DDS reader
+    d.writer, err = d.connector.GetOutput("MyPublisher::MyWriter")
+    if err != nil {
+        return err
+    }
 
 	return nil
 }
