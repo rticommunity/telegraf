@@ -6,19 +6,5 @@ The DDS consumer plugin reads with DDS readers defined in a configuration for [X
 
 ```toml
 [[inputs.dds_consumer_lp]]
-  ## XML configuration file path
-  config_path = "dds_consumer_lp.xml"
-
-  ## Configuration name for DDS Participant from a description in XML
-  participant_config = "MyParticipantLibrary::Zero"
-
-  ## Configuration name for DDS DataReader from a description in XML
-  reader_config = "MySubscriber::MyReader"
-
-  ## Data format to consume.
-  ## Each data format has its own unique set of configuration options, read
-  ## more about them here:
-  ## https://github.com/influxdata/telegraf/blob/master/docs/DATA_FORMATS_INPUT.md
-  #data_format = "json"
 
 ```
