@@ -1,0 +1,38 @@
+struct Tag {
+    string key;
+    string value;
+};
+
+enum FieldValueKind{
+    FIELD_STRING,
+    FIELD_FLOAT,
+    FIELD_INT,
+    FIELD_BOOL
+};
+
+union FieldValue switch (FieldValueKind) {
+    case FIELD_STRING:
+        string s;
+    case FIELD_FLOAT:
+        float f;
+    case FIELD_INT:
+        long i;
+    case FIELD_BOOL:
+        boolean b;
+};
+
+struct Field {
+    string key;
+    //FieldValue value;
+    double value;
+};
+
+const long MAX_TAGS = 32;
+const long MAX_FIELDS = 128;
+
+struct Metric {
+    string name;
+    sequence<Tag, MAX_TAGS> tags;
+    sequence<Field, MAX_FIELDS> fields;
+    long long timestamp;
+};
