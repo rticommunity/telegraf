@@ -1,8 +1,3 @@
-struct Time {
-    long sec;
-    long nanosec;
-};
-
 struct Tag {
     string key;
     string value;
@@ -39,6 +34,5 @@ struct Metric {
     string name;
     sequence<Tag, MAX_TAGS> tags;
     sequence<Field, MAX_FIELDS> fields;
-    Time timestamp;
+    long long timestamp;
 };
-
