@@ -11,18 +11,22 @@
 package dds_consumer_lp
 
 import (
-	"errors"
 	"fmt"
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/inputs"
 	"github.com/influxdata/telegraf/plugins/parsers"
 	"github.com/rticommunity/rticonnextdds-connector-go"
-	"path"
-	"runtime"
 	"time"
 )
 
 type DDSConsumer struct {
+	// XML configuration file path
+	ConfigFilePath string `toml:"config_path"`
+	// XML configuration name for DDS Participant
+	ParticipantConfig string `toml:"participant_config"`
+	// XML configuration names for DDS Readers
+	ReaderConfig string `toml:"reader_config"`
+
 	// RTI Connext Connector entities
 	connector *rti.Connector
 	reader    *rti.Input
@@ -34,6 +38,14 @@ type DDSConsumer struct {
 
 // Default configurations
 var sampleConfig = `
+  ## XML configuration file path
+  config_path = "dds_consumer_lp.xml"
+
+  ## Configuration name for DDS Participant from a description in XML
+  participant_config = "MyParticipantLibrary::Zero"
+
+   ## Configuration name for DDS DataReader from a description in XML
+  reader_config = "MySubscriber::MyReader"
 `
 
 func (d *DDSConsumer) SampleConfig() string {
@@ -49,24 +61,17 @@ func (d *DDSConsumer) SetParser(parser parsers.Parser) {
 }
 
 func (d *DDSConsumer) Start(acc telegraf.Accumulator) (err error) {
-	// Find the file path to the XML configuration
-	_, cur_path, _, ok := runtime.Caller(0)
-	if !ok {
-		return errors.New("cannot get the path for XML config file")
-	}
-	filepath := path.Join(path.Dir(cur_path), "./dds_consumer_lp.xml")
-
 	// Keep the Telegraf accumulator internally
 	d.acc = acc
 
 	// Create a Connector entity
-	d.connector, err = rti.NewConnector("MyParticipantLibrary::Zero", filepath)
+	d.connector, err = rti.NewConnector(d.ParticipantConfig, d.ConfigFilePath)
 	if err != nil {
 		return err
 	}
 
 	// Get a DDS reader
-	d.reader, err = d.connector.GetInput("MySubscriber::MyReader")
+	d.reader, err = d.connector.GetInput(d.ReaderConfig)
 	if err != nil {
 		return err
 	}

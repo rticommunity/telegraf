@@ -13,9 +13,6 @@ package dds_producer
 import (
 	"fmt"
 	"time"
-	"runtime"
-	"errors"
-	"path"
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/outputs"
 	"github.com/influxdata/telegraf/plugins/serializers"
@@ -35,6 +32,12 @@ type DDSProducer struct {
 }
 
 var sampleConfig = `
+  ## XML configuration file path
+  config_path = "dds_producer.xml"
+   ## Configuration name for DDS Participant from a description in XML
+  participant_config = "MyParticipantLibrary::Zero"
+   ## Configuration name for DDS DataWriter from a description in XML
+  writer_config = "MyPublisher::MyWriter"
 `
 
 func (d *DDSProducer) SetSerializer(serializer serializers.Serializer) {
@@ -42,21 +45,14 @@ func (d *DDSProducer) SetSerializer(serializer serializers.Serializer) {
 }
 
 func (d *DDSProducer) Connect() (err error) {
-    // Find the file path to the XML configuration
-    _, cur_path, _, ok := runtime.Caller(0)
-    if !ok {
-        return errors.New("cannot get the path for XML config file")
-    }
-    filepath := path.Join(path.Dir(cur_path), "./dds_producer.xml")
-
     // Create a Connector entity
-    d.connector, err = rti.NewConnector("MyParticipantLibrary::Zero", filepath)
+    d.connector, err = rti.NewConnector(d.ParticipantConfig, d.ConfigFilePath)
     if err != nil {
         return err
     }
 
     // Get a DDS reader
-    d.writer, err = d.connector.GetOutput("MyPublisher::MyWriter")
+    d.writer, err = d.connector.GetOutput(d.WriterConfig)
     if err != nil {
         return err
     }
