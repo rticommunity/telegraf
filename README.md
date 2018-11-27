@@ -39,8 +39,6 @@ Telegraf requires golang version 1.9 or newer, the Makefile requires GNU make.
    
 2. Install dep   
 
-Current dep does not support git submodule (Go Connector uses git submodule for Connector C library).   
-So you need to build dep including the fix. (See this [Issue Link](https://github.com/golang/dep/pull/1909) for details).   
    ```
    cd $GOPATH
    mkdir -p src/github.com/golang
@@ -51,8 +49,11 @@ So you need to build dep including the fix. (See this [Issue Link](https://githu
    go install ./cmd/dep
    ```
 
+Current dep does not support git submodule (Go Connector uses git submodule for Connector C library).   
+So you need to build dep including the fix. (See this [Issue Link](https://github.com/golang/dep/pull/1909) for details).   
+
 You can find dep at $GOPATH/bin.   
-Please add this path to your $PATH environmental variable if you haven't.   
+Please add $GOPATH/bin to your $PATH if you haven't.   
    
 3. Download Telegraf source:
    ```
@@ -72,7 +73,7 @@ Please add this path to your $PATH environmental variable if you haven't.
 
 #### Include RTI Connector library to the library path (e.g. LD_LIBRARY_PATH)
 
-Currently, RTI Go Connector dynamically links to connector library, so the connectory library should be included in the environment variable for library path (e.g. LD_LIBRARY_PATH). After you built Telegraf, Connector Git repository was checked out under $TELEGRAF_PATH/vendor. You can include the connector library like the following.
+Currently, RTI Go Connector dynamically links to connector library, so the connectory library should be included in the environment variable for library path (e.g. LD_LIBRARY_PATH). After you built Telegraf, Connector Git repository was checked out under YOUR_TELEGRAF_PATH/vendor. You can include the connector library like the following.
 
 ``` 
 $ export LD_LIBRARY_PATH=$GOPATH/src/github.com/influxdata/telegraf/vendor/github.com/rticommunity/rticonnextdds-connector-go/rticonnextdds-connector/lib/x64Linux2.6gcc4.4.5:$LD_LIBRARY_PATH
