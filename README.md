@@ -31,13 +31,6 @@ There are many ways to contribute:
 
 ## Installation:
 
-You can download the binaries directly from the [downloads](https://www.influxdata.com/downloads) page
-or from the [releases](https://github.com/influxdata/telegraf/releases) section.
-
-### Ansible Role:
-
-Ansible role: https://github.com/rossmcdonald/telegraf
-
 ### From Source:
 
 Telegraf requires golang version 1.9 or newer, the Makefile requires GNU make.
@@ -75,34 +68,15 @@ Please add this path to your $PATH environmental variable if you haven't.
    make
    ```
 
-### Nightly Builds
-
-These builds are generated from the master branch:
-- [telegraf_nightly_amd64.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_amd64.deb)
-- [telegraf_nightly_arm64.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_arm64.deb)
-- [telegraf-nightly.arm64.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.arm64.rpm)
-- [telegraf_nightly_armel.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_armel.deb)
-- [telegraf-nightly.armel.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.armel.rpm)
-- [telegraf_nightly_armhf.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_armhf.deb)
-- [telegraf-nightly.armv6hl.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.armv6hl.rpm)
-- [telegraf-nightly_freebsd_amd64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_freebsd_amd64.tar.gz)
-- [telegraf-nightly_freebsd_i386.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_freebsd_i386.tar.gz)
-- [telegraf_nightly_i386.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_i386.deb)
-- [telegraf-nightly.i386.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.i386.rpm)
-- [telegraf-nightly_linux_amd64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_amd64.tar.gz)
-- [telegraf-nightly_linux_arm64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_arm64.tar.gz)
-- [telegraf-nightly_linux_armel.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_armel.tar.gz)
-- [telegraf-nightly_linux_armhf.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_armhf.tar.gz)
-- [telegraf-nightly_linux_i386.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_i386.tar.gz)
-- [telegraf-nightly_linux_s390x.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_s390x.tar.gz)
-- [telegraf_nightly_s390x.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_s390x.deb)
-- [telegraf-nightly.s390x.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.s390x.rpm)
-- [telegraf-nightly_windows_amd64.zip](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_windows_amd64.zip)
-- [telegraf-nightly_windows_i386.zip](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_windows_i386.zip)
-- [telegraf-nightly.x86_64.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.x86_64.rpm)
-- [telegraf-static-nightly_linux_amd64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-static-nightly_linux_amd64.tar.gz)
-
 ## How to use it:
+
+#### Include RTI Connector library to the library path (e.g. LD_LIBRARY_PATH)
+
+Currently, RTI Go Connector dynamically links to connector library, so the connectory library should be included in the environment variable for library path (e.g. LD_LIBRARY_PATH). After you built Telegraf, Connector Git repository was checked out under $TELEGRAF_PATH/vendor. You can include the connector library like the following.
+
+``` 
+$ export LD_LIBRARY_PATH=$GOPATH/src/github.com/influxdata/telegraf/vendor/github.com/rticommunity/rticonnextdds-connector-go/rticonnextdds-connector/lib/x64Linux2.6gcc4.4.5:$LD_LIBRARY_PATH
+```
 
 See usage with:
 
@@ -116,10 +90,10 @@ See usage with:
 ./telegraf config > telegraf.conf
 ```
 
-#### Generate config with only cpu input & influxdb output plugins defined:
+#### Generate config with DDS input & influxdb output plugins defined:
 
 ```
-./telegraf --input-filter cpu --output-filter influxdb config
+./telegraf --input-filter dds_consumer --output-filter influxdb config
 ```
 
 #### Run a single telegraf collection, outputing metrics to stdout:
@@ -128,17 +102,7 @@ See usage with:
 ./telegraf --config telegraf.conf --test
 ```
 
-#### Run telegraf with all plugins defined in config file:
-
-```
-./telegraf --config telegraf.conf
-```
-
-#### Run telegraf, enabling the cpu & memory input, and influxdb output plugins:
-
-```
-./telegraf --config telegraf.conf --input-filter cpu:mem --output-filter influxdb
-```
+When you run with a DDS input plugin, please make sure that a configuration file for XML Application Creation is at the location configured in your Telegraf configuration (e.g. telegraf.conf).
 
 
 ## Configuration
@@ -283,6 +247,7 @@ configuration options.
 * [zfs](./plugins/inputs/zfs)
 * [zipkin](./plugins/inputs/zipkin)
 * [zookeeper](./plugins/inputs/zookeeper)
+* [dds_consumer](./plugins/inputs/dds_consumer)
 
 Telegraf is able to parse the following input data formats into metrics, these
 formats may be used with input plugins supporting the `data_format` option:
