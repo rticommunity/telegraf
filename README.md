@@ -1,11 +1,9 @@
-# Telegraf [![Circle CI](https://circleci.com/gh/influxdata/telegraf.svg?style=svg)](https://circleci.com/gh/influxdata/telegraf) [![Docker pulls](https://img.shields.io/docker/pulls/library/telegraf.svg)](https://hub.docker.com/_/telegraf/)
-
 Telegraf is an agent written in Go for collecting, processing, aggregating,
 and writing metrics.
 
 Design goals are to have a minimal memory footprint with a plugin system so
-that developers in the community can easily add support for collecting metrics
-.  For an example configuration referencet from local or remote services.
+that developers in the community can easily add support for collecting metrics.  
+For an example configuration referencet from local or remote services.
 
 Telegraf is plugin-driven and has the concept of 4 distinct plugins:
 
@@ -16,22 +14,9 @@ Telegraf is plugin-driven and has the concept of 4 distinct plugins:
 
 For more information on Processor and Aggregator plugins please [read this](./docs/AGGREGATORS_AND_PROCESSORS.md).
 
-New plugins are designed to be easy to contribute,
-we'll eagerly accept pull
-requests and will manage the set of plugins that Telegraf supports.
-
-## Contributing
-
-There are many ways to contribute:
-- Fix and [report bugs](https://github.com/influxdata/telegraf/issues/new)
-- [Improve documentation](https://github.com/influxdata/telegraf/issues?q=is%3Aopen+label%3Adocumentation)
-- [Review code and feature proposals](https://github.com/influxdata/telegraf/pulls)
-- Answer questions on github and on the [Community Site](https://community.influxdata.com/)
-- [Contribute plugins](CONTRIBUTING.md)
+It is a forked Telegraf repository adding a DDS input plugin (dds_consumer). 
 
 ## Installation:
-
-### From Source:
 
 Telegraf requires golang version 1.9 or newer, the Makefile requires GNU make.
 
@@ -60,7 +45,7 @@ Please add $GOPATH/bin to your $PATH if you haven't.
    cd $GOPATH
    mkdir -p src/github.com/influxdata
    cd $GOPATH/src/github.com/influxdata
-   git clone https://github.com/kyoungho/telegraf.git
+   git clone https://github.com/rticommunity/telegraf.git
    ```
    
 4. Run make from the source directory
