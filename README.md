@@ -117,6 +117,7 @@ configuration options.
 * [couchdb](./plugins/inputs/couchdb)
 * [cpu](./plugins/inputs/cpu)
 * [DC/OS](./plugins/inputs/dcos)
+* [dds_consumer](./plugins/inputs/dds_consumer)
 * [diskio](./plugins/inputs/diskio)
 * [disk](./plugins/inputs/disk)
 * [disque](./plugins/inputs/disque)
