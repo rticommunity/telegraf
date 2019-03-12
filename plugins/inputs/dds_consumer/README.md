@@ -1,6 +1,6 @@
 # DDS Consumer Input Plugin
 
-The DDS consumer plugin reads with DDS readers defined in a configuration for [XML App Creation](https://community.rti.com/static/documentation/connext-dds/5.3.1/doc/manuals/connext_dds/xml_application_creation/RTI_ConnextDDS_CoreLibraries_XML_AppCreation_GettingStarted.pdf). This plugin converts received DDS data to JSON data and adds to a Telegraf output plugin like the InfluxDB plugin. 
+The DDS consumer plugin reads metrics over DDS by creating readers defined in [XML App Creation](https://community.rti.com/static/documentation/connext-dds/5.3.1/doc/manuals/connext_dds/xml_application_creation/RTI_ConnextDDS_CoreLibraries_XML_AppCreation_GettingStarted.pdf) configurations. This plugin converts received DDS data to JSON data and adds to a Telegraf output plugin. 
 
 ### Configuration:
 
