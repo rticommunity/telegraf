@@ -88,7 +88,22 @@ See usage with:
 ./telegraf --config telegraf.conf --test
 ```
 
-When you run with a DDS input plugin, please make sure that a configuration file for XML Application Creation is at the location configured in your Telegraf configuration (e.g. telegraf.conf).
+#### Generate a config file with DDS input & file output plugins:
+```
+./telegraf --input-filter dds_consumer --output-filter influxdb config > dds_input.conf
+```
+
+When you run with a DDS input plugin, please make sure that an XML file for XML Application Creation is located at the configured path (config_path) in your Telegraf configuration (e.g. dds_input.conf).
+
+An example XML file (ShapeExample.xml) for shapes demo is given at the dds_consumer input plugin directory. You can copy the file to your current location. Then, run your telegraf executable with dds_input.conf.
+
+```
+./telegraf --config dds_input.conf
+```
+
+Telegraf process will create a data reader with "Square" topic as defined in ShapeExample.xml.
+You can see DDS data received after running a publisher with "Square" topic. 
+You can simply test with the RTI Shapes Demo applicaiton.
 
 
 ## Configuration
