@@ -1,11 +1,3 @@
-Telegraf is an agent written in Go for collecting, processing, aggregating,
-and writing metrics.
-
-Design goals are to have a minimal memory footprint with a plugin system so
-that developers in the community can easily add support for collecting metrics.  
-For an example configuration referencet from local or remote services.
-# Telegraf [![Circle CI](https://circleci.com/gh/influxdata/telegraf.svg?style=svg)](https://circleci.com/gh/influxdata/telegraf) [![Docker pulls](https://img.shields.io/docker/pulls/library/telegraf.svg)](https://hub.docker.com/_/telegraf/)
-
 Telegraf is an agent for collecting, processing, aggregating, and writing metrics.
 
 Design goals are to have a minimal memory footprint with a plugin system so
@@ -19,11 +11,10 @@ Telegraf is plugin-driven and has the concept of 4 distinct plugin types:
 3. [Aggregator Plugins](#aggregator-plugins) create aggregate metrics (e.g. mean, min, max, quantiles, etc.)
 4. [Output Plugins](#output-plugins) write metrics to various destinations
 
-For more information on Processor and Aggregator plugins please [read this](./docs/AGGREGATORS_AND_PROCESSORS.md).
-
-It is a forked Telegraf repository adding a DDS input plugin (dds_consumer). 
 New plugins are designed to be easy to contribute, we'll eagerly accept pull
 requests and will manage the set of plugins that Telegraf supports.
+
+It is a forked Telegraf repository adding a DDS input plugin ([dds_consumer](./plugins/inputs/dds_consumer)). 
 
 ## Contributing
 
@@ -58,8 +49,6 @@ So you need to build dep including the fix. (See this [Issue Link](https://githu
 You can find dep at $GOPATH/bin.   
 Please add $GOPATH/bin to your $PATH if you haven't.   
    
-1. [Install Go](https://golang.org/doc/install) >=1.9 (1.11 recommended)
-2. [Install dep](https://golang.github.io/dep/docs/installation.html) ==v0.5.0
 3. Download Telegraf source:
    ```
    cd $GOPATH
@@ -74,38 +63,6 @@ Please add $GOPATH/bin to your $PATH if you haven't.
    make
    ```
 
-### Changelog
-
-View the [changelog](/CHANGELOG.md) for the latest updates and changes by
-version.
-
-### Nightly Builds
-
-These builds are generated from the master branch:
-- [telegraf_nightly_amd64.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_amd64.deb)
-- [telegraf_nightly_arm64.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_arm64.deb)
-- [telegraf-nightly.arm64.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.arm64.rpm)
-- [telegraf_nightly_armel.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_armel.deb)
-- [telegraf-nightly.armel.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.armel.rpm)
-- [telegraf_nightly_armhf.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_armhf.deb)
-- [telegraf-nightly.armv6hl.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.armv6hl.rpm)
-- [telegraf-nightly_freebsd_amd64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_freebsd_amd64.tar.gz)
-- [telegraf-nightly_freebsd_i386.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_freebsd_i386.tar.gz)
-- [telegraf_nightly_i386.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_i386.deb)
-- [telegraf-nightly.i386.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.i386.rpm)
-- [telegraf-nightly_linux_amd64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_amd64.tar.gz)
-- [telegraf-nightly_linux_arm64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_arm64.tar.gz)
-- [telegraf-nightly_linux_armel.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_armel.tar.gz)
-- [telegraf-nightly_linux_armhf.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_armhf.tar.gz)
-- [telegraf-nightly_linux_i386.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_i386.tar.gz)
-- [telegraf-nightly_linux_s390x.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_s390x.tar.gz)
-- [telegraf_nightly_s390x.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_s390x.deb)
-- [telegraf-nightly.s390x.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.s390x.rpm)
-- [telegraf-nightly_windows_amd64.zip](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_windows_amd64.zip)
-- [telegraf-nightly_windows_i386.zip](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_windows_i386.zip)
-- [telegraf-nightly.x86_64.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.x86_64.rpm)
-- [telegraf-static-nightly_linux_amd64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-static-nightly_linux_amd64.tar.gz)
-
 ## How to use it:
 
 #### Include RTI Connector library to the library path (e.g. LD_LIBRARY_PATH)
@@ -119,49 +76,44 @@ $ export LD_LIBRARY_PATH=$GOPATH/src/github.com/influxdata/telegraf/vendor/githu
 See usage with:
 
 ```
-telegraf --help
+./telegraf --help
 ```
 
 #### Generate a telegraf config file:
 
 ```
-telegraf config > telegraf.conf
+./telegraf config > telegraf.conf
 ```
 
 #### Generate config with DDS input & influxdb output plugins defined:
 
 ```
 ./telegraf --input-filter dds_consumer --output-filter influxdb config
-telegraf --input-filter cpu --output-filter influxdb config
 ```
 
 #### Run a single telegraf collection, outputing metrics to stdout:
 
 ```
-telegraf --config telegraf.conf --test
+./telegraf --config telegraf.conf --test
 ```
 
-When you run with a DDS input plugin, please make sure that a configuration file for XML Application Creation is at the location configured in your Telegraf configuration (e.g. telegraf.conf).
-#### Run telegraf with all plugins defined in config file:
-
+#### Generate a config file with DDS input & file output plugins:
 ```
-telegraf --config telegraf.conf
+./telegraf --input-filter dds_consumer --output-filter influxdb config > dds_input.conf
 ```
 
-#### Run telegraf, enabling the cpu & memory input, and influxdb output plugins:
+When you run with a DDS input plugin, please make sure that an XML file for XML Application Creation is located at the configured path (config_path) in your Telegraf configuration (e.g. dds_input.conf).
+
+An example XML file (ShapeExample.xml) for shapes demo is given at the dds_consumer input plugin directory. You can copy the file to your current location. Then, run your telegraf executable with dds_input.conf.
 
 ```
-telegraf --config telegraf.conf --input-filter cpu:mem --output-filter influxdb
+./telegraf --config dds_input.conf
 ```
 
-## Documentation
+Telegraf process will create a data reader with "Square" topic as defined in ShapeExample.xml.
+You can see DDS data received after running a publisher with "Square" topic. 
+You can simply test with the RTI Shapes Demo applicaiton.
 
-[Latest Release Documentation][release docs].
-
-For documentation on the latest development code see the [documentation index][devel docs].
-
-[release docs]: https://docs.influxdata.com/telegraf
-[devel docs]: docs
 
 ## Input Plugins
 
