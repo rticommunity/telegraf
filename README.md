@@ -4,8 +4,15 @@ and writing metrics.
 Design goals are to have a minimal memory footprint with a plugin system so
 that developers in the community can easily add support for collecting metrics.  
 For an example configuration referencet from local or remote services.
+# Telegraf [![Circle CI](https://circleci.com/gh/influxdata/telegraf.svg?style=svg)](https://circleci.com/gh/influxdata/telegraf) [![Docker pulls](https://img.shields.io/docker/pulls/library/telegraf.svg)](https://hub.docker.com/_/telegraf/)
 
-Telegraf is plugin-driven and has the concept of 4 distinct plugins:
+Telegraf is an agent for collecting, processing, aggregating, and writing metrics.
+
+Design goals are to have a minimal memory footprint with a plugin system so
+that developers in the community can easily add support for collecting
+metrics.
+
+Telegraf is plugin-driven and has the concept of 4 distinct plugin types:
 
 1. [Input Plugins](#input-plugins) collect metrics from the system, services, or 3rd party APIs
 2. [Processor Plugins](#processor-plugins) transform, decorate, and/or filter metrics
@@ -15,6 +22,17 @@ Telegraf is plugin-driven and has the concept of 4 distinct plugins:
 For more information on Processor and Aggregator plugins please [read this](./docs/AGGREGATORS_AND_PROCESSORS.md).
 
 It is a forked Telegraf repository adding a DDS input plugin (dds_consumer). 
+New plugins are designed to be easy to contribute, we'll eagerly accept pull
+requests and will manage the set of plugins that Telegraf supports.
+
+## Contributing
+
+There are many ways to contribute:
+- Fix and [report bugs](https://github.com/influxdata/telegraf/issues/new)
+- [Improve documentation](https://github.com/influxdata/telegraf/issues?q=is%3Aopen+label%3Adocumentation)
+- [Review code and feature proposals](https://github.com/influxdata/telegraf/pulls)
+- Answer questions and discuss here on github and on the [Community Site](https://community.influxdata.com/)
+- [Contribute plugins](CONTRIBUTING.md)
 
 ## Installation:
 
@@ -40,6 +58,8 @@ So you need to build dep including the fix. (See this [Issue Link](https://githu
 You can find dep at $GOPATH/bin.   
 Please add $GOPATH/bin to your $PATH if you haven't.   
    
+1. [Install Go](https://golang.org/doc/install) >=1.9 (1.11 recommended)
+2. [Install dep](https://golang.github.io/dep/docs/installation.html) ==v0.5.0
 3. Download Telegraf source:
    ```
    cd $GOPATH
@@ -54,6 +74,38 @@ Please add $GOPATH/bin to your $PATH if you haven't.
    make
    ```
 
+### Changelog
+
+View the [changelog](/CHANGELOG.md) for the latest updates and changes by
+version.
+
+### Nightly Builds
+
+These builds are generated from the master branch:
+- [telegraf_nightly_amd64.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_amd64.deb)
+- [telegraf_nightly_arm64.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_arm64.deb)
+- [telegraf-nightly.arm64.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.arm64.rpm)
+- [telegraf_nightly_armel.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_armel.deb)
+- [telegraf-nightly.armel.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.armel.rpm)
+- [telegraf_nightly_armhf.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_armhf.deb)
+- [telegraf-nightly.armv6hl.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.armv6hl.rpm)
+- [telegraf-nightly_freebsd_amd64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_freebsd_amd64.tar.gz)
+- [telegraf-nightly_freebsd_i386.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_freebsd_i386.tar.gz)
+- [telegraf_nightly_i386.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_i386.deb)
+- [telegraf-nightly.i386.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.i386.rpm)
+- [telegraf-nightly_linux_amd64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_amd64.tar.gz)
+- [telegraf-nightly_linux_arm64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_arm64.tar.gz)
+- [telegraf-nightly_linux_armel.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_armel.tar.gz)
+- [telegraf-nightly_linux_armhf.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_armhf.tar.gz)
+- [telegraf-nightly_linux_i386.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_i386.tar.gz)
+- [telegraf-nightly_linux_s390x.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_s390x.tar.gz)
+- [telegraf_nightly_s390x.deb](https://dl.influxdata.com/telegraf/nightlies/telegraf_nightly_s390x.deb)
+- [telegraf-nightly.s390x.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.s390x.rpm)
+- [telegraf-nightly_windows_amd64.zip](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_windows_amd64.zip)
+- [telegraf-nightly_windows_i386.zip](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_windows_i386.zip)
+- [telegraf-nightly.x86_64.rpm](https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly.x86_64.rpm)
+- [telegraf-static-nightly_linux_amd64.tar.gz](https://dl.influxdata.com/telegraf/nightlies/telegraf-static-nightly_linux_amd64.tar.gz)
+
 ## How to use it:
 
 #### Include RTI Connector library to the library path (e.g. LD_LIBRARY_PATH)
@@ -67,34 +119,49 @@ $ export LD_LIBRARY_PATH=$GOPATH/src/github.com/influxdata/telegraf/vendor/githu
 See usage with:
 
 ```
-./telegraf --help
+telegraf --help
 ```
 
 #### Generate a telegraf config file:
 
 ```
-./telegraf config > telegraf.conf
+telegraf config > telegraf.conf
 ```
 
 #### Generate config with DDS input & influxdb output plugins defined:
 
 ```
 ./telegraf --input-filter dds_consumer --output-filter influxdb config
+telegraf --input-filter cpu --output-filter influxdb config
 ```
 
 #### Run a single telegraf collection, outputing metrics to stdout:
 
 ```
-./telegraf --config telegraf.conf --test
+telegraf --config telegraf.conf --test
 ```
 
 When you run with a DDS input plugin, please make sure that a configuration file for XML Application Creation is at the location configured in your Telegraf configuration (e.g. telegraf.conf).
+#### Run telegraf with all plugins defined in config file:
 
+```
+telegraf --config telegraf.conf
+```
 
-## Configuration
+#### Run telegraf, enabling the cpu & memory input, and influxdb output plugins:
 
-See the [configuration guide](docs/CONFIGURATION.md) for a rundown of the more advanced
-configuration options.
+```
+telegraf --config telegraf.conf --input-filter cpu:mem --output-filter influxdb
+```
+
+## Documentation
+
+[Latest Release Documentation][release docs].
+
+For documentation on the latest development code see the [documentation index][devel docs].
+
+[release docs]: https://docs.influxdata.com/telegraf
+[devel docs]: docs
 
 ## Input Plugins
 
@@ -105,12 +172,15 @@ configuration options.
 * [aurora](./plugins/inputs/aurora)
 * [aws cloudwatch](./plugins/inputs/cloudwatch)
 * [bcache](./plugins/inputs/bcache)
+* [beanstalkd](./plugins/inputs/beanstalkd)
 * [bond](./plugins/inputs/bond)
 * [burrow](./plugins/inputs/burrow)
 * [cassandra](./plugins/inputs/cassandra) (deprecated, use [jolokia2](./plugins/inputs/jolokia2))
 * [ceph](./plugins/inputs/ceph)
 * [cgroup](./plugins/inputs/cgroup)
 * [chrony](./plugins/inputs/chrony)
+* [cloud_pubsub](./plugins/inputs/cloud_pubsub) Google Cloud Pub/Sub
+* [cloud_pubsub_push](./plugins/inputs/cloud_pubsub_push) Google Cloud Pub/Sub push endpoint
 * [conntrack](./plugins/inputs/conntrack)
 * [consul](./plugins/inputs/consul)
 * [couchbase](./plugins/inputs/couchbase)
@@ -137,24 +207,31 @@ configuration options.
 * [haproxy](./plugins/inputs/haproxy)
 * [hddtemp](./plugins/inputs/hddtemp)
 * [httpjson](./plugins/inputs/httpjson) (generic JSON-emitting http service plugin)
-* [http_listener](./plugins/inputs/http_listener)
+* [http_listener](./plugins/inputs/influxdb_listener) (deprecated, renamed to [influxdb_listener](/plugins/inputs/influxdb_listener))
+* [http_listener_v2](./plugins/inputs/http_listener_v2)
 * [http](./plugins/inputs/http) (generic HTTP plugin, supports using input data formats)
 * [http_response](./plugins/inputs/http_response)
 * [icinga2](./plugins/inputs/icinga2)
 * [influxdb](./plugins/inputs/influxdb)
+* [influxdb_listener](./plugins/inputs/influxdb_listener)
 * [internal](./plugins/inputs/internal)
 * [interrupts](./plugins/inputs/interrupts)
 * [ipmi_sensor](./plugins/inputs/ipmi_sensor)
 * [ipset](./plugins/inputs/ipset)
 * [iptables](./plugins/inputs/iptables)
+* [ipvs](./plugins/inputs/ipvs)
+* [jenkins](./plugins/inputs/jenkins)
 * [jolokia2](./plugins/inputs/jolokia2) (java, cassandra, kafka)
 * [jolokia](./plugins/inputs/jolokia) (deprecated, use [jolokia2](./plugins/inputs/jolokia2))
 * [jti_openconfig_telemetry](./plugins/inputs/jti_openconfig_telemetry)
 * [kafka_consumer](./plugins/inputs/kafka_consumer)
 * [kapacitor](./plugins/inputs/kapacitor)
+* [kinesis](./plugins/inputs/kinesis_consumer)
 * [kernel](./plugins/inputs/kernel)
 * [kernel_vmstat](./plugins/inputs/kernel_vmstat)
+* [kibana](./plugins/inputs/kibana)
 * [kubernetes](./plugins/inputs/kubernetes)
+* [kube_inventory](./plugins/inputs/kube_inventory)
 * [leofs](./plugins/inputs/leofs)
 * [linux_sysctl_fs](./plugins/inputs/linux_sysctl_fs)
 * [logparser](./plugins/inputs/logparser)
@@ -167,14 +244,19 @@ configuration options.
 * [minecraft](./plugins/inputs/minecraft)
 * [mongodb](./plugins/inputs/mongodb)
 * [mqtt_consumer](./plugins/inputs/mqtt_consumer)
+* [multifile](./plugins/inputs/multifile)
 * [mysql](./plugins/inputs/mysql)
 * [nats_consumer](./plugins/inputs/nats_consumer)
 * [nats](./plugins/inputs/nats)
+* [neptune_apex](./plugins/inputs/neptune_apex)
 * [net](./plugins/inputs/net)
 * [net_response](./plugins/inputs/net_response)
 * [netstat](./plugins/inputs/net)
 * [nginx](./plugins/inputs/nginx)
+* [nginx_plus_api](./plugins/inputs/nginx_plus_api)
 * [nginx_plus](./plugins/inputs/nginx_plus)
+* [nginx_upstream_check](./plugins/inputs/nginx_upstream_check)
+* [nginx_vts](./plugins/inputs/nginx_vts)
 * [nsq_consumer](./plugins/inputs/nsq_consumer)
 * [nsq](./plugins/inputs/nsq)
 * [nstat](./plugins/inputs/nstat)
@@ -208,12 +290,14 @@ configuration options.
 * [socket_listener](./plugins/inputs/socket_listener)
 * [solr](./plugins/inputs/solr)
 * [sql server](./plugins/inputs/sqlserver) (microsoft)
+* [stackdriver](./plugins/inputs/stackdriver)
 * [statsd](./plugins/inputs/statsd)
 * [swap](./plugins/inputs/swap)
 * [syslog](./plugins/inputs/syslog)
 * [sysstat](./plugins/inputs/sysstat)
 * [system](./plugins/inputs/system)
 * [tail](./plugins/inputs/tail)
+* [temp](./plugins/inputs/temp)
 * [tcp_listener](./plugins/inputs/socket_listener)
 * [teamspeak](./plugins/inputs/teamspeak)
 * [tengine](./plugins/inputs/tengine)
@@ -222,6 +306,7 @@ configuration options.
 * [udp_listener](./plugins/inputs/socket_listener)
 * [unbound](./plugins/inputs/unbound)
 * [varnish](./plugins/inputs/varnish)
+* [vsphere](./plugins/inputs/vsphere) VMware vSphere
 * [webhooks](./plugins/inputs/webhooks)
   * [filestack](./plugins/inputs/webhooks/filestack)
   * [github](./plugins/inputs/webhooks/github)
@@ -231,29 +316,46 @@ configuration options.
   * [rollbar](./plugins/inputs/webhooks/rollbar)
 * [win_perf_counters](./plugins/inputs/win_perf_counters) (windows performance counters)
 * [win_services](./plugins/inputs/win_services)
+* [wireless](./plugins/inputs/wireless)
+* [x509_cert](./plugins/inputs/x509_cert)
 * [zfs](./plugins/inputs/zfs)
 * [zipkin](./plugins/inputs/zipkin)
 * [zookeeper](./plugins/inputs/zookeeper)
 * [dds_consumer](./plugins/inputs/dds_consumer)
 
-Telegraf is able to parse the following input data formats into metrics, these
-formats may be used with input plugins supporting the `data_format` option:
+## Parsers
 
-* [InfluxDB Line Protocol](./docs/DATA_FORMATS_INPUT.md#influx)
-* [JSON](./docs/DATA_FORMATS_INPUT.md#json)
-* [Graphite](./docs/DATA_FORMATS_INPUT.md#graphite)
-* [Value](./docs/DATA_FORMATS_INPUT.md#value)
-* [Nagios](./docs/DATA_FORMATS_INPUT.md#nagios)
-* [Collectd](./docs/DATA_FORMATS_INPUT.md#collectd)
-* [Dropwizard](./docs/DATA_FORMATS_INPUT.md#dropwizard)
+- [InfluxDB Line Protocol](/plugins/parsers/influx)
+- [Collectd](/plugins/parsers/collectd)
+- [CSV](/plugins/parsers/csv)
+- [Dropwizard](/plugins/parsers/dropwizard)
+- [Graphite](/plugins/parsers/graphite)
+- [Grok](/plugins/parsers/grok)
+- [JSON](/plugins/parsers/json)
+- [Logfmt](/plugins/parsers/logfmt)
+- [Nagios](/plugins/parsers/nagios)
+- [Value](/plugins/parsers/value), ie: 45 or "booyah"
+- [Wavefront](/plugins/parsers/wavefront)
+
+## Serializers
+
+- [InfluxDB Line Protocol](/plugins/serializers/influx)
+- [JSON](/plugins/serializers/json)
+- [Graphite](/plugins/serializers/graphite)
+- [ServiceNow](/plugins/serializers/nowmetric)
+- [SplunkMetric](/plugins/serializers/splunkmetric)
+- [Carbon2](/plugins/serializers/carbon2)
 
 ## Processor Plugins
 
 * [converter](./plugins/processors/converter)
+* [enum](./plugins/processors/enum)
 * [override](./plugins/processors/override)
+* [parser](./plugins/processors/parser)
 * [printer](./plugins/processors/printer)
 * [regex](./plugins/processors/regex)
 * [rename](./plugins/processors/rename)
+* [strings](./plugins/processors/strings)
 * [topk](./plugins/processors/topk)
 
 ## Aggregator Plugins
@@ -265,12 +367,15 @@ formats may be used with input plugins supporting the `data_format` option:
 
 ## Output Plugins
 
-* [influxdb](./plugins/outputs/influxdb)
+* [influxdb](./plugins/outputs/influxdb) (InfluxDB 1.x)
+* [influxdb_v2](./plugins/outputs/influxdb_v2) ([InfluxDB 2.x](https://github.com/influxdata/platform))
 * [amon](./plugins/outputs/amon)
 * [amqp](./plugins/outputs/amqp) (rabbitmq)
 * [application_insights](./plugins/outputs/application_insights)
 * [aws kinesis](./plugins/outputs/kinesis)
 * [aws cloudwatch](./plugins/outputs/cloudwatch)
+* [azure_monitor](./plugins/outputs/azure_monitor)
+* [cloud_pubsub](./plugins/outputs/cloud_pubsub) Google Cloud Pub/Sub
 * [cratedb](./plugins/outputs/cratedb)
 * [datadog](./plugins/outputs/datadog)
 * [discard](./plugins/outputs/discard)
@@ -290,6 +395,7 @@ formats may be used with input plugins supporting the `data_format` option:
 * [riemann](./plugins/outputs/riemann)
 * [riemann_legacy](./plugins/outputs/riemann_legacy)
 * [socket_writer](./plugins/outputs/socket_writer)
+* [stackdriver](./plugins/outputs/stackdriver)
 * [tcp](./plugins/outputs/socket_writer)
 * [udp](./plugins/outputs/socket_writer)
 * [wavefront](./plugins/outputs/wavefront)
