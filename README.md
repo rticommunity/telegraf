@@ -16,15 +16,6 @@ requests and will manage the set of plugins that Telegraf supports.
 
 It is a forked Telegraf repository adding a DDS input plugin ([dds_consumer](./plugins/inputs/dds_consumer)). 
 
-## Contributing
-
-There are many ways to contribute:
-- Fix and [report bugs](https://github.com/influxdata/telegraf/issues/new)
-- [Improve documentation](https://github.com/influxdata/telegraf/issues?q=is%3Aopen+label%3Adocumentation)
-- [Review code and feature proposals](https://github.com/influxdata/telegraf/pulls)
-- Answer questions and discuss here on github and on the [Community Site](https://community.influxdata.com/)
-- [Contribute plugins](CONTRIBUTING.md)
-
 ## Installation:
 
 Telegraf requires golang version 1.9 or newer, the Makefile requires GNU make.
