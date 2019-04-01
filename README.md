@@ -104,6 +104,14 @@ An example XML file (ShapeExample.xml) for shapes demo is given at the dds_consu
 Telegraf process will create a data reader with "Square" topic as defined in ShapeExample.xml.
 You can simply test with the RTI Shapes Demo applicaiton by publishing data with "Square" topic.
 
+## Documentation
+
+[Latest Release Documentation][release docs].
+
+For documentation on the latest development code see the [documentation index][devel docs].
+
+[release docs]: https://docs.influxdata.com/telegraf
+[devel docs]: docs
 
 ## Input Plugins
 
