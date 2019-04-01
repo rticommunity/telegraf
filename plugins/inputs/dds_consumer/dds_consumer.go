@@ -37,7 +37,6 @@ type DDSConsumer struct {
 
 // Default configurations
 var sampleConfig = `
-[[inputs.dds_consumer]]
   ## XML configuration file path
   config_path = "example_configs/ShapeExample.xml"
 
