@@ -6,7 +6,6 @@ The DDS consumer plugin reads metrics over DDS by creating readers defined in [X
 
 ```toml
 [[inputs.dds_consumer]]
-[[inputs.dds_consumer]]
   ## XML configuration file path
   config_path = "example_configs/ShapeExample.xml"
 
