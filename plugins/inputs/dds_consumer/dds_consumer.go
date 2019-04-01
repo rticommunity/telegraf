@@ -37,8 +37,9 @@ type DDSConsumer struct {
 
 // Default configurations
 var sampleConfig = `
+[[inputs.dds_consumer]]
   ## XML configuration file path
-  config_path = "ShapeExample.xml"
+  config_path = "example_configs/ShapeExample.xml"
 
   ## Configuration name for DDS Participant from a description in XML
   participant_config = "MyParticipantLibrary::Zero"
@@ -46,10 +47,13 @@ var sampleConfig = `
   ## Configuration name for DDS DataReader from a description in XML
   reader_config = "MySubscriber::MySquareReader"
 
+  # Tag key is an array of keys that should be added as tags.
+  tag_keys = ["color"]
+
+  # Override the base name of the measurement
+  name_override = "shapes"
+
   ## Data format to consume.
-  ## Each data format has its own unique set of configuration options, read
-  ## more about them here:
-  ## https://github.com/influxdata/telegraf/blob/master/docs/DATA_FORMATS_INPUT.md
   data_format = "json"
 `
 
