@@ -969,11 +969,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:4668edc6a0995e3625a27a91595b17f44cca7e99eb803919686b82ce533d6dae"
+  digest = "1:fd69bbf803471bcedb62bf62923f9b294178b8e236bc8ab27370b04635c96f89"
   name = "github.com/rticommunity/rticonnextdds-connector-go"
   packages = ["."]
   pruneopts = ""
-  revision = "36dd3201d8b2544d869d104eff596f364dfc26f4"
+  revision = "8a621a86ba8e155872aecaf239d5550eb79df232"
 
 [[projects]]
   branch = "master"
@@ -1596,7 +1596,6 @@
     "github.com/prometheus/client_golang/prometheus/promhttp",
     "github.com/prometheus/client_model/go",
     "github.com/prometheus/common/expfmt",
-    "github.com/prometheus/common/log",
     "github.com/rticommunity/rticonnextdds-connector-go",
     "github.com/satori/go.uuid",
     "github.com/shirou/gopsutil/cpu",
