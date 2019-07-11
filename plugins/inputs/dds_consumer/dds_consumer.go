@@ -117,7 +117,7 @@ func (d *DDSConsumer) process() {
 
 		for i := 0; i < numOfSamples; i++ {
 			if d.reader.Infos.IsValid(i) {
-				json, err := d.reader.Samples.GetJson(i)
+				json, err := d.reader.Samples.GetJSON(i)
 				checkError(err)
 				go func(json []byte) {
 					//log.Println(string(json))
