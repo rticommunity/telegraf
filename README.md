@@ -21,25 +21,7 @@ It is a forked Telegraf repository adding a DDS input plugin ([dds_consumer](./p
 Telegraf requires golang version 1.9 or newer, the Makefile requires GNU make.
 
 1. [Install Go](https://golang.org/doc/install) >=1.9
-   
-2. Install dep   
-
-   ```
-   cd $GOPATH
-   mkdir -p src/github.com/golang
-   cd $GOPATH/src/github.com/golang
-   git clone https://github.com/pohly/dep.git
-   cd dep
-   git checkout export-git-submodule
-   go install ./cmd/dep
-   ```
-
-Current dep does not support git submodule (Go Connector uses git submodule for Connector C library).   
-So you need to build dep including the fix. (See this [Issue Link](https://github.com/golang/dep/pull/1909) for details).   
-
-You can find dep at $GOPATH/bin.   
-Please add $GOPATH/bin to your $PATH if you haven't.   
-   
+2. [Install dep](https://golang.github.io/dep/docs/installation.html) ==v0.5.0
 3. Download Telegraf source:
    ```
    cd $GOPATH
@@ -47,7 +29,6 @@ Please add $GOPATH/bin to your $PATH if you haven't.
    cd $GOPATH/src/github.com/influxdata
    git clone https://github.com/rticommunity/telegraf.git
    ```
-   
 4. Run make from the source directory
    ```
    cd "$GOPATH/src/github.com/influxdata/telegraf"
