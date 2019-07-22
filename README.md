@@ -11,14 +11,8 @@ Telegraf is plugin-driven and has the concept of 4 distinct plugin types:
 3. [Aggregator Plugins](#aggregator-plugins) create aggregate metrics (e.g. mean, min, max, quantiles, etc.)
 4. [Output Plugins](#output-plugins) write metrics to various destinations
 
-New plugins are designed to be easy to contribute, pull requests are welcomed
-and we work to incorporate as many pull requests as possible.
-
-## Try in Browser :rocket:
-
-You can try Telegraf right in your browser in the [Telegraf playground](https://rootnroll.com/d/telegraf/).
-
 It is a forked Telegraf repository adding a DDS input plugin ([dds_consumer](./plugins/inputs/dds_consumer)). 
+This fork repository is synced up with [Telegraf v1.11](https://github.com/influxdata/telegraf/tree/release-1.11). 
 
 ## Installation:
 
@@ -43,7 +37,7 @@ Telegraf requires golang version 1.9 or newer, the Makefile requires GNU make.
 
 #### Include RTI Connector library to the library path (e.g. LD_LIBRARY_PATH)
 
-Currently, RTI Go Connector dynamically links to connector library, so the connectory library should be included in the environment variable for library path (e.g. LD_LIBRARY_PATH). After you built Telegraf, Connector Git repository was checked out under YOUR_TELEGRAF_PATH/vendor. You can include the connector library like the following.
+RTI Go Connector dynamically links to RTI Connector C library, so the Connectory C library should be included in the environment variable for library path (e.g. LD_LIBRARY_PATH). After you built Telegraf, the RTI C Connector repository is checked out under the vendor directory. You can include the Connector C library like the following.
 
 ``` 
 $ export LD_LIBRARY_PATH=$GOPATH/src/github.com/influxdata/telegraf/vendor/github.com/rticommunity/rticonnextdds-connector-go/rticonnextdds-connector/lib/x64Linux2.6gcc4.4.5:$LD_LIBRARY_PATH
@@ -78,16 +72,16 @@ See usage with:
 ./telegraf --input-filter dds_consumer --output-filter influxdb config > dds_input.conf
 ```
 
-When you run with a DDS input plugin, please make sure that an XML file for XML Application Creation is located at the configured path (config_path) in your Telegraf configuration (e.g. dds_input.conf).
+When you run with a DDS input plugin, please make sure that an XML file for XML Application Creation is located at the configured path (```config_path```) in your Telegraf TOML configuration.
 
-An example XML file (ShapeExample.xml) for shapes demo is given at the dds_consumer input plugin directory. You can copy the file to your current location. Then, run your telegraf executable with dds_input.conf.
+An example XML file (```ShapeExample.xml```) for shapes demo is given at the ```dds_consumer``` input plugin directory. You can copy the file to your current location. Then, run your telegraf executable with dds_input.conf.
 
 ```
 ./telegraf --config dds_input.conf
 ```
 
 Telegraf process will create a data reader with "Square" topic as defined in ShapeExample.xml.
-You can simply test with the RTI Shapes Demo applicaiton by publishing data with "Square" topic.
+You can simply test with the [RTI Shapes Demo](https://www.rti.com/free-trial/shapes-demo) by publishing data with "Square" topic.
 
 ## Documentation
 
