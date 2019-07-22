@@ -11,8 +11,12 @@ Telegraf is plugin-driven and has the concept of 4 distinct plugin types:
 3. [Aggregator Plugins](#aggregator-plugins) create aggregate metrics (e.g. mean, min, max, quantiles, etc.)
 4. [Output Plugins](#output-plugins) write metrics to various destinations
 
-New plugins are designed to be easy to contribute, we'll eagerly accept pull
-requests and will manage the set of plugins that Telegraf supports.
+New plugins are designed to be easy to contribute, pull requests are welcomed
+and we work to incorporate as many pull requests as possible.
+
+## Try in Browser :rocket:
+
+You can try Telegraf right in your browser in the [Telegraf playground](https://rootnroll.com/d/telegraf/).
 
 It is a forked Telegraf repository adding a DDS input plugin ([dds_consumer](./plugins/inputs/dds_consumer)). 
 
@@ -104,12 +108,15 @@ For documentation on the latest development code see the [documentation index][d
 * [aws cloudwatch](./plugins/inputs/cloudwatch)
 * [bcache](./plugins/inputs/bcache)
 * [beanstalkd](./plugins/inputs/beanstalkd)
+* [bind](./plugins/inputs/bind)
 * [bond](./plugins/inputs/bond)
 * [burrow](./plugins/inputs/burrow)
 * [cassandra](./plugins/inputs/cassandra) (deprecated, use [jolokia2](./plugins/inputs/jolokia2))
 * [ceph](./plugins/inputs/ceph)
 * [cgroup](./plugins/inputs/cgroup)
 * [chrony](./plugins/inputs/chrony)
+* [cisco_telemetry_gnmi](./plugins/inputs/cisco_telemetry_gnmi)
+* [cisco_telemetry_mdt](./plugins/inputs/cisco_telemetry_mdt)
 * [cloud_pubsub](./plugins/inputs/cloud_pubsub) Google Cloud Pub/Sub
 * [cloud_pubsub_push](./plugins/inputs/cloud_pubsub_push) Google Cloud Pub/Sub push endpoint
 * [conntrack](./plugins/inputs/conntrack)
@@ -126,6 +133,7 @@ For documentation on the latest development code see the [documentation index][d
 * [dns query time](./plugins/inputs/dns_query)
 * [docker](./plugins/inputs/docker)
 * [dovecot](./plugins/inputs/dovecot)
+* [ecs](./plugins/inputs/ecs) (Amazon Elastic Container Service, Fargate)
 * [elasticsearch](./plugins/inputs/elasticsearch)
 * [exec](./plugins/inputs/exec) (generic executable plugin, support JSON, influx, graphite and nagios)
 * [fail2ban](./plugins/inputs/fail2ban)
@@ -134,6 +142,7 @@ For documentation on the latest development code see the [documentation index][d
 * [filestat](./plugins/inputs/filestat)
 * [filecount](./plugins/inputs/filecount)
 * [fluentd](./plugins/inputs/fluentd)
+* [github](./plugins/inputs/github)
 * [graylog](./plugins/inputs/graylog)
 * [haproxy](./plugins/inputs/haproxy)
 * [hddtemp](./plugins/inputs/hddtemp)
@@ -195,6 +204,7 @@ For documentation on the latest development code see the [documentation index][d
 * [nvidia_smi](./plugins/inputs/nvidia_smi)
 * [openldap](./plugins/inputs/openldap)
 * [opensmtpd](./plugins/inputs/opensmtpd)
+* [openweathermap](./plugins/inputs/openweathermap)
 * [pf](./plugins/inputs/pf)
 * [pgbouncer](./plugins/inputs/pgbouncer)
 * [phpfpm](./plugins/inputs/phpfpm)
@@ -204,6 +214,7 @@ For documentation on the latest development code see the [documentation index][d
 * [postgresql_extensible](./plugins/inputs/postgresql_extensible)
 * [postgresql](./plugins/inputs/postgresql)
 * [powerdns](./plugins/inputs/powerdns)
+* [powerdns_recursor](./plugins/inputs/powerdns_recursor)
 * [processes](./plugins/inputs/processes)
 * [procstat](./plugins/inputs/procstat)
 * [prometheus](./plugins/inputs/prometheus) (can be used for [Caddy server](./plugins/inputs/prometheus/README.md#usage-for-caddy-http-server))
@@ -276,6 +287,7 @@ For documentation on the latest development code see the [documentation index][d
 - [ServiceNow](/plugins/serializers/nowmetric)
 - [SplunkMetric](/plugins/serializers/splunkmetric)
 - [Carbon2](/plugins/serializers/carbon2)
+- [Wavefront](/plugins/serializers/wavefront)
 
 ## Processor Plugins
 
@@ -292,14 +304,15 @@ For documentation on the latest development code see the [documentation index][d
 ## Aggregator Plugins
 
 * [basicstats](./plugins/aggregators/basicstats)
-* [minmax](./plugins/aggregators/minmax)
+* [final](./plugins/aggregators/final)
 * [histogram](./plugins/aggregators/histogram)
+* [minmax](./plugins/aggregators/minmax)
 * [valuecounter](./plugins/aggregators/valuecounter)
 
 ## Output Plugins
 
 * [influxdb](./plugins/outputs/influxdb) (InfluxDB 1.x)
-* [influxdb_v2](./plugins/outputs/influxdb_v2) ([InfluxDB 2.x](https://github.com/influxdata/platform))
+* [influxdb_v2](./plugins/outputs/influxdb_v2) ([InfluxDB 2.x](https://github.com/influxdata/influxdb))
 * [amon](./plugins/outputs/amon)
 * [amqp](./plugins/outputs/amqp) (rabbitmq)
 * [application_insights](./plugins/outputs/application_insights)
@@ -314,6 +327,7 @@ For documentation on the latest development code see the [documentation index][d
 * [file](./plugins/outputs/file)
 * [graphite](./plugins/outputs/graphite)
 * [graylog](./plugins/outputs/graylog)
+* [health](./plugins/outputs/health)
 * [http](./plugins/outputs/http)
 * [instrumental](./plugins/outputs/instrumental)
 * [kafka](./plugins/outputs/kafka)
@@ -327,6 +341,7 @@ For documentation on the latest development code see the [documentation index][d
 * [riemann_legacy](./plugins/outputs/riemann_legacy)
 * [socket_writer](./plugins/outputs/socket_writer)
 * [stackdriver](./plugins/outputs/stackdriver)
+* [syslog](./plugins/outputs/syslog)
 * [tcp](./plugins/outputs/socket_writer)
 * [udp](./plugins/outputs/socket_writer)
 * [wavefront](./plugins/outputs/wavefront)
