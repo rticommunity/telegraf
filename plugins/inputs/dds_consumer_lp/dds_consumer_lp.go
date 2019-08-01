@@ -11,7 +11,6 @@
 package dds_consumer_lp
 
 import (
-	"fmt"
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/inputs"
 	"github.com/influxdata/telegraf/plugins/parsers"
@@ -34,6 +33,23 @@ type DDSConsumer struct {
 	// Telegraf entities
 	parser parsers.Parser
 	acc    telegraf.Accumulator
+}
+
+type Tag struct {
+	Key string `json:"key"`
+	Value string `json:"value"`
+}
+
+type Field struct {
+	Key string `json:"key"`
+	Value float64 `json:"value"`
+}
+
+type Metric struct {
+	Name string `json:"name"`
+	Tags []Tag `json:"tags"`
+	Fields []Field	`json:"fields"`
+	Timestamp int64 `json:"timestamp"`
 }
 
 // Default configurations
@@ -95,27 +111,20 @@ func (d *DDSConsumer) process() {
 
 		for i := 0; i < numOfSamples; i++ {
 			if d.reader.Infos.IsValid(i) {
-				name := d.reader.Samples.GetString(i, "name")
+				var m Metric
+				d.reader.Samples.Get(i, &m)
 
 				tags := make(map[string]string)
-				tag_length := d.reader.Samples.GetInt(i, "tags#")
-				for j := 0; j < tag_length; j++ {
-					key := fmt.Sprintf("tags[%d].key", j+1)
-					value := fmt.Sprintf("tags[%d].value", j+1)
-					tags[d.reader.Samples.GetString(i, key)] = d.reader.Samples.GetString(i, value)
+				for _, tag := range m.Tags {
+					tags[tag.Key] = tag.Value
 				}
 
 				fields := make(map[string]interface{})
-				field_length := d.reader.Samples.GetInt(i, "fields#")
-				for j := 0; j < field_length; j++ {
-					key := fmt.Sprintf("fields[%d].key", j+1)
-					value := fmt.Sprintf("fields[%d].value", j+1)
-					fields[d.reader.Samples.GetString(i, key)] = d.reader.Samples.GetFloat64(i, value)
+				for _, field := range m.Fields {
+					fields[field.Key] = field.Value
 				}
 
-				timestamp := d.reader.Samples.GetInt64(i, "timestamp")
-
-				d.acc.AddFields(name, fields, tags, time.Unix(0, timestamp))
+				d.acc.AddFields(m.Name, fields, tags, time.Unix(0, m.Timestamp))
 				/*
 					go func(json []byte) {
 						//log.Println(string(json))

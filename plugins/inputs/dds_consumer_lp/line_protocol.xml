@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:////opt/nfsshare/rti_connext_dds-5.3.0/bin/../resource/app/app_support/rtiddsgen/schema/rti_dds_topic_types.xsd">
+<types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:////home/kyounghoan/rti_connext_dds-6.0.0/bin/../resource/app/app_support/rtiddsgen/schema/rti_dds_topic_types.xsd">
 <struct name= "Tag">
-  <member name="key" type="string"/>
-  <member name="value" type="string"/>
+  <member name="key" stringMaxLength="255" type="string"/>
+  <member name="value" stringMaxLength="255" type="string"/>
 </struct>
 <enum name="FieldValueKind">
   <enumerator name="FIELD_STRING"/>
@@ -14,7 +14,7 @@
 <discriminator type="nonBasic" nonBasicTypeName="FieldValueKind"/>
 <case>
   <caseDiscriminator value="(FIELD_STRING)"/>
-<member name="s" type="string"/>
+<member name="s" stringMaxLength="255" type="string"/>
 </case>
 <case>
   <caseDiscriminator value="(FIELD_FLOAT)"/>
@@ -30,13 +30,13 @@
 </case>
 </union>
 <struct name= "Field">
-  <member name="key" type="string"/>
+  <member name="key" stringMaxLength="255" type="string"/>
   <member name="value" type="float64"/>
 </struct>
 <const name="MAX_TAGS" type="int32" value="32"/>
 <const name="MAX_FIELDS" type="int32" value="128"/>
 <struct name= "Metric">
-  <member name="name" type="string"/>
+  <member name="name" stringMaxLength="255" type="string" key="true"/>
   <member name="tags" sequenceMaxLength="MAX_TAGS" type="nonBasic"  nonBasicTypeName= "Tag"/>
   <member name="fields" sequenceMaxLength="MAX_FIELDS" type="nonBasic"  nonBasicTypeName= "Field"/>
   <member name="timestamp" type="int64"/>
