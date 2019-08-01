@@ -11,7 +11,6 @@
 package dds_producer
 
 import (
-	"fmt"
 	"time"
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/outputs"
@@ -31,6 +30,23 @@ type DDSProducer struct {
 	serializer serializers.Serializer
 }
 
+type Tag struct {
+	Key string `json:"key"`
+	Value string `json:"value"`
+}
+
+type Field struct {
+	Key string `json:"key"`
+	Value float64 `json:"value"`
+}
+
+type Metric struct {
+	Name string `json:"name"`
+	Tags []Tag `json:"tags"`
+	Fields []Field	`json:"fields"`
+	Timestamp int64 `json:"timestamp"`
+}
+
 var sampleConfig = `
   ## XML configuration file path
   config_path = "dds_producer.xml"
@@ -45,13 +61,13 @@ func (d *DDSProducer) SetSerializer(serializer serializers.Serializer) {
 }
 
 func (d *DDSProducer) Connect() (err error) {
-    // Create a Connector entity
+    // Create a Connector
     d.connector, err = rti.NewConnector(d.ParticipantConfig, d.ConfigFilePath)
     if err != nil {
         return err
     }
 
-    // Get a DDS reader
+    // Get a DDS Writer
     d.writer, err = d.connector.GetOutput(d.WriterConfig)
     if err != nil {
         return err
@@ -70,53 +86,35 @@ func (d *DDSProducer) SampleConfig() string {
 }
 
 func (d *DDSProducer) Description() string {
-	return "Send metrics to DDS"
+	return "Send metrics over DDS"
 }
 
-func (d *DDSProducer) Write(metrics []telegraf.Metric) error {
+func (d *DDSProducer) Write(metrics []telegraf.Metric) (err error) {
 	if len(metrics) == 0 {
 		return nil
 	}
 
 	for _, metric := range metrics {
-		err := d.writer.Instance.SetString("name", metric.Name())
-		if err != nil {
-			return err
-		}
+		var m Metric
+		m.Name = metric.Name()
 
-		for i, tag := range metric.TagList() {
-			key := fmt.Sprintf("tags[%d].key", i+1)
-			value := fmt.Sprintf("tags[%d].value", i+1)
-			err = d.writer.Instance.SetString(key, tag.Key)
-			if err != nil {
-				return err
-			}
-			err = d.writer.Instance.SetString(value, tag.Value)
-			if err != nil {
-				return err
-			}
+		for _, tag := range metric.TagList() {
+			var t Tag
+			t.Key = tag.Key
+			t.Value = tag.Value
+			m.Tags = append(m.Tags, t)
 		}
-		for i, field := range metric.FieldList() {
-			key := fmt.Sprintf("fields[%d].key", i+1)
-			value := fmt.Sprintf("fields[%d].value", i+1)
-			err = d.writer.Instance.SetString(key, field.Key)
-			if err != nil {
-				return err
-			}
-
+		for _, field := range metric.FieldList() {
+			var f Field
+			f.Key = field.Key
 			v := convertField(field.Value)
-
-			err = d.writer.Instance.SetFloat64(value, v)
-			if err != nil {
-				return err
-			}
-
+			f.Value = v
+			m.Fields = append(m.Fields, f)
 		}
 
-		d.writer.Instance.SetInt64("timestamp", time.Now().UTC().UnixNano())
-		if err != nil {
-			return err
-		}
+		m.Timestamp = time.Now().UTC().UnixNano()
+
+		d.writer.Instance.Set(&m)
 
 		err = d.writer.Write()
 		if err != nil {

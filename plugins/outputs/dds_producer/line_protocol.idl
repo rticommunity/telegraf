@@ -31,7 +31,7 @@ const long MAX_TAGS = 32;
 const long MAX_FIELDS = 128;
 
 struct Metric {
-    string name;
+    string name;//@key
     sequence<Tag, MAX_TAGS> tags;
     sequence<Field, MAX_FIELDS> fields;
     long long timestamp;
