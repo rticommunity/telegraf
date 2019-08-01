@@ -35,9 +35,9 @@ Telegraf requires golang version 1.9 or newer, the Makefile requires GNU make.
 
 ## How to use it:
 
-#### Include RTI Connector library to the library path (e.g. LD_LIBRARY_PATH)
+#### Include RTI Connector C library to the library path
 
-RTI Go Connector dynamically links to RTI Connector C library, so the Connectory C library should be included in the environment variable for library path (e.g. LD_LIBRARY_PATH). After you built Telegraf, the RTI C Connector repository is checked out under the vendor directory. You can include the Connector C library like the following.
+RTI Go Connector dynamically links to RTI Connector C library. The path for Connector C library should be included in the environment variable for library path (e.g. ```LD_LIBRARY_PATH```). After you build Telegraf, the RTI C Connector library is checked out under the vendor directory. You can include the path like the following.
 
 ``` 
 $ export LD_LIBRARY_PATH=$GOPATH/src/github.com/influxdata/telegraf/vendor/github.com/rticommunity/rticonnextdds-connector-go/rticonnextdds-connector/lib/x64Linux2.6gcc4.4.5:$LD_LIBRARY_PATH
@@ -69,19 +69,19 @@ See usage with:
 
 #### Generate a config file with DDS input & file output plugins:
 ```
-./telegraf --input-filter dds_consumer --output-filter influxdb config > dds_input.conf
+./telegraf --input-filter dds_consumer --output-filter file config > dds_to_file.conf
 ```
 
-When you run with a DDS input plugin, please make sure that an XML file for XML Application Creation is located at the configured path (```config_path```) in your Telegraf TOML configuration.
+When you run with the DDS input plugin, please make sure an XML file for DDS configurations is located at the ```config_path``` in your Telegraf TOML configuration.
 
-An example XML file (```ShapeExample.xml```) for shapes demo is given at the ```dds_consumer``` input plugin directory. You can copy the file to your current location. Then, run your telegraf executable with dds_input.conf.
+Example XML files (e.g. ```ShapeExample.xml```) and Telegraf config files are given at under ```example_configs``` directory. 
 
 ```
-./telegraf --config dds_input.conf
+./telegraf --config ./example_configs/dds_to_file.conf
 ```
 
-Telegraf process will create a data reader with "Square" topic as defined in ShapeExample.xml.
-You can simply test with the [RTI Shapes Demo](https://www.rti.com/free-trial/shapes-demo) by publishing data with "Square" topic.
+Telegraf with the example config will create a DDS DataReader with a "Square" topic. They are all defined in ```ShapeExample.xml```.
+You can simply test with the [RTI Shapes Demo](https://www.rti.com/free-trial/shapes-demo) with publishing data with "Square" topic.
 
 ## Documentation
 
