@@ -55,26 +55,26 @@ See usage with:
 ./telegraf config > telegraf.conf
 ```
 
-#### Generate config with DDS input & influxdb output plugins defined:
-
-```
-./telegraf --input-filter dds_consumer --output-filter influxdb config
-```
-
 #### Run a single telegraf collection, outputing metrics to stdout:
 
 ```
 ./telegraf --config telegraf.conf --test
 ```
 
+#### Generate config with DDS input & influxdb output plugins defined:
+
+```
+./telegraf config --input-filter dds_consumer --output-filter influxdb
+```
+
 #### Generate a config file with DDS input & file output plugins:
 ```
-./telegraf --input-filter dds_consumer --output-filter file config > dds_to_file.conf
+./telegraf config --input-filter dds_consumer --output-filter file > dds_to_file.conf
 ```
 
-When you run with the DDS input plugin, please make sure an XML file for DDS configurations is located at the ```config_path``` in your Telegraf TOML configuration.
+When you run with ```dds_consumer``` plugin, please make sure an XML file for DDS configurations is located at the ```config_path``` in your Telegraf TOML config.
 
-Example XML files (e.g. ```ShapeExample.xml```) and Telegraf config files are given at under ```example_configs``` directory. 
+Example XML files (e.g. ```ShapeExample.xml```) and Telegraf config files are given under ```example_configs``` directory. 
 
 ```
 ./telegraf --config ./example_configs/dds_to_file.conf
