@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/rticommunity/telegraf.svg?branch=master)](https://travis-ci.org/rticommunity/telegraf.svg?branch=master) 
+
 Telegraf is an agent for collecting, processing, aggregating, and writing metrics.
 
 Design goals are to have a minimal memory footprint with a plugin system so
