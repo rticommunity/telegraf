@@ -16,9 +16,9 @@ It is synced up with [Telegraf v1.11](https://github.com/influxdata/telegraf/tre
 
 ## Installation:
 
-Telegraf requires golang version 1.9 or newer, the Makefile requires GNU make.
+Telegraf requires golang version 1.10 or newer, the Makefile requires GNU make.
 
-1. [Install Go](https://golang.org/doc/install) >=1.9
+1. [Install Go](https://golang.org/doc/install) >=1.10 (1.12 recommended)
 2. [Install dep](https://golang.github.io/dep/docs/installation.html) ==v0.5.0
 3. Download Telegraf source:
    ```
@@ -64,12 +64,12 @@ See usage with:
 #### Generate config with DDS input & influxdb output plugins defined:
 
 ```
-./telegraf config --input-filter dds_consumer --output-filter influxdb
+./telegraf --input-filter dds_consumer --output-filter influxdb config
 ```
 
 #### Generate a config file with DDS input & file output plugins:
 ```
-./telegraf config --input-filter dds_consumer --output-filter file > dds_to_file.conf
+./telegraf --input-filter dds_consumer --output-filter file config > dds_to_file.conf
 ```
 
 When you run with ```dds_consumer``` plugin, please make sure an XML file for DDS configurations is located at the ```config_path``` in your Telegraf TOML config.
