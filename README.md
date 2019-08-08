@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.org/rticommunity/telegraf.svg?branch=master)](https://travis-ci.org/rticommunity/telegraf.svg?branch=master) 
+[![Build Status](https://travis-ci.org/rticommunity/telegraf.svg?branch=master)](https://travis-ci.org/rticommunity/telegraf) 
 
 Telegraf is an agent for collecting, processing, aggregating, and writing metrics.
 
