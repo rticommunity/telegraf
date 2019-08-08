@@ -64,12 +64,12 @@ See usage with:
 #### Generate config with DDS input & influxdb output plugins defined:
 
 ```
-./telegraf config --input-filter dds_consumer --output-filter influxdb
+./telegraf --input-filter dds_consumer --output-filter influxdb config
 ```
 
 #### Generate a config file with DDS input & file output plugins:
 ```
-./telegraf config --input-filter dds_consumer --output-filter file > dds_to_file.conf
+./telegraf --input-filter dds_consumer --output-filter file config > dds_to_file.conf
 ```
 
 When you run with ```dds_consumer``` plugin, please make sure an XML file for DDS configurations is located at the ```config_path``` in your Telegraf TOML config.
