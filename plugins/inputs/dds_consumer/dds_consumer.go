@@ -110,7 +110,7 @@ func (d *DDSConsumer) Stop() {
 
 // Take DDS samples from the DataReader and ingest them to Telegraf outputs
 func (d *DDSConsumer) process() {
-	for  {
+	for {
 		d.connector.Wait(-1)
 		d.reader.Take()
 		numOfSamples := d.reader.Samples.GetLength()

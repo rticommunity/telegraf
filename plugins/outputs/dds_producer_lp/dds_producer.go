@@ -8,27 +8,24 @@
 *                                                                            *
 *****************************************************************************/
 
-package dds_consumer_lp
+package dds_producer
 
 import (
 	"github.com/influxdata/telegraf"
-	"github.com/influxdata/telegraf/plugins/inputs"
-	"github.com/influxdata/telegraf/plugins/parsers"
+	"github.com/influxdata/telegraf/plugins/outputs"
+	"github.com/influxdata/telegraf/plugins/serializers"
 	"github.com/rticommunity/rticonnextdds-connector-go"
 	"time"
 )
 
-type DDSConsumer struct {
-	// XML configuration file path
+type DDSProducer struct {
+	// DDS Domain ID Configuration
 	DomainId string `toml:"domain_id"`
 
-	// RTI Connext Connector entities
 	connector *rti.Connector
-	reader    *rti.Input
+	writer    *rti.Output
 
-	// Telegraf entities
-	parser parsers.Parser
-	acc    telegraf.Accumulator
+	serializer serializers.Serializer
 }
 
 type Tag struct {
@@ -67,23 +64,15 @@ type Metric struct {
 
 // Default configurations
 var sampleConfig = `
-domain_id = "0"
+  ## DDS Domain ID configuration
+  domain_id = "0"
 `
 
-func (d *DDSConsumer) SampleConfig() string {
-	return sampleConfig
+func (d *DDSProducer) SetSerializer(serializer serializers.Serializer) {
+	d.serializer = serializer
 }
 
-func (d *DDSConsumer) Description() string {
-	return "Read metrics from DDS"
-}
-
-func (d *DDSConsumer) SetParser(parser parsers.Parser) {
-	d.parser = parser
-}
-
-func (d *DDSConsumer) Start(acc telegraf.Accumulator) (err error) {
-	d.acc = acc
+func (d *DDSProducer) Connect() (err error) {
 
 	var xmlString = `
 	str://"<dds>
@@ -104,81 +93,106 @@ func (d *DDSConsumer) Start(acc telegraf.Accumulator) (err error) {
 	</domain_library>
 	<domain_participant_library name="ParticipantLib">
 	<domain_participant name="TelegrafParticipant" domain_ref="DomainLib::Telegraf">
-	<subscriber name="TelegrafSubscriber">
-	<data_reader name="TelegrafReader" topic_ref="Telegraf"/>
-	</subscriber>
+	<publisher name="TelegrafPublisher">
+	<data_writer name="TelegrafWriter" topic_ref="Telegraf"/>
+	</publisher>
 	</domain_participant>
 	</domain_participant_library>
 	</dds>"
 	`
-	// Create a Connector object from the XML config
+
+	// Create a Connector
 	d.connector, err = rti.NewConnector("ParticipantLib::TelegrafParticipant", xmlString)
 	if err != nil {
 		return err
 	}
 
-	// Get a DDS reader
-	d.reader, err = d.connector.GetInput("TelegrafSubscriber::TelegrafReader")
+	// Get a DDS Writer
+	d.writer, err = d.connector.GetOutput("TelegrafPublisher::TelegrafWriter")
 	if err != nil {
 		return err
 	}
 
-	// Start a go routine for processing DDS samples
-	go d.process()
-
 	return nil
 }
 
-func (d *DDSConsumer) Stop() {
+func (d *DDSProducer) Close() error {
 	d.connector.Delete()
+	return nil
 }
 
-// Take DDS samples from the DataReader and ingest them to Telegraf outputs
-func (d *DDSConsumer) process() {
-	for {
-		d.connector.Wait(-1)
-		d.reader.Take()
-		numOfSamples := d.reader.Samples.GetLength()
+func (d *DDSProducer) SampleConfig() string {
+	return sampleConfig
+}
 
-		for i := 0; i < numOfSamples; i++ {
-			if d.reader.Infos.IsValid(i) {
-				var m Metric
-				d.reader.Samples.Get(i, &m)
+func (d *DDSProducer) Description() string {
+	return "Send metrics over DDS"
+}
 
-				tags := make(map[string]string)
-				for _, tag := range m.Tags {
-					tags[tag.Key] = tag.Value
-				}
+func (d *DDSProducer) Write(metrics []telegraf.Metric) (err error) {
+	if len(metrics) == 0 {
+		return nil
+	}
 
-				fields := make(map[string]interface{})
-				for _, field := range m.Fields {
-					switch field.Kind {
-					case FIELD_DOUBLE:
-						fields[field.Key] = field.Value.D
-					case FIELD_INT:
-						fields[field.Key] = field.Value.I
-					case FIELD_UINT:
-						fields[field.Key] = field.Value.U
-					case FIELD_STRING:
-						fields[field.Key] = field.Value.S
-					case FIELD_BOOL:
-						fields[field.Key] = field.Value.B
-					default:
-					}
-				}
+	for _, metric := range metrics {
+		var m Metric
+		m.Name = metric.Name()
 
-				d.acc.AddFields(m.Name, fields, tags, time.Unix(0, m.Timestamp))
+		for _, tag := range metric.TagList() {
+			var t Tag
+			t.Key = tag.Key
+			t.Value = tag.Value
+			m.Tags = append(m.Tags, t)
+		}
+		for _, field := range metric.FieldList() {
+			var f Field
+			f.Key = field.Key
+			switch field.Value.(type) {
+			case float64:
+				f.Kind = FIELD_DOUBLE
+				value := field.Value.(float64)
+				f.Value.D = &value
+			case int64:
+				f.Kind = FIELD_INT
+				value := field.Value.(int64)
+				f.Value.I = &value
+			case uint64:
+				f.Kind = FIELD_UINT
+				value := field.Value.(uint64)
+				f.Value.U = &value
+			case string:
+				f.Kind = FIELD_STRING
+				value := field.Value.(string)
+				f.Value.S = &value
+			case bool:
+				f.Kind = FIELD_BOOL
+				value := field.Value.(bool)
+				f.Value.B = &value
+			default:
 			}
+
+			m.Fields = append(m.Fields, f)
+		}
+
+		m.Timestamp = time.Now().UTC().UnixNano()
+
+		d.writer.Instance.Set(&m)
+
+		err = d.writer.Write()
+		if err != nil {
+			return err
+		}
+
+		err = d.writer.ClearMembers()
+		if err != nil {
+			return err
 		}
 	}
-}
-
-func (d *DDSConsumer) Gather(acc telegraf.Accumulator) error {
 	return nil
 }
 
 func init() {
-	inputs.Add("dds_consumer_lp", func() telegraf.Input {
-		return &DDSConsumer{}
+	outputs.Add("dds_producer_lp", func() telegraf.Output {
+		return &DDSProducer{}
 	})
 }

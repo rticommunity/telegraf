@@ -1,0 +1,213 @@
+struct CpuUsage {
+    double usage_user;
+    double usage_system;
+    double usage_idle;
+    double usage_active;
+    double usage_nice;
+    double usage_iowait;
+    double usage_irq;
+    double usage_softirq;
+    double usage_steal;
+    double usage_guest;
+    double usage_guest_nice;
+};
+
+struct Mem {
+    double available_percent;
+    double used_percent;
+    unsigned long long active;
+    unsigned long long available;
+    unsigned long long buffered;
+    unsigned long long cached;
+    unsigned long long free;
+    unsigned long long inactive;
+    unsigned long long slab;
+    unsigned long long total;
+    unsigned long long used;
+    unsigned long long wired;
+    unsigned long long commit_limit;
+    unsigned long long committed_as;
+    unsigned long long dirty;
+    unsigned long long high_free;
+    unsigned long long high_total;
+    unsigned long long huge_page_size;
+    unsigned long long huge_page_free;
+    unsigned long long huge_page_total;
+    unsigned long long low_free;
+    unsigned long long low_total;
+    unsigned long long mapped;
+    unsigned long long page_tables;
+    unsigned long long shared;
+    unsigned long long swap_cached;
+    unsigned long long swap_free;
+    unsigned long long swap_total;
+    unsigned long long vmalloc_chunk;
+    unsigned long long vmalloc_total;
+    unsigned long long vmalloc_used;
+    unsigned long long write_back;
+    unsigned long long write_back_tmp;
+};
+
+struct Net {
+    unsigned long long bytes_sent;
+    unsigned long long bytes_recv;
+    unsigned long long packets_sent;
+    unsigned long long packets_recv;
+    unsigned long long err_in;
+    unsigned long long err_out;
+    unsigned long long drop_in;
+    unsigned long long drop_out;
+};
+
+struct Netstat {
+    unsigned long long tcp_established;
+    unsigned long long tcp_syn_sent;
+    unsigned long long tcp_syn_recv;
+    unsigned long long tcp_fin_wait1;
+    unsigned long long tcp_fin_wait2;
+    unsigned long long tcp_time_wait;
+    unsigned long long tcp_close;
+    unsigned long long tcp_close_wait;
+    unsigned long long tcp_last_ack;
+    unsigned long long tcp_listen;
+    unsigned long long tcp_closing;
+    unsigned long long tcp_none;
+    unsigned long long udp_socket;
+};
+
+struct System {
+    double load1;
+    double load15;
+    double load5;
+    unsigned long long n_users;
+    unsigned long long n_cpus;
+    unsigned long long uptime;
+    string uptime_format;
+};
+
+struct Processes {
+    unsigned long long blocked;
+    unsigned long long running;
+    unsigned long long sleeping;
+    unsigned long long stopped;
+    unsigned long long total;
+    unsigned long long zombie;
+    unsigned long long dead;
+    unsigned long long wait;//@Optional
+    unsigned long long idle;//@Optional
+    unsigned long long paging;//@Optional
+    unsigned long long total_threads;//@Optional
+};
+
+struct Disk {
+    unsigned long long free;
+    unsigned long long total;
+    unsigned long long used;
+    double used_percent;
+    unsigned long long inodes_free;
+    unsigned long long inodes_total;
+    unsigned long long inodes_used;
+};
+
+struct Diskio {
+    unsigned long long reads;
+    unsigned long long writes;
+    unsigned long long read_bytes;
+    unsigned long long write_bytes;
+    unsigned long long read_time;
+    unsigned long long write_time;
+    unsigned long long io_time;
+    unsigned long long weighted_io_time;
+    unsigned long long iops_in_progress;
+};
+
+struct Kernel {
+    unsigned long long boot_time;
+    unsigned long long context_switches;
+    unsigned long long disk_pages_in;
+    unsigned long long disk_pages_out;
+    unsigned long long interrupts;
+    unsigned long long processes_forked;
+    unsigned long long entropy_avail;
+};
+
+struct Swap {
+    unsigned long long free;
+    unsigned long long total;
+    unsigned long long used;
+    double used_percent;
+    unsigned long long swap_in;
+    unsigned long long swap_out;
+};
+
+struct Interrupts {
+    unsigned long long cpu;//@Optional
+    unsigned long long total;//@Optional
+    unsigned long long count;//@Optional
+};
+struct SoftInterrupts {
+    unsigned long long cpu;//@Optional
+    unsigned long long total;//@Optional
+    unsigned long long count;//@Optional
+};
+
+enum FieldKind{
+    CPU_USAGE,
+    MEM,
+    NET,
+    NETSTAT,
+    SYSTEM,
+    PROCESSES,
+    DISK,
+    DISKIO,
+    KERNEL,
+    SWAP,
+    INTERRUPTS,
+    SOFT_INTERRUPTS
+};
+
+union FieldValue switch (FieldKind) {
+    case CPU_USAGE:
+        CpuUsage cpu_usage;
+    case MEM:
+        Mem mem;
+    case NET:
+        Net net;
+    case NETSTAT:
+        Netstat netstat;
+    case SYSTEM:
+        System system;
+    case PROCESSES:
+        Processes processes;
+    case DISK:
+        Disk disk;
+    case DISKIO:
+        Diskio diskio;
+    case KERNEL:
+        Kernel kernel;
+    case SWAP:
+        Swap swap;
+    case INTERRUPTS:
+        Interrupts interrupts;
+    case SOFT_INTERRUPTS:
+        SoftInterrupts soft_interrupts;
+};
+
+struct Field {
+    FieldKind kind;
+    FieldValue value;
+};
+
+struct Tag {
+    string key;
+    string value;
+};
+
+const long MAX_TAGS = 32;
+
+struct Metric {
+    string name;//@key
+    sequence<Tag, MAX_TAGS> tags;
+    Field fields;
+    long long timestamp;
+};

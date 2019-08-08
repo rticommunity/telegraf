@@ -4,25 +4,30 @@
   <member name="key" stringMaxLength="255" type="string"/>
   <member name="value" stringMaxLength="255" type="string"/>
 </struct>
-<enum name="FieldValueKind">
-  <enumerator name="FIELD_STRING"/>
-  <enumerator name="FIELD_FLOAT"/>
+<enum name="FieldKind">
+  <enumerator name="FIELD_DOUBLE"/>
   <enumerator name="FIELD_INT"/>
+  <enumerator name="FIELD_UINT"/>
+  <enumerator name="FIELD_STRING"/>
   <enumerator name="FIELD_BOOL"/>
 </enum> 
 <union name="FieldValue">
-<discriminator type="nonBasic" nonBasicTypeName="FieldValueKind"/>
+<discriminator type="nonBasic" nonBasicTypeName="FieldKind"/>
 <case>
-  <caseDiscriminator value="(FIELD_STRING)"/>
-<member name="s" stringMaxLength="255" type="string"/>
-</case>
-<case>
-  <caseDiscriminator value="(FIELD_FLOAT)"/>
-<member name="f" type="float32"/>
+  <caseDiscriminator value="(FIELD_DOUBLE)"/>
+<member name="d" type="float64"/>
 </case>
 <case>
   <caseDiscriminator value="(FIELD_INT)"/>
-<member name="i" type="int32"/>
+<member name="i" type="int64"/>
+</case>
+<case>
+  <caseDiscriminator value="(FIELD_UINT)"/>
+<member name="u" type="uint64"/>
+</case>
+<case>
+  <caseDiscriminator value="(FIELD_STRING)"/>
+<member name="s" stringMaxLength="255" type="string"/>
 </case>
 <case>
   <caseDiscriminator value="(FIELD_BOOL)"/>
@@ -31,7 +36,8 @@
 </union>
 <struct name= "Field">
   <member name="key" stringMaxLength="255" type="string"/>
-  <member name="value" type="float64"/>
+  <member name="kind" type="nonBasic"  nonBasicTypeName= "FieldKind"/>
+  <member name="value" type="nonBasic"  nonBasicTypeName= "FieldValue"/>
 </struct>
 <const name="MAX_TAGS" type="int32" value="32"/>
 <const name="MAX_FIELDS" type="int32" value="128"/>

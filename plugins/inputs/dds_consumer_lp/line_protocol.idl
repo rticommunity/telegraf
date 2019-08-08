@@ -3,28 +3,31 @@ struct Tag {
     string value;
 };
 
-enum FieldValueKind{
-    FIELD_STRING,
-    FIELD_FLOAT,
+enum FieldKind{
+    FIELD_DOUBLE,
     FIELD_INT,
+    FIELD_UINT,
+    FIELD_STRING,
     FIELD_BOOL
 };
 
-union FieldValue switch (FieldValueKind) {
+union FieldValue switch (FieldKind) {
+    case FIELD_DOUBLE:
+        double d;
+    case FIELD_INT:
+        long long i;
+    case FIELD_UINT:
+        unsigned long long u;
     case FIELD_STRING:
         string s;
-    case FIELD_FLOAT:
-        float f;
-    case FIELD_INT:
-        long i;
     case FIELD_BOOL:
         boolean b;
 };
 
 struct Field {
     string key;
-    //FieldValue value;
-    double value;
+    FieldKind kind;
+    FieldValue value;
 };
 
 const long MAX_TAGS = 32;

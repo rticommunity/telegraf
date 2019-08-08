@@ -41,7 +41,7 @@ This code contains trade secrets of Real-Time Innovations, Inc.
 
     <!-- types -->
     <types>
-      <include file="line_protocol.xml"/>
+      <include file="line_protocol_union.xml"/>
     </types>
 
 

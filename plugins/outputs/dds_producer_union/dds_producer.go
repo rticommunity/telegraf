@@ -11,11 +11,11 @@
 package dds_producer
 
 import (
-	"time"
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/outputs"
 	"github.com/influxdata/telegraf/plugins/serializers"
 	"github.com/rticommunity/rticonnextdds-connector-go"
+	"time"
 )
 
 type DDSProducer struct {
@@ -31,20 +31,49 @@ type DDSProducer struct {
 }
 
 type Tag struct {
-	Key string `json:"key"`
+	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
+const (
+	CPU_USAGE = 0
+	MEM       = 1
+)
+
+type CpuUsageType struct {
+	UsageUser      float64 `json:"usage_user"`
+	UsageSystem    float64 `json:"usage_system"`
+	UsageIdle      float64 `json:"usage_idle"`
+	UsageActive    float64 `json:"usage_active"`
+	UsageNice      float64 `json:"usage_nice"`
+	UsageIoWait    float64 `json:"usage_iowait"`
+	UsageIrq       float64 `json:"usage_irq"`
+	UsageSoftirq   float64 `json:"usage_softirq"`
+	UsageSteal     float64 `json:"usage_steal"`
+	UsageGuest     float64 `json:"usage_guest"`
+	UsageGuestNice float64 `json:"usage_guest_nice"`
+}
+
+type MemType struct {
+	Active    uint64 `json:"active"`
+	Available uint64 `json:"available"`
+}
+
+type FieldValueUnion struct {
+	CpuUsage *CpuUsageType `json:"cpu_usage,omitempty"`
+	Mem      *MemType      `json:"mem,omitempty"`
+}
+
 type Field struct {
-	Key string `json:"key"`
-	Value float64 `json:"value"`
+	Kind  int         `json:"kind"`
+	Value interface{} `json:"value"`
 }
 
 type Metric struct {
-	Name string `json:"name"`
-	Tags []Tag `json:"tags"`
-	Fields []Field	`json:"fields"`
-	Timestamp int64 `json:"timestamp"`
+	Name      string `json:"name"`
+	Tags      []Tag  `json:"tags"`
+	Fields    Field  `json:"fields"`
+	Timestamp int64  `json:"timestamp"`
 }
 
 var sampleConfig = `
@@ -61,17 +90,17 @@ func (d *DDSProducer) SetSerializer(serializer serializers.Serializer) {
 }
 
 func (d *DDSProducer) Connect() (err error) {
-    // Create a Connector
-    d.connector, err = rti.NewConnector(d.ParticipantConfig, d.ConfigFilePath)
-    if err != nil {
-        return err
-    }
+	// Create a Connector
+	d.connector, err = rti.NewConnector(d.ParticipantConfig, d.ConfigFilePath)
+	if err != nil {
+		return err
+	}
 
-    // Get a DDS Writer
-    d.writer, err = d.connector.GetOutput(d.WriterConfig)
-    if err != nil {
-        return err
-    }
+	// Get a DDS Writer
+	d.writer, err = d.connector.GetOutput(d.WriterConfig)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -104,12 +133,32 @@ func (d *DDSProducer) Write(metrics []telegraf.Metric) (err error) {
 			t.Value = tag.Value
 			m.Tags = append(m.Tags, t)
 		}
-		for _, field := range metric.FieldList() {
-			var f Field
-			f.Key = field.Key
-			v := convertField(field.Value)
-			f.Value = v
-			m.Fields = append(m.Fields, f)
+		switch metric.Name() {
+		case "cpu":
+			m.Fields.Kind = CPU_USAGE
+			m.Fields.Value = FieldValueUnion{
+				CpuUsage: &CpuUsageType{
+					UsageUser:   metric.Fields()["usage_user"].(float64),
+					UsageSystem: metric.Fields()["usage_system"].(float64),
+					UsageIdle:   metric.Fields()["usage_idle"].(float64),
+					//UsageActive: metric.Fields()["usage_active"].(float64),
+					UsageNice:      metric.Fields()["usage_nice"].(float64),
+					UsageIoWait:    metric.Fields()["usage_iowait"].(float64),
+					UsageIrq:       metric.Fields()["usage_irq"].(float64),
+					UsageSoftirq:   metric.Fields()["usage_softirq"].(float64),
+					UsageSteal:     metric.Fields()["usage_steal"].(float64),
+					UsageGuest:     metric.Fields()["usage_guest"].(float64),
+					UsageGuestNice: metric.Fields()["usage_guest_nice"].(float64),
+				},
+			}
+		case "mem":
+			m.Fields.Kind = MEM
+			m.Fields.Value = FieldValueUnion{
+				Mem: &MemType{
+					Active:    metric.Fields()["active"].(uint64),
+					Available: metric.Fields()["available"].(uint64),
+				},
+			}
 		}
 
 		m.Timestamp = time.Now().UTC().UnixNano()
@@ -168,7 +217,7 @@ func convertField(v interface{}) float64 {
 }
 
 func init() {
-	outputs.Add("dds_producer", func() telegraf.Output {
+	outputs.Add("dds_producer_union", func() telegraf.Output {
 		return &DDSProducer{}
 	})
 }

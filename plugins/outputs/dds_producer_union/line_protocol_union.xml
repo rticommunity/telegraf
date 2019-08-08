@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:////home/kyounghoan/rti_connext_dds-6.0.0/bin/../resource/app/app_support/rtiddsgen/schema/rti_dds_topic_types.xsd">
+<struct name= "CpuUsage">
+  <member name="usage_user" type="float64"/>
+  <member name="usage_system" type="float64"/>
+  <member name="usage_idle" type="float64"/>
+  <member name="usage_active" type="float64"/>
+  <member name="usage_nice" type="float64"/>
+  <member name="usage_iowait" type="float64"/>
+  <member name="usage_irq" type="float64"/>
+  <member name="usage_softirq" type="float64"/>
+  <member name="usage_steal" type="float64"/>
+  <member name="usage_guest" type="float64"/>
+  <member name="usage_guest_nice" type="float64"/>
+</struct>
+<struct name= "Mem">
+  <member name="available_percent" type="float64"/>
+  <member name="used_percent" type="float64"/>
+  <member name="active" type="uint64"/>
+  <member name="available" type="uint64"/>
+  <member name="buffered" type="uint64"/>
+  <member name="cached" type="uint64"/>
+  <member name="free" type="uint64"/>
+  <member name="inactive" type="uint64"/>
+  <member name="slab" type="uint64"/>
+  <member name="total" type="uint64"/>
+  <member name="used" type="uint64"/>
+  <member name="wired" type="uint64"/>
+  <member name="commit_limit" type="uint64"/>
+  <member name="committed_as" type="uint64"/>
+  <member name="dirty" type="uint64"/>
+  <member name="high_free" type="uint64"/>
+  <member name="high_total" type="uint64"/>
+  <member name="huge_page_size" type="uint64"/>
+  <member name="huge_page_free" type="uint64"/>
+  <member name="huge_page_total" type="uint64"/>
+  <member name="low_free" type="uint64"/>
+  <member name="low_total" type="uint64"/>
+  <member name="mapped" type="uint64"/>
+  <member name="page_tables" type="uint64"/>
+  <member name="shared" type="uint64"/>
+  <member name="swap_cached" type="uint64"/>
+  <member name="swap_free" type="uint64"/>
+  <member name="swap_total" type="uint64"/>
+  <member name="vmalloc_chunk" type="uint64"/>
+  <member name="vmalloc_total" type="uint64"/>
+  <member name="vmalloc_used" type="uint64"/>
+  <member name="write_back" type="uint64"/>
+  <member name="write_back_tmp" type="uint64"/>
+</struct>
+<struct name= "Net">
+  <member name="bytes_sent" type="uint64"/>
+  <member name="bytes_recv" type="uint64"/>
+  <member name="packets_sent" type="uint64"/>
+  <member name="packets_recv" type="uint64"/>
+  <member name="err_in" type="uint64"/>
+  <member name="err_out" type="uint64"/>
+  <member name="drop_in" type="uint64"/>
+  <member name="drop_out" type="uint64"/>
+</struct>
+<struct name= "Netstat">
+  <member name="tcp_established" type="uint64"/>
+  <member name="tcp_syn_sent" type="uint64"/>
+  <member name="tcp_syn_recv" type="uint64"/>
+  <member name="tcp_fin_wait1" type="uint64"/>
+  <member name="tcp_fin_wait2" type="uint64"/>
+  <member name="tcp_time_wait" type="uint64"/>
+  <member name="tcp_close" type="uint64"/>
+  <member name="tcp_close_wait" type="uint64"/>
+  <member name="tcp_last_ack" type="uint64"/>
+  <member name="tcp_listen" type="uint64"/>
+  <member name="tcp_closing" type="uint64"/>
+  <member name="tcp_none" type="uint64"/>
+  <member name="udp_socket" type="uint64"/>
+</struct>
+<struct name= "System">
+  <member name="load1" type="float64"/>
+  <member name="load15" type="float64"/>
+  <member name="load5" type="float64"/>
+  <member name="n_users" type="uint64"/>
+  <member name="n_cpus" type="uint64"/>
+  <member name="uptime" type="uint64"/>
+  <member name="uptime_format" stringMaxLength="255" type="string"/>
+</struct>
+<struct name= "Processes">
+  <member name="blocked" type="uint64"/>
+  <member name="running" type="uint64"/>
+  <member name="sleeping" type="uint64"/>
+  <member name="stopped" type="uint64"/>
+  <member name="total" type="uint64"/>
+  <member name="zombie" type="uint64"/>
+  <member name="dead" type="uint64"/>
+  <member name="wait" type="uint64" optional="true"/>
+  <member name="idle" type="uint64" optional="true"/>
+  <member name="paging" type="uint64" optional="true"/>
+  <member name="total_threads" type="uint64" optional="true"/>
+</struct>
+<struct name= "Disk">
+  <member name="free" type="uint64"/>
+  <member name="total" type="uint64"/>
+  <member name="used" type="uint64"/>
+  <member name="used_percent" type="float64"/>
+  <member name="inodes_free" type="uint64"/>
+  <member name="inodes_total" type="uint64"/>
+  <member name="inodes_used" type="uint64"/>
+</struct>
+<struct name= "Diskio">
+  <member name="reads" type="uint64"/>
+  <member name="writes" type="uint64"/>
+  <member name="read_bytes" type="uint64"/>
+  <member name="write_bytes" type="uint64"/>
+  <member name="read_time" type="uint64"/>
+  <member name="write_time" type="uint64"/>
+  <member name="io_time" type="uint64"/>
+  <member name="weighted_io_time" type="uint64"/>
+  <member name="iops_in_progress" type="uint64"/>
+</struct>
+<struct name= "Kernel">
+  <member name="boot_time" type="uint64"/>
+  <member name="context_switches" type="uint64"/>
+  <member name="disk_pages_in" type="uint64"/>
+  <member name="disk_pages_out" type="uint64"/>
+  <member name="interrupts" type="uint64"/>
+  <member name="processes_forked" type="uint64"/>
+  <member name="entropy_avail" type="uint64"/>
+</struct>
+<struct name= "Swap">
+  <member name="free" type="uint64"/>
+  <member name="total" type="uint64"/>
+  <member name="used" type="uint64"/>
+  <member name="used_percent" type="float64"/>
+  <member name="swap_in" type="uint64"/>
+  <member name="swap_out" type="uint64"/>
+</struct>
+<struct name= "Interrupts">
+  <member name="cpu" type="uint64" optional="true"/>
+  <member name="total" type="uint64" optional="true"/>
+  <member name="count" type="uint64" optional="true"/>
+</struct>
+<struct name= "SoftInterrupts">
+  <member name="cpu" type="uint64" optional="true"/>
+  <member name="total" type="uint64" optional="true"/>
+  <member name="count" type="uint64" optional="true"/>
+</struct>
+<enum name="FieldKind">
+  <enumerator name="CPU_USAGE"/>
+  <enumerator name="MEM"/>
+  <enumerator name="NET"/>
+  <enumerator name="NETSTAT"/>
+  <enumerator name="SYSTEM"/>
+  <enumerator name="PROCESSES"/>
+  <enumerator name="DISK"/>
+  <enumerator name="DISKIO"/>
+  <enumerator name="KERNEL"/>
+  <enumerator name="SWAP"/>
+  <enumerator name="INTERRUPTS"/>
+  <enumerator name="SOFT_INTERRUPTS"/>
+</enum> 
+<union name="FieldValue">
+<discriminator type="nonBasic" nonBasicTypeName="FieldKind"/>
+<case>
+  <caseDiscriminator value="(CPU_USAGE)"/>
+<member name="cpu_usage" type="nonBasic"  nonBasicTypeName= "CpuUsage"/>
+</case>
+<case>
+  <caseDiscriminator value="(MEM)"/>
+<member name="mem" type="nonBasic"  nonBasicTypeName= "Mem"/>
+</case>
+<case>
+  <caseDiscriminator value="(NET)"/>
+<member name="net" type="nonBasic"  nonBasicTypeName= "Net"/>
+</case>
+<case>
+  <caseDiscriminator value="(NETSTAT)"/>
+<member name="netstat" type="nonBasic"  nonBasicTypeName= "Netstat"/>
+</case>
+<case>
+  <caseDiscriminator value="(SYSTEM)"/>
+<member name="system" type="nonBasic"  nonBasicTypeName= "System"/>
+</case>
+<case>
+  <caseDiscriminator value="(PROCESSES)"/>
+<member name="processes" type="nonBasic"  nonBasicTypeName= "Processes"/>
+</case>
+<case>
+  <caseDiscriminator value="(DISK)"/>
+<member name="disk" type="nonBasic"  nonBasicTypeName= "Disk"/>
+</case>
+<case>
+  <caseDiscriminator value="(DISKIO)"/>
+<member name="diskio" type="nonBasic"  nonBasicTypeName= "Diskio"/>
+</case>
+<case>
+  <caseDiscriminator value="(KERNEL)"/>
+<member name="kernel" type="nonBasic"  nonBasicTypeName= "Kernel"/>
+</case>
+<case>
+  <caseDiscriminator value="(SWAP)"/>
+<member name="swap" type="nonBasic"  nonBasicTypeName= "Swap"/>
+</case>
+<case>
+  <caseDiscriminator value="(INTERRUPTS)"/>
+<member name="interrupts" type="nonBasic"  nonBasicTypeName= "Interrupts"/>
+</case>
+<case>
+  <caseDiscriminator value="(SOFT_INTERRUPTS)"/>
+<member name="soft_interrupts" type="nonBasic"  nonBasicTypeName= "SoftInterrupts"/>
+</case>
+</union>
+<struct name= "Field">
+  <member name="kind" type="nonBasic"  nonBasicTypeName= "FieldKind"/>
+  <member name="value" type="nonBasic"  nonBasicTypeName= "FieldValue"/>
+</struct>
+<struct name= "Tag">
+  <member name="key" stringMaxLength="255" type="string"/>
+  <member name="value" stringMaxLength="255" type="string"/>
+</struct>
+<const name="MAX_TAGS" type="int32" value="32"/>
+<struct name= "Metric">
+  <member name="name" stringMaxLength="255" type="string" key="true"/>
+  <member name="tags" sequenceMaxLength="MAX_TAGS" type="nonBasic"  nonBasicTypeName= "Tag"/>
+  <member name="fields" type="nonBasic"  nonBasicTypeName= "Field"/>
+  <member name="timestamp" type="int64"/>
+</struct>
+</types>
