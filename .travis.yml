@@ -8,3 +8,6 @@ go:
 
 script:
   - cd $TRAVIS_BUILD_DIR; make
+
+before_install:
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
