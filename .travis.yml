@@ -1,0 +1,10 @@
+language: go
+
+os:
+  - linux
+  
+go:
+  - "1.12.x"
+
+script:
+  - cd $TRAVIS_BUILD_DIR; make
