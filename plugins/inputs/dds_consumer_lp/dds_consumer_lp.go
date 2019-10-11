@@ -67,6 +67,7 @@ type Metric struct {
 
 // Default configurations
 var sampleConfig = `
+# DDS Domain ID configuration
 domain_id = "0"
 `
 
