@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:////opt/rti_connext_dds-6.0.0/bin/../resource/app/app_support/rtiddsgen/schema/rti_dds_topic_types.xsd">
+<directive kind="copyC">#if 0</directive>
+<include file="dds_rtf2_dcps.xml"/>
+<directive kind="copyC">#endif</directive>
+<directive kind="copyC">#include "dds_typedefs.h"</directive>
+<directive kind="copyC">#include "dds_rtf2_dcpsPlugin.h"</directive>
+<module name="rti">
+  <module name="monitoring">
+    <typedef name="DiscreteVariable" type="int64"/>
+    <struct name= "DiscreteVariableStatistics" nested="true">
+      <member name="mean" type="float64"/>
+      <member name="minimum" type="nonBasic"  nonBasicTypeName= "rti::monitoring::DiscreteVariable"/>
+      <member name="maximum" type="nonBasic"  nonBasicTypeName= "rti::monitoring::DiscreteVariable"/>
+      <member name="variance" type="float64"/>
+    </struct>
+  </module>
+  <module name="dds">
+    <module name="monitoring">
+      <const name="STRING_MAX_LENGTH" type="int32" value="256"/>
+      <struct name= "DomainParticipantDescription" extensibility= "mutable">
+        <member name="entity_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="domain_id" id="1" type="int32"/>
+        <member name="host_id" id="2" type="uint32"/>
+        <member name="process_id" id="3" type="uint32"/>
+        <member name="qos" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DomainParticipantQos"/>
+      </struct>
+      <struct name= "TopicDescription" extensibility= "mutable">
+        <member name="entity_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="participant_entity_key" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="domain_id" id="2" type="int32"/>
+        <member name="host_id" id="3" type="uint32"/>
+        <member name="process_id" id="4" type="uint32"/>
+        <member name="topic_name" stringMaxLength="rti::dds::monitoring::STRING_MAX_LENGTH" id="5" type="string"/>
+        <member name="type_name" stringMaxLength="rti::dds::monitoring::STRING_MAX_LENGTH" id="6" type="string"/>
+        <member name="tc_serialized_size" id="7" type="uint32"/>
+        <member name="qos" id="8" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TopicQos"/>
+      </struct>
+      <struct name= "PublisherDescription" extensibility= "mutable">
+        <member name="entity_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="participant_entity_key" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="domain_id" id="2" type="int32"/>
+        <member name="host_id" id="3" type="uint32"/>
+        <member name="process_id" id="4" type="uint32"/>
+        <member name="qos" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PublisherQos"/>
+      </struct>
+      <struct name= "SubscriberDescription" extensibility= "mutable">
+        <member name="entity_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="participant_entity_key" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="domain_id" id="2" type="int32"/>
+        <member name="host_id" id="3" type="uint32"/>
+        <member name="process_id" id="4" type="uint32"/>
+        <member name="qos" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SubscriberQos"/>
+      </struct>
+      <struct name= "DataReaderDescription" extensibility= "mutable">
+        <member name="entity_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="subscriber_entity_key" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="topic_entity_key" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="is_content_filtered" id="3" type="boolean"/>
+        <member name="domain_id" id="4" type="int32"/>
+        <member name="host_id" id="5" type="uint32"/>
+        <member name="process_id" id="6" type="uint32"/>
+        <member name="type_name" stringMaxLength="rti::dds::monitoring::STRING_MAX_LENGTH" id="7" type="string"/>
+        <member name="topic_name" stringMaxLength="rti::dds::monitoring::STRING_MAX_LENGTH" id="8" type="string"/>
+        <member name="serialized_sample_max_size" id="9" type="int32"/>
+        <member name="serialized_sample_min_size" id="10" type="int32"/>
+        <member name="serialized_key_max_size" id="11" type="int32"/>
+        <member name="qos" id="12" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataReaderQos"/>
+      </struct>
+      <struct name= "DataWriterDescription" extensibility= "mutable">
+        <member name="entity_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="publisher_entity_key" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="topic_entity_key" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="domain_id" id="3" type="int32"/>
+        <member name="host_id" id="4" type="uint32"/>
+        <member name="process_id" id="5" type="uint32"/>
+        <member name="type_name" stringMaxLength="rti::dds::monitoring::STRING_MAX_LENGTH" id="6" type="string"/>
+        <member name="topic_name" stringMaxLength="rti::dds::monitoring::STRING_MAX_LENGTH" id="7" type="string"/>
+        <member name="serialized_sample_max_size" id="8" type="int32"/>
+        <member name="serialized_sample_min_size" id="9" type="int32"/>
+        <member name="serialized_key_max_size" id="10" type="int32"/>
+        <member name="qos" id="11" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataWriterQos"/>
+      </struct>
+      <struct name= "LivelinessChangedStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LivelinessChangedStatus"/>
+      </struct>
+      <struct name= "SampleRejectedStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SampleRejectedStatus"/>
+      </struct>
+      <struct name= "RequestedDeadlineMissedStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RequestedDeadlineMissedStatus"/>
+      </struct>
+      <struct name= "RequestedIncompatibleQosStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RequestedIncompatibleQosStatus"/>
+      </struct>
+      <struct name= "SampleLostStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SampleLostStatus"/>
+      </struct>
+      <struct name= "SubscriptionMatchedStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SubscriptionMatchedStatus"/>
+      </struct>
+      <struct name= "DataReaderCacheStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataReaderCacheStatus"/>
+      </struct>
+      <struct name= "DataReaderProtocolStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataReaderProtocolStatus"/>
+      </struct>
+      <struct name= "DataReaderEntityStatistics" extensibility= "mutable">
+        <member name="datareader_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="period" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t" key="true"/>
+        <member name="participant_key" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="subscriber_key" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="topic_key" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="is_content_filtered" id="5" type="boolean"/>
+        <member name="topic_name" stringMaxLength="rti::dds::monitoring::STRING_MAX_LENGTH" id="6" type="string"/>
+        <member name="domain_id" id="7" type="int32"/>
+        <member name="host_id" id="8" type="uint32"/>
+        <member name="process_id" id="9" type="uint32"/>
+        <member name="sample_rejected_status" id="10" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::SampleRejectedStatusStatistics"/>
+        <member name="liveliness_changed_status" id="11" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::LivelinessChangedStatusStatistics"/>
+        <member name="requested_deadline_missed_status" id="12" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::RequestedDeadlineMissedStatusStatistics"/>
+        <member name="requested_incompatible_qos_status" id="13" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::RequestedIncompatibleQosStatusStatistics"/>
+        <member name="sample_lost_status" id="14" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::SampleLostStatusStatistics"/>
+        <member name="subscription_matched_status" id="15" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::SubscriptionMatchedStatusStatistics"/>
+        <member name="datareader_cache_status" id="16" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::DataReaderCacheStatusStatistics"/>
+        <member name="datareader_protocol_status" id="17" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::DataReaderProtocolStatusStatistics"/>
+      </struct>
+      <struct name= "DataReaderEntityMatchedPublicationStatistics" extensibility= "mutable">
+        <member name="datareader_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="publication_handle" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t" key="true"/>
+        <member name="period" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t" key="true"/>
+        <member name="datareader_protocol_status" id="3" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::DataReaderProtocolStatusStatistics"/>
+      </struct>
+      <struct name= "LivelinessLostStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LivelinessLostStatus"/>
+      </struct>
+      <struct name= "OfferedDeadlineMissedStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::OfferedDeadlineMissedStatus"/>
+      </struct>
+      <struct name= "OfferedIncompatibleQosStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::OfferedIncompatibleQosStatus"/>
+      </struct>
+      <struct name= "PublicationMatchedStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PublicationMatchedStatus"/>
+      </struct>
+      <struct name= "ReliableWriterCacheChangedStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliableWriterCacheChangedStatus"/>
+      </struct>
+      <struct name= "ReliableReaderActivityChangedStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliableReaderActivityChangedStatus"/>
+      </struct>
+      <struct name= "DataWriterCacheStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataWriterCacheStatus"/>
+      </struct>
+      <struct name= "DataWriterProtocolStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataWriterProtocolStatus"/>
+      </struct>
+      <struct name= "DataWriterEntityStatistics" extensibility= "mutable">
+        <member name="datawriter_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="period" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t" key="true"/>
+        <member name="participant_key" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="publisher_key" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="topic_key" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="topic_name" stringMaxLength="rti::dds::monitoring::STRING_MAX_LENGTH" id="5" type="string"/>
+        <member name="domain_id" id="6" type="int32"/>
+        <member name="host_id" id="7" type="uint32"/>
+        <member name="process_id" id="8" type="uint32"/>
+        <member name="liveliness_lost_status" id="9" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::LivelinessLostStatusStatistics"/>
+        <member name="offered_deadline_missed_status" id="10" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::OfferedDeadlineMissedStatusStatistics"/>
+        <member name="offered_incompatible_qos_status" id="11" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::OfferedIncompatibleQosStatusStatistics"/>
+        <member name="publication_matched_status" id="12" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::PublicationMatchedStatusStatistics"/>
+        <member name="reliable_writer_cache_changed_status" id="13" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::ReliableWriterCacheChangedStatusStatistics"/>
+        <member name="reliable_reader_activity_changed_status" id="14" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::ReliableReaderActivityChangedStatusStatistics"/>
+        <member name="datawriter_cache_status" id="15" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::DataWriterCacheStatusStatistics"/>
+        <member name="datawriter_protocol_status" id="16" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::DataWriterProtocolStatusStatistics"/>
+      </struct>
+      <struct name= "DataWriterEntityMatchedSubscriptionStatistics" extensibility= "mutable">
+        <member name="datawriter_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="subscription_handle" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t" key="true"/>
+        <member name="period" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t" key="true"/>
+        <member name="datawriter_protocol_status" id="3" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::DataWriterProtocolStatusStatistics"/>
+      </struct>
+      <struct name= "DataWriterEntityMatchedSubscriptionWithLocatorStatistics" extensibility= "mutable">
+        <member name="datawriter_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="subscription_locator" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Locator_t" key="true"/>
+        <member name="period" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t" key="true"/>
+        <member name="datawriter_protocol_status" id="3" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::DataWriterProtocolStatusStatistics"/>
+      </struct>
+      <struct name= "ProcessStatistics" nested="true">
+        <member name="user_cpu_time" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+        <member name="user_cpu_time_change" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+        <member name="kernel_cpu_time" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+        <member name="kernel_cpu_time_change" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+        <member name="physical_memory_bytes" type="uint64"/>
+        <member name="total_memory_bytes" type="uint64"/>
+      </struct>
+      <struct name= "DomainParticipantEntityStatistics" extensibility= "mutable">
+        <member name="participant_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="period" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t" key="true"/>
+        <member name="domain_id" id="2" type="int32"/>
+        <member name="host_id" id="3" type="uint32"/>
+        <member name="process_id" id="4" type="uint32"/>
+        <member name="process" id="5" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::ProcessStatistics"/>
+        <member name="remoteParticipantCount" id="6" type="int32"/>
+        <member name="remoteWriterCount" id="7" type="int32"/>
+        <member name="remoteReaderCount" id="8" type="int32"/>
+      </struct>
+      <struct name= "InconsistentTopicStatusStatistics" extensibility= "mutable" nested="true">
+        <member name="status" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InconsistentTopicStatus"/>
+      </struct>
+      <struct name= "TopicEntityStatistics" extensibility= "mutable">
+        <member name="topic_key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t" key="true"/>
+        <member name="period" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t" key="true"/>
+        <member name="participant_key" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+        <member name="topic_name" stringMaxLength="rti::dds::monitoring::STRING_MAX_LENGTH" id="3" type="string"/>
+        <member name="type_name" stringMaxLength="rti::dds::monitoring::STRING_MAX_LENGTH" id="4" type="string"/>
+        <member name="domain_id" id="5" type="int32"/>
+        <member name="host_id" id="6" type="uint32"/>
+        <member name="process_id" id="7" type="uint32"/>
+        <member name="inconsistent_topic_status" id="8" type="nonBasic"  nonBasicTypeName= "rti::dds::monitoring::InconsistentTopicStatusStatistics"/>
+      </struct>
+    </module>
+  </module>
+</module>
+</types>

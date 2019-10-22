@@ -1,0 +1,1387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:////opt/rti_connext_dds-6.0.0/bin/../resource/app/app_support/rtiddsgen/schema/rti_dds_topic_types.xsd">
+<module name="DDSMonitoring">
+  <struct name= "RTIInstanceHandle" extensibility= "final" nested="true">
+    <member name="value" type="byte" arrayDimensions="16"/>
+    <member name="length" type="uint32"/>
+    <member name="isValid" type="boolean"/>
+  </struct>
+  <typedef name="DomainId_t" type="int32"/>
+  <struct name= "BuiltinTopicKey_t" extensibility= "final" nested="true">
+    <member name="value" type="int32" arrayDimensions="4"/>
+  </struct>
+  <typedef name="InstanceHandle_t" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RTIInstanceHandle"/>
+  <typedef name="ReturnCode_t" type="int32"/>
+  <typedef name="QosPolicyId_t" type="int32"/>
+  <typedef name="DataRepresentationId_t" type="int16"/>
+  <struct name= "Duration_t" extensibility= "final" nested="true">
+    <member name="sec" type="int32"/>
+    <member name="nanosec" type="uint32"/>
+  </struct>
+  <struct name= "Time_t" extensibility= "final" nested="true">
+    <member name="sec" type="int32"/>
+    <member name="nanosec" type="uint32"/>
+  </struct>
+  <typedef name="StringSequence" sequenceMaxLength="100" stringMaxLength="255" type="string"/>
+  <struct name= "EndpointGroup_t" extensibility= "final" nested="true">
+    <member name="role_name" stringMaxLength="255" type="string"/>
+    <member name="quorum" type="int32"/>
+  </struct>
+  <const name="LENGTH_UNLIMITED" type="int32" value="-1"/>
+  <const name="DURATION_INFINITE_SEC" type="int32" value="0x7fffffff"/>
+  <const name="DURATION_INFINITE_NSEC" type="uint32" value="0x7fffffff"/>
+  <const name="DURATION_ZERO_SEC" type="int32" value="0"/>
+  <const name="DURATION_ZERO_NSEC" type="uint32" value="0"/>
+  <const name="TIME_INVALID_SEC" type="int32" value="-1"/>
+  <const name="TIME_INVALID_NSEC" type="uint32" value="0xffffffff"/>
+  <const name="RETCODE_OK" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="0"/>
+  <const name="RETCODE_ERROR" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="1"/>
+  <const name="RETCODE_UNSUPPORTED" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="2"/>
+  <const name="RETCODE_BAD_PARAMETER" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="3"/>
+  <const name="RETCODE_PRECONDITION_NOT_MET" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="4"/>
+  <const name="RETCODE_OUT_OF_RESOURCES" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="5"/>
+  <const name="RETCODE_NOT_ENABLED" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="6"/>
+  <const name="RETCODE_IMMUTABLE_POLICY" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="7"/>
+  <const name="RETCODE_INCONSISTENT_POLICY" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="8"/>
+  <const name="RETCODE_ALREADY_DELETED" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="9"/>
+  <const name="RETCODE_TIMEOUT" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="10"/>
+  <const name="RETCODE_NO_DATA" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="11"/>
+  <const name="RETCODE_ILLEGAL_OPERATION" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReturnCode_t" value="12"/>
+  <typedef name="StatusKind" type="uint32"/>
+  <typedef name="StatusMask" type="uint32"/>
+  <const name="INCONSISTENT_TOPIC_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;0"/>
+  <const name="OFFERED_DEADLINE_MISSED_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;1"/>
+  <const name="REQUESTED_DEADLINE_MISSED_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;2"/>
+  <const name="OFFERED_INCOMPATIBLE_QOS_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;5"/>
+  <const name="REQUESTED_INCOMPATIBLE_QOS_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;6"/>
+  <const name="SAMPLE_LOST_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;7"/>
+  <const name="SAMPLE_REJECTED_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;8"/>
+  <const name="DATA_ON_READERS_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;9"/>
+  <const name="DATA_AVAILABLE_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;10"/>
+  <const name="LIVELINESS_LOST_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;11"/>
+  <const name="LIVELINESS_CHANGED_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;12"/>
+  <const name="PUBLICATION_MATCHED_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;13"/>
+  <const name="SUBSCRIPTION_MATCHED_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x0001&lt;&lt;14"/>
+  <const name="DATA_WRITER_APPLICATION_ACKNOWLEDGEMENT_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;22"/>
+  <const name="DATA_WRITER_INSTANCE_REPLACED_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;23"/>
+  <const name="RELIABLE_WRITER_CACHE_CHANGED_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;24"/>
+  <const name="RELIABLE_READER_ACTIVITY_CHANGED_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;25"/>
+  <const name="DATA_WRITER_CACHE_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;26"/>
+  <const name="DATA_WRITER_PROTOCOL_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;27"/>
+  <const name="DATA_READER_CACHE_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;28"/>
+  <const name="DATA_READER_PROTOCOL_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;29"/>
+  <const name="DATA_WRITER_DESTINATION_UNREACHABLE_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;30"/>
+  <const name="DATA_WRITER_SAMPLE_REMOVED_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;31"/>
+  <const name="DATA_WRITER_DATA_REQUEST_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;32"/>
+  <const name="DATA_WRITER_DATA_RETURN_STATUS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::StatusKind" value="0x00000001&lt;&lt;33"/>
+  <struct name= "InconsistentTopicStatus" nested="true">
+    <member name="total_count" type="int32"/>
+    <member name="total_count_change" type="int32"/>
+  </struct>
+  <enum name="SampleLostStatusKind">
+    <enumerator name="NOT_LOST"/>
+    <enumerator name="LOST_BY_WRITER"/>
+    <enumerator name="LOST_BY_INSTANCES_LIMIT"/>
+    <enumerator name="LOST_BY_REMOTE_WRITERS_PER_INSTANCE_LIMIT"/>
+    <enumerator name="LOST_BY_INCOMPLETE_COHERENT_SET"/>
+    <enumerator name="LOST_BY_LARGE_COHERENT_SET"/>
+    <enumerator name="LOST_BY_SAMPLES_PER_REMOTE_WRITER_LIMIT"/>
+    <enumerator name="LOST_BY_VIRTUAL_WRITERS_LIMIT"/>
+    <enumerator name="LOST_BY_REMOTE_WRITERS_PER_SAMPLE_LIMIT"/>
+    <enumerator name="LOST_BY_AVAILABILITY_WAITING_TIME"/>
+    <enumerator name="LOST_BY_REMOTE_WRITER_SAMPLES_PER_VIRTUAL_QUEUE_LIMIT"/>
+  </enum> 
+  <struct name= "SampleLostStatus" nested="true">
+    <member name="total_count" type="int32"/>
+    <member name="total_count_change" type="int32"/>
+    <member name="last_reason" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SampleLostStatusKind"/>
+  </struct>
+  <enum name="SampleRejectedStatusKind">
+    <enumerator name="NOT_REJECTED"/>
+    <enumerator name="REJECTED_BY_INSTANCES_LIMIT"/>
+    <enumerator name="REJECTED_BY_SAMPLES_LIMIT"/>
+    <enumerator name="REJECTED_BY_SAMPLES_PER_INSTANCE_LIMIT"/>
+    <enumerator name="REJECTED_BY_REMOTE_WRITERS_LIMIT"/>
+    <enumerator name="REJECTED_BY_REMOTE_WRITERS_PER_INSTANCE_LIMIT"/>
+    <enumerator name="REJECTED_BY_SAMPLES_PER_REMOTE_WRITER_LIMIT"/>
+    <enumerator name="REJECTED_BY_VIRTUAL_WRITERS_LIMIT"/>
+    <enumerator name="REJECTED_BY_REMOTE_WRITERS_PER_SAMPLE_LIMIT"/>
+    <enumerator name="REJECTED_BY_REMOTE_WRITER_SAMPLES_PER_VIRTUAL_QUEUE_LIMIT"/>
+  </enum> 
+  <enum name="TransportMulticastQosPolicyKind">
+    <enumerator name="AUTOMATIC_TRANSPORT_MULTICAST_QOS"/>
+    <enumerator name="UNICAST_ONLY_TRANSPORT_MULTICAST_QOS"/>
+  </enum> 
+  <struct name= "SampleRejectedStatus" nested="true">
+    <member name="total_count" type="int32"/>
+    <member name="total_count_change" type="int32"/>
+    <member name="last_reason" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SampleRejectedStatusKind"/>
+    <member name="last_instance_handle" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t"/>
+  </struct>
+  <struct name= "LivelinessLostStatus" nested="true">
+    <member name="total_count" type="int32"/>
+    <member name="total_count_change" type="int32"/>
+  </struct>
+  <struct name= "LivelinessChangedStatus" nested="true">
+    <member name="alive_count" type="int32"/>
+    <member name="not_alive_count" type="int32"/>
+    <member name="alive_count_change" type="int32"/>
+    <member name="not_alive_count_change" type="int32"/>
+    <member name="last_publication_handle" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t"/>
+  </struct>
+  <struct name= "OfferedDeadlineMissedStatus" nested="true">
+    <member name="total_count" type="int32"/>
+    <member name="total_count_change" type="int32"/>
+    <member name="last_instance_handle" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t"/>
+  </struct>
+  <struct name= "RequestedDeadlineMissedStatus" nested="true">
+    <member name="total_count" type="int32"/>
+    <member name="total_count_change" type="int32"/>
+    <member name="last_instance_handle" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t"/>
+  </struct>
+  <struct name= "QosPolicyCount" extensibility= "final" nested="true">
+    <member name="policy_id" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t"/>
+    <member name="count" type="int32"/>
+  </struct>
+  <struct name= "OfferedIncompatibleQosStatus" nested="true">
+    <member name="total_count" type="int32"/>
+    <member name="total_count_change" type="int32"/>
+    <member name="last_policy_id" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t"/>
+    <member name="policies" sequenceMaxLength="64" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyCount"/>
+  </struct>
+  <struct name= "RequestedIncompatibleQosStatus" nested="true">
+    <member name="total_count" type="int32"/>
+    <member name="total_count_change" type="int32"/>
+    <member name="last_policy_id" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t"/>
+    <member name="policies" sequenceMaxLength="64" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyCount"/>
+  </struct>
+  <struct name= "PublicationMatchedStatus" nested="true">
+    <member name="total_count" type="int32"/>
+    <member name="total_count_change" type="int32"/>
+    <member name="current_count" type="int32"/>
+    <member name="current_count_peak" type="int32"/>
+    <member name="current_count_change" type="int32"/>
+    <member name="last_subscription_handle" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t"/>
+  </struct>
+  <struct name= "SubscriptionMatchedStatus" nested="true">
+    <member name="total_count" type="int32"/>
+    <member name="total_count_change" type="int32"/>
+    <member name="current_count" type="int32"/>
+    <member name="current_count_peak" type="int32"/>
+    <member name="current_count_change" type="int32"/>
+    <member name="last_publication_handle" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t"/>
+  </struct>
+  <struct name= "DataReaderCacheStatus" nested="true">
+    <member name="sample_count_peak" type="int64"/>
+    <member name="sample_count" type="int64"/>
+  </struct>
+  <struct name= "SequenceNumber_t" extensibility= "final" nested="true">
+    <member name="high" type="int32"/>
+    <member name="low" type="uint32"/>
+  </struct>
+  <struct name= "DataReaderProtocolStatus" nested="true">
+    <member name="received_sample_count" type="int64"/>
+    <member name="received_sample_count_change" type="int64"/>
+    <member name="received_sample_bytes" type="int64"/>
+    <member name="received_sample_bytes_change" type="int64"/>
+    <member name="duplicate_sample_count" type="int64"/>
+    <member name="duplicate_sample_count_change" type="int64"/>
+    <member name="duplicate_sample_bytes" type="int64"/>
+    <member name="duplicate_sample_bytes_change" type="int64"/>
+    <member name="filtered_sample_count" type="int64"/>
+    <member name="filtered_sample_count_change" type="int64"/>
+    <member name="filtered_sample_bytes" type="int64"/>
+    <member name="filtered_sample_bytes_change" type="int64"/>
+    <member name="received_heartbeat_count" type="int64"/>
+    <member name="received_heartbeat_count_change" type="int64"/>
+    <member name="received_heartbeat_bytes" type="int64"/>
+    <member name="received_heartbeat_bytes_change" type="int64"/>
+    <member name="sent_ack_count" type="int64"/>
+    <member name="sent_ack_count_change" type="int64"/>
+    <member name="sent_ack_bytes" type="int64"/>
+    <member name="sent_ack_bytes_change" type="int64"/>
+    <member name="sent_nack_count" type="int64"/>
+    <member name="sent_nack_count_change" type="int64"/>
+    <member name="sent_nack_bytes" type="int64"/>
+    <member name="sent_nack_bytes_change" type="int64"/>
+    <member name="received_gap_count" type="int64"/>
+    <member name="received_gap_count_change" type="int64"/>
+    <member name="received_gap_bytes" type="int64"/>
+    <member name="received_gap_bytes_change" type="int64"/>
+    <member name="rejected_sample_count" type="int64"/>
+    <member name="rejected_sample_count_change" type="int64"/>
+    <member name="first_available_sample_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="last_available_sample_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="last_committed_sample_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="uncommitted_sample_count" type="int32"/>
+  </struct>
+  <struct name= "DataWriterCacheStatus" nested="true">
+    <member name="sample_count_peak" type="int64"/>
+    <member name="sample_count" type="int64"/>
+  </struct>
+  <struct name= "DataWriterProtocolStatus" nested="true">
+    <member name="pushed_sample_count" type="int64"/>
+    <member name="pushed_sample_count_change" type="int64"/>
+    <member name="pushed_sample_bytes" type="int64"/>
+    <member name="pushed_sample_bytes_change" type="int64"/>
+    <member name="filtered_sample_count" type="int64"/>
+    <member name="filtered_sample_count_change" type="int64"/>
+    <member name="filtered_sample_bytes" type="int64"/>
+    <member name="filtered_sample_bytes_change" type="int64"/>
+    <member name="sent_heartbeat_count" type="int64"/>
+    <member name="sent_heartbeat_count_change" type="int64"/>
+    <member name="sent_heartbeat_bytes" type="int64"/>
+    <member name="sent_heartbeat_bytes_change" type="int64"/>
+    <member name="pulled_sample_count" type="int64"/>
+    <member name="pulled_sample_count_change" type="int64"/>
+    <member name="pulled_sample_bytes" type="int64"/>
+    <member name="pulled_sample_bytes_change" type="int64"/>
+    <member name="received_ack_count" type="int64"/>
+    <member name="received_ack_count_change" type="int64"/>
+    <member name="received_ack_bytes" type="int64"/>
+    <member name="received_ack_bytes_change" type="int64"/>
+    <member name="received_nack_count" type="int64"/>
+    <member name="received_nack_count_change" type="int64"/>
+    <member name="received_nack_bytes" type="int64"/>
+    <member name="received_nack_bytes_change" type="int64"/>
+    <member name="sent_gap_count" type="int64"/>
+    <member name="sent_gap_count_change" type="int64"/>
+    <member name="sent_gap_bytes" type="int64"/>
+    <member name="sent_gap_bytes_change" type="int64"/>
+    <member name="rejected_sample_count" type="int64"/>
+    <member name="rejected_sample_count_change" type="int64"/>
+    <member name="send_window_size" type="int32"/>
+    <member name="first_available_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="last_available_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="first_unacknowledged_sample_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="first_available_sample_virtual_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="last_available_sample_virtual_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="first_unacknowledged_sample_virtual_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="first_unacknowledged_sample_subscription_handle" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t"/>
+    <member name="first_unelapsed_keep_duration_sample_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+  </struct>
+  <struct name= "ReliableWriterCacheEventCount" extensibility= "final" nested="true">
+    <member name="total_count" type="int32"/>
+    <member name="total_count_change" type="int32"/>
+  </struct>
+  <struct name= "ReliableWriterCacheChangedStatus" nested="true">
+    <member name="empty_reliable_writer_cache" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliableWriterCacheEventCount"/>
+    <member name="full_reliable_writer_cache" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliableWriterCacheEventCount"/>
+    <member name="low_watermark_reliable_writer_cache" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliableWriterCacheEventCount"/>
+    <member name="high_watermark_reliable_writer_cache" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliableWriterCacheEventCount"/>
+    <member name="unacknowledged_sample_count" type="int32"/>
+    <member name="unacknowledged_sample_count_peak" type="int32"/>
+  </struct>
+  <struct name= "ReliableReaderActivityChangedStatus" nested="true">
+    <member name="active_count" type="int32"/>
+    <member name="inactive_count" type="int32"/>
+    <member name="active_count_change" type="int32"/>
+    <member name="inactive_count_change" type="int32"/>
+    <member name="last_instance_handle" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t"/>
+  </struct>
+  <typedef name="SampleStateKind" type="uint32"/>
+  <const name="READ_SAMPLE_STATE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SampleStateKind" value="0x0001&lt;&lt;0"/>
+  <const name="NOT_READ_SAMPLE_STATE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SampleStateKind" value="0x0001&lt;&lt;1"/>
+  <typedef name="SampleStateMask" type="uint32"/>
+  <const name="ANY_SAMPLE_STATE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SampleStateMask" value="0xffff"/>
+  <typedef name="ViewStateKind" type="uint32"/>
+  <const name="NEW_VIEW_STATE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ViewStateKind" value="0x0001&lt;&lt;0"/>
+  <const name="NOT_NEW_VIEW_STATE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ViewStateKind" value="0x0001&lt;&lt;1"/>
+  <typedef name="ViewStateMask" type="uint32"/>
+  <const name="ANY_VIEW_STATE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ViewStateMask" value="0xffff"/>
+  <typedef name="InstanceStateKind" type="uint32"/>
+  <const name="ALIVE_INSTANCE_STATE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceStateKind" value="0x0001&lt;&lt;0"/>
+  <const name="NOT_ALIVE_DISPOSED_INSTANCE_STATE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceStateKind" value="0x0001&lt;&lt;1"/>
+  <const name="NOT_ALIVE_NO_WRITERS_INSTANCE_STATE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceStateKind" value="0x0001&lt;&lt;2"/>
+  <typedef name="InstanceStateMask" type="uint32"/>
+  <const name="ANY_INSTANCE_STATE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceStateMask" value="0xffff"/>
+  <const name="NOT_ALIVE_INSTANCE_STATE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceStateMask" value="0x006"/>
+  <const name="USERDATA_QOS_POLICY_NAME" type="string" value="&quot;UserData&quot;"/>
+  <const name="DURABILITY_QOS_POLICY_NAME" type="string" value="&quot;Durability&quot;"/>
+  <const name="PRESENTATION_QOS_POLICY_NAME" type="string" value="&quot;Presentation&quot;"/>
+  <const name="DEADLINE_QOS_POLICY_NAME" type="string" value="&quot;Deadline&quot;"/>
+  <const name="LATENCYBUDGET_QOS_POLICY_NAME" type="string" value="&quot;LatencyBudget&quot;"/>
+  <const name="OWNERSHIP_QOS_POLICY_NAME" type="string" value="&quot;Ownership&quot;"/>
+  <const name="OWNERSHIPSTRENGTH_QOS_POLICY_NAME" type="string" value="&quot;OwnershipStrength&quot;"/>
+  <const name="LIVELINESS_QOS_POLICY_NAME" type="string" value="&quot;Liveliness&quot;"/>
+  <const name="TIMEBASEDFILTER_QOS_POLICY_NAME" type="string" value="&quot;TimeBasedFilter&quot;"/>
+  <const name="PARTITION_QOS_POLICY_NAME" type="string" value="&quot;Partition&quot;"/>
+  <const name="RELIABILITY_QOS_POLICY_NAME" type="string" value="&quot;Reliability&quot;"/>
+  <const name="DESTINATIONORDER_QOS_POLICY_NAME" type="string" value="&quot;DestinationOrder&quot;"/>
+  <const name="HISTORY_QOS_POLICY_NAME" type="string" value="&quot;History&quot;"/>
+  <const name="RESOURCELIMITS_QOS_POLICY_NAME" type="string" value="&quot;ResourceLimits&quot;"/>
+  <const name="ENTITYFACTORY_QOS_POLICY_NAME" type="string" value="&quot;EntityFactory&quot;"/>
+  <const name="WRITERDATALIFECYCLE_QOS_POLICY_NAME" type="string" value="&quot;WriterDataLifecycle&quot;"/>
+  <const name="READERDATALIFECYCLE_QOS_POLICY_NAME" type="string" value="&quot;ReaderDataLifecycle&quot;"/>
+  <const name="TOPICDATA_QOS_POLICY_NAME" type="string" value="&quot;TopicData&quot;"/>
+  <const name="GROUPDATA_QOS_POLICY_NAME" type="string" value="&quot;GroupData&quot;"/>
+  <const name="LIFESPAN_QOS_POLICY_NAME" type="string" value="&quot;Lifespan&quot;"/>
+  <const name="DURABILITYSERVICE_POLICY_NAME" type="string" value="&quot;DurabilityService&quot;"/>
+  <const name="TRANSPORTPRIORITY_QOS_POLICY_NAME" type="string" value="&quot;TransportPriority&quot;"/>
+  <const name="DATA_REPRESENTATION_QOS_POLICY_NAME" type="string" value="&quot;DataRepresentation&quot;"/>
+  <const name="TYPE_CONSISTENCY_ENFORCEMENT_QOS_POLICY_NAME" type="string" value="&quot;TypeConsistencyEnforcement&quot;"/>
+  <const name="DATATAG_QOS_POLICY_NAME" type="string" value="&quot;DataTag&quot;"/>
+  <const name="ASYNCHRONOUSPUBLISHER_QOS_POLICY_NAME" type="string" value="&quot;AsynchronousPublisher&quot;"/>
+  <const name="TYPESUPPORT_QOS_POLICY_NAME" type="string" value="&quot;TypeSupport&quot;"/>
+  <const name="WIREPROTOCOL_QOS_POLICY_NAME" type="string" value="&quot;WireProtocol&quot;"/>
+  <const name="DISCOVERY_QOS_POLICY_NAME" type="string" value="&quot;Discovery&quot;"/>
+  <const name="DATAREADERRESOURCELIMITS_QOS_POLICY_NAME" type="string" value="&quot;DataReaderResourceLimits&quot;"/>
+  <const name="DATAWRITERRESOURCELIMITS_QOS_POLICY_NAME" type="string" value="&quot;DataWriterResourceLimits&quot;"/>
+  <const name="DATAREADERPROTOCOL_QOS_POLICY_NAME" type="string" value="&quot;DataReaderProtocol&quot;"/>
+  <const name="DATAWRITERPROTOCOL_QOS_POLICY_NAME" type="string" value="&quot;DataWriterProtocol&quot;"/>
+  <const name="DOMAINPARTICIPANTRESOURCELIMITS_QOS_POLICY_NAME" type="string" value="&quot;DomainParticipantResourceLimits&quot;"/>
+  <const name="EVENT_QOS_POLICY_NAME" type="string" value="&quot;Event&quot;"/>
+  <const name="DATABASE_QOS_POLICY_NAME" type="string" value="&quot;Database&quot;"/>
+  <const name="RECEIVERPOOL_QOS_POLICY_NAME" type="string" value="&quot;ReceiverPool&quot;"/>
+  <const name="DISCOVERYCONFIG_QOS_POLICY_NAME" type="string" value="&quot;DiscoveryConfig&quot;"/>
+  <const name="USEROBJECT_QOS_POLICY_NAME" type="string" value="&quot;UserObject&quot;"/>
+  <const name="EXCLUSIVEAREA_QOS_POLICY_NAME" type="string" value="&quot;ExclusiveArea&quot;"/>
+  <const name="SYSTEMRESOURCELIMITS_QOS_POLICY_NAME" type="string" value="&quot;SystemResourceLimits&quot;"/>
+  <const name="TRANSPORTSELECTION_QOS_POLICY_NAME" type="string" value="&quot;TransportSelection&quot;"/>
+  <const name="TRANSPORTUNICAST_QOS_POLICY_NAME" type="string" value="&quot;TransportUnicast&quot;"/>
+  <const name="TRANSPORTMULTICAST_QOS_POLICY_NAME" type="string" value="&quot;TransportMulticast&quot;"/>
+  <const name="DDS_TRANSPORTMULTICASTMAPPING_QOS_POLICY_NAME" type="string" value="&quot;TransportMulticastMapping&quot;"/>
+  <const name="TRANSPORTBUILTIN_QOS_POLICY_NAME" type="string" value="&quot;TransportBuiltin&quot;"/>
+  <const name="PUBLISHMODE_QOS_POLICY_NAME" type="string" value="&quot;PublishMode&quot;"/>
+  <const name="PROPERTY_QOS_POLICY_NAME" type="string" value="&quot;Property&quot;"/>
+  <const name="ENTITYNAME_QOS_POLICY_NAME" type="string" value="&quot;EntityName&quot;"/>
+  <const name="SERVICE_QOS_POLICY_NAME" type="string" value="&quot;Service&quot;"/>
+  <const name="BATCH_QOS_POLICY_NAME" type="string" value="&quot;Batch&quot;"/>
+  <const name="PROFILE_QOS_POLICY_NAME" type="string" value="&quot;Profile&quot;"/>
+  <const name="LOCATORFILTER_QOS_POLICY_NAME" type="string" value="&quot;LocatorFilter&quot;"/>
+  <const name="MULTICHANNEL_QOS_POLICY_NAME" type="string" value="&quot;MultiChannel&quot;"/>
+  <const name="TRANSPORTENCAPSULATION_QOS_POLICY_NAME" type="string" value="&quot;TransportEncapsulation&quot;"/>
+  <const name="PUBLISHERPROTOCOL_QOS_POLICY_NAME" type="string" value="&quot;PublisherProtocol&quot;"/>
+  <const name="SUBSCRIBERPROTOCOL_QOS_POLICY_NAME" type="string" value="&quot;SubscriberProtocol&quot;"/>
+  <const name="TOPICPROTOCOL_QOS_POLICY_NAME" type="string" value="&quot;TopicProtocol&quot;"/>
+  <const name="TOPICQUERYDISPATCH_QOS_POLICY_NAME" type="string" value="&quot;TopicQueryDispatch&quot;"/>
+  <const name="DATAWRITERTRANSFERMODE_QOS_POLICY_NAME" type="string" value="&quot;DataWriterTransferMode&quot;"/>
+  <const name="DOMAINPARTICIPANTPROTOCOL_QOS_POLICY_NAME" type="string" value="&quot;DomainParticipantProtocol&quot;"/>
+  <const name="INVALID_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="0"/>
+  <const name="USERDATA_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1"/>
+  <const name="DURABILITY_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="2"/>
+  <const name="PRESENTATION_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="3"/>
+  <const name="DEADLINE_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="4"/>
+  <const name="LATENCYBUDGET_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="5"/>
+  <const name="OWNERSHIP_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="6"/>
+  <const name="OWNERSHIPSTRENGTH_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="7"/>
+  <const name="LIVELINESS_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="8"/>
+  <const name="TIMEBASEDFILTER_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="9"/>
+  <const name="PARTITION_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="10"/>
+  <const name="RELIABILITY_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="11"/>
+  <const name="DESTINATIONORDER_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="12"/>
+  <const name="HISTORY_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="13"/>
+  <const name="RESOURCELIMITS_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="14"/>
+  <const name="ENTITYFACTORY_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="15"/>
+  <const name="WRITERDATALIFECYCLE_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="16"/>
+  <const name="READERDATALIFECYCLE_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="17"/>
+  <const name="TOPICDATA_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="18"/>
+  <const name="GROUPDATA_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="19"/>
+  <const name="TRANSPORTPRIORITY_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="20"/>
+  <const name="LIFESPAN_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="21"/>
+  <const name="DURABILITYSERVICE_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="22"/>
+  <const name="DATA_REPRESENTATION_QOS_POLICY" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="23"/>
+  <const name="TYPE_CONSISTENCY_ENFORCEMENT_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="24"/>
+  <const name="DATATAG_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="25"/>
+  <const name="WIREPROTOCOL_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1000"/>
+  <const name="DISCOVERY_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1001"/>
+  <const name="DATAREADERRESOURCELIMITS_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1003"/>
+  <const name="DATAWRITERRESOURCELIMITS_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1004"/>
+  <const name="DATAREADERPROTOCOL_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1005"/>
+  <const name="DATAWRITERPROTOCOL_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1006"/>
+  <const name="DOMAINPARTICIPANTRESOURCELIMITS_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1007"/>
+  <const name="EVENT_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1008"/>
+  <const name="DATABASE_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1009"/>
+  <const name="RECEIVERPOOL_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1010"/>
+  <const name="DISCOVERYCONFIG_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1011"/>
+  <const name="EXCLUSIVEAREA_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1012"/>
+  <const name="USEROBJECT_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1013"/>
+  <const name="SYSTEMRESOURCELIMITS_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1014"/>
+  <const name="TRANSPORTSELECTION_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1015"/>
+  <const name="TRANSPORTUNICAST_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1016"/>
+  <const name="TRANSPORTMULTICAST_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1017"/>
+  <const name="TRANSPORTBUILTIN_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1018"/>
+  <const name="TYPESUPPORT_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1019"/>
+  <const name="PROPERTY_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1020"/>
+  <const name="PUBLISHMODE_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1021"/>
+  <const name="ASYNCHRONOUSPUBLISHER_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1022"/>
+  <const name="ENTITYNAME_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1023"/>
+  <const name="SERVICE_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1025"/>
+  <const name="BATCH_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1026"/>
+  <const name="PROFILE_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1027"/>
+  <const name="LOCATORFILTER_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1028"/>
+  <const name="MULTICHANNEL_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1029"/>
+  <const name="TRANSPORTENCAPSULATION_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1030"/>
+  <const name="PUBLISHERPROTOCOL_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1031"/>
+  <const name="SUBSCRIBERPROTOCOL_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1032"/>
+  <const name="TOPICPROTOCOL_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1033"/>
+  <const name="DOMAINPARTICIPANTPROTOCOL_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1034"/>
+  <const name="TOPICQUERYDISPATCH_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1038"/>
+  <const name="DATAWRITERTRANSFERMODE_QOS_POLICY_ID" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::QosPolicyId_t" value="1039"/>
+  <struct name= "UserDataQosPolicy" nested="true">
+    <member name="value" sequenceMaxLength="256" type="byte"/>
+  </struct>
+  <struct name= "TopicDataQosPolicy" nested="true">
+    <member name="value" sequenceMaxLength="256" type="byte"/>
+  </struct>
+  <struct name= "GroupDataQosPolicy" nested="true">
+    <member name="value" sequenceMaxLength="256" type="byte"/>
+  </struct>
+  <struct name= "TransportPriorityQosPolicy" nested="true">
+    <member name="value" type="int32"/>
+  </struct>
+  <struct name= "LifespanQosPolicy" nested="true">
+    <member name="duration" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+  </struct>
+  <struct name= "DataRepresentationQosPolicy" nested="true">
+    <member name="value" sequenceMaxLength="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataRepresentationId_t"/>
+  </struct>
+  <struct name= "AvailabilityQosPolicy" nested="true">
+    <member name="enable_required_subscriptions" type="boolean"/>
+    <member name="max_data_availability_waiting_time" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="max_endpoint_availability_waiting_time" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="required_matched_endpoint_groups" sequenceMaxLength="256" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EndpointGroup_t"/>
+  </struct>
+  <enum name="DurabilityQosPolicyKind">
+    <enumerator name="VOLATILE_DURABILITY_QOS"/>
+    <enumerator name="TRANSIENT_LOCAL_DURABILITY_QOS"/>
+    <enumerator name="TRANSIENT_DURABILITY_QOS"/>
+    <enumerator name="PERSISTENT_DURABILITY_QOS"/>
+  </enum> 
+  <struct name= "DurabilityQosPolicy" nested="true">
+    <member name="kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DurabilityQosPolicyKind"/>
+    <member name="direct_communication" type="boolean"/>
+  </struct>
+  <enum name="PresentationQosPolicyAccessScopeKind">
+    <enumerator name="INSTANCE_PRESENTATION_QOS"/>
+    <enumerator name="TOPIC_PRESENTATION_QOS"/>
+    <enumerator name="GROUP_PRESENTATION_QOS"/>
+    <enumerator name="HIGHEST_OFFERED_PRESENTATION_QOS"/>
+  </enum> 
+  <struct name= "PresentationQosPolicy" nested="true">
+    <member name="access_scope" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PresentationQosPolicyAccessScopeKind"/>
+    <member name="coherent_access" type="boolean"/>
+    <member name="ordered_access" type="boolean"/>
+  </struct>
+  <struct name= "DeadlineQosPolicy" nested="true">
+    <member name="period" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+  </struct>
+  <struct name= "LatencyBudgetQosPolicy" nested="true">
+    <member name="duration" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+  </struct>
+  <enum name="OwnershipQosPolicyKind">
+    <enumerator name="SHARED_OWNERSHIP_QOS"/>
+    <enumerator name="EXCLUSIVE_OWNERSHIP_QOS"/>
+  </enum> 
+  <struct name= "OwnershipQosPolicy" nested="true">
+    <member name="kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::OwnershipQosPolicyKind"/>
+  </struct>
+  <struct name= "OwnershipStrengthQosPolicy" nested="true">
+    <member name="value" type="int32"/>
+  </struct>
+  <enum name="LivelinessQosPolicyKind">
+    <enumerator name="AUTOMATIC_LIVELINESS_QOS"/>
+    <enumerator name="MANUAL_BY_PARTICIPANT_LIVELINESS_QOS"/>
+    <enumerator name="MANUAL_BY_TOPIC_LIVELINESS_QOS"/>
+  </enum> 
+  <struct name= "LivelinessQosPolicy" nested="true">
+    <member name="kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LivelinessQosPolicyKind"/>
+    <member name="lease_duration" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="assertions_per_lease_duration" type="int32"/>
+  </struct>
+  <struct name= "TimeBasedFilterQosPolicy" nested="true">
+    <member name="minimum_separation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+  </struct>
+  <struct name= "PartitionQosPolicy" nested="true">
+    <member name="name" sequenceMaxLength="64" stringMaxLength="255" type="string"/>
+  </struct>
+  <enum name="ReliabilityQosPolicyKind">
+    <enumerator name="BEST_EFFORT_RELIABILITY_QOS"/>
+    <enumerator name="RELIABLE_RELIABILITY_QOS"/>
+  </enum> 
+  <enum name="ReliabilityQosPolicyAcknowledgementModeKind">
+    <enumerator name="PROTOCOL_ACKNOWLEDGEMENT_MODE"/>
+    <enumerator name="APPLICATION_AUTO_ACKNOWLEDGEMENT_MODE"/>
+    <enumerator name="APPLICATION_ORDERED_ACKNOWLEDGEMENT_MODE"/>
+    <enumerator name="APPLICATION_EXPLICIT_ACKNOWLEDGEMENT_MODE"/>
+  </enum> 
+  <struct name= "ReliabilityQosPolicy" nested="true">
+    <member name="kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliabilityQosPolicyKind"/>
+    <member name="max_blocking_time" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="acknowledgementKind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliabilityQosPolicyAcknowledgementModeKind"/>
+  </struct>
+  <enum name="DestinationOrderQosPolicyKind">
+    <enumerator name="BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS"/>
+    <enumerator name="BY_SOURCE_TIMESTAMP_DESTINATIONORDER_QOS"/>
+  </enum> 
+  <enum name="TypeConsistencyKind">
+    <enumerator name="DISALLOW_TYPE_COERCION"/>
+    <enumerator name="ALLOW_TYPE_COERCION"/>
+    <enumerator name="AUTO_TYPE_COERCION"/>
+  </enum> 
+  <struct name= "TypeConsistencyEnforcementQosPolicy" nested="true">
+    <member name="kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TypeConsistencyKind"/>
+    <member name="ignore_sequence_bounds" type="boolean"/>
+    <member name="ignore_string_bounds" type="boolean"/>
+    <member name="ignore_member_names" type="boolean"/>
+    <member name="prevent_type_widening" type="boolean"/>
+    <member name="force_type_validation" type="boolean"/>
+    <member name="ignore_enum_literal_names" type="boolean"/>
+  </struct>
+  <enum name="DestinationOrderQosPolicyScopeKind">
+    <enumerator name="INSTANCE_SCOPE_DESTINATIONORDER_QOS"/>
+    <enumerator name="TOPIC_SCOPE_DESTINATIONORDER_QOS"/>
+  </enum> 
+  <struct name= "DestinationOrderQosPolicy" nested="true">
+    <member name="kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DestinationOrderQosPolicyKind"/>
+    <member name="scope" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DestinationOrderQosPolicyScopeKind"/>
+    <member name="source_timestamp_tolerance" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+  </struct>
+  <enum name="HistoryQosPolicyKind">
+    <enumerator name="KEEP_LAST_HISTORY_QOS"/>
+    <enumerator name="KEEP_ALL_HISTORY_QOS"/>
+  </enum> 
+  <enum name="RefilterQosPolicyKind">
+    <enumerator name="NONE_REFILTER_QOS"/>
+    <enumerator name="ALL_REFILTER_QOS"/>
+    <enumerator name="ON_DEMAND_REFILTER_QOS"/>
+  </enum> 
+  <struct name= "HistoryQosPolicy" nested="true">
+    <member name="kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::HistoryQosPolicyKind"/>
+    <member name="depth" type="int32"/>
+    <member name="refilter" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RefilterQosPolicyKind"/>
+  </struct>
+  <struct name= "ResourceLimitsQosPolicy" nested="true">
+    <member name="max_samples" type="int32"/>
+    <member name="max_instances" type="int32"/>
+    <member name="max_samples_per_instance" type="int32"/>
+    <member name="initial_samples" type="int32"/>
+    <member name="initial_instances" type="int32"/>
+    <member name="instance_hash_buckets" type="int32"/>
+  </struct>
+  <struct name= "EntityFactoryQosPolicy" nested="true">
+    <member name="autoenable_created_entities" type="boolean"/>
+  </struct>
+  <struct name= "WriterDataLifecycleQosPolicy" nested="true">
+    <member name="autodispose_unregistered_instances" type="boolean"/>
+    <member name="autopurge_unregistered_instances_delay" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="autopurge_disposed_instances_delay" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+  </struct>
+  <struct name= "ReaderDataLifecycleQosPolicy" nested="true">
+    <member name="autopurge_nowriter_samples_delay" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="autopurge_disposed_samples_delay" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="autopurge_disposed_instances_delay" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+  </struct>
+  <struct name= "DurabilityServiceQosPolicy" nested="true">
+    <member name="service_cleanup_delay" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="history_kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::HistoryQosPolicyKind"/>
+    <member name="history_depth" type="int32"/>
+    <member name="max_samples" type="int32"/>
+    <member name="max_instances" type="int32"/>
+    <member name="max_samples_per_instance" type="int32"/>
+  </struct>
+  <struct name= "SystemResourceLimitsQosPolicy" nested="true">
+    <member name="max_objects_per_thread" type="int32"/>
+  </struct>
+  <struct name= "ProfileQosPolicy" nested="true">
+    <member name="string_profile" sequenceMaxLength="256" stringMaxLength="2000" type="string"/>
+    <member name="url_profile" sequenceMaxLength="256" stringMaxLength="255" type="string"/>
+    <member name="ignore_user_profile" type="boolean"/>
+    <member name="ignore_environment_profile" type="boolean"/>
+    <member name="ignore_resource_profile" type="boolean"/>
+    <member name="string_profile_dtd" sequenceMaxLength="256" stringMaxLength="2000" type="string"/>
+  </struct>
+  <struct name= "TopicQueryDispatchQosPolicy" nested="true">
+    <member name="enable" type="boolean"/>
+    <member name="publication_period" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="samples_per_period" type="int32"/>
+  </struct>
+  <struct name= "DomainParticipantFactoryQos">
+    <member name="entity_factory" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EntityFactoryQosPolicy"/>
+    <member name="resource_limits" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SystemResourceLimitsQosPolicy"/>
+    <member name="profile" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ProfileQosPolicy"/>
+  </struct>
+  <struct name= "RtpsWellKnownPorts_t" extensibility= "final" nested="true">
+    <member name="port_base" type="int32"/>
+    <member name="domain_id_gain" type="int32"/>
+    <member name="participant_id_gain" type="int32"/>
+    <member name="builtin_multicast_port_offset" type="int32"/>
+    <member name="builtin_unicast_port_offset" type="int32"/>
+    <member name="user_multicast_port_offset" type="int32"/>
+    <member name="user_unicast_port_offset" type="int32"/>
+  </struct>
+  <struct name= "ProductVersion_t" nested="true">
+    <member name="major" type="char8"/>
+    <member name="minor" type="char8"/>
+    <member name="release" type="char8"/>
+    <member name="revision" type="char8"/>
+  </struct>
+  <struct name= "ProtocolVersion_t" nested="true">
+    <member name="major" type="byte"/>
+    <member name="minor" type="byte"/>
+  </struct>
+  <typedef name="EncapsulationId_t" type="uint16"/>
+  <const name="LOCATOR_ADDRESS_LENGTH_MAX" type="int32" value="16"/>
+  <struct name= "Locator_t" nested="true">
+    <member name="kind" type="int32"/>
+    <member name="_port" type="uint32"/>
+    <member name="address" type="byte" arrayDimensions="(DDSMonitoring::LOCATOR_ADDRESS_LENGTH_MAX)"/>
+    <member name="encapsulations" sequenceMaxLength="8" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EncapsulationId_t"/>
+  </struct>
+  <typedef name="RtpsReservedPortKindMask" type="int32"/>
+  <const name="RTPS_RESERVED_PORT_BUILTIN_UNICAST" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReservedPortKindMask" value="0x0001&lt;&lt;0"/>
+  <const name="RTPS_RESERVED_PORT_BUILTIN_MULTICAST" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReservedPortKindMask" value="0x0001&lt;&lt;1"/>
+  <const name="RTPS_RESERVED_PORT_USER_UNICAST" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReservedPortKindMask" value="0x0001&lt;&lt;2"/>
+  <const name="RTPS_RESERVED_PORT_USER_MULTICAST" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReservedPortKindMask" value="0x0001&lt;&lt;3"/>
+  <const name="RTPS_RESERVED_PORT_MASK_DEFAULT" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReservedPortKindMask" value="(DDSMonitoring::RTPS_RESERVED_PORT_BUILTIN_UNICAST)|(DDSMonitoring::RTPS_RESERVED_PORT_BUILTIN_MULTICAST)|(DDSMonitoring::RTPS_RESERVED_PORT_USER_UNICAST)"/>
+  <const name="RTPS_RESERVED_PORT_MASK_NONE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReservedPortKindMask" value="0"/>
+  <const name="RTPS_RESERVED_PORT_MASK_ALL" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReservedPortKindMask" value="~(DDSMonitoring::RTPS_RESERVED_PORT_MASK_NONE)"/>
+  <enum name="WireProtocolQosPolicyAutoKind">
+    <enumerator name="RTPS_AUTO_ID_FROM_IP"/>
+    <enumerator name="RTPS_AUTO_ID_FROM_MAC"/>
+    <enumerator name="RTPS_AUTO_ID_FROM_UUID"/>
+  </enum> 
+  <struct name= "WireProtocolQosPolicy" nested="true">
+    <member name="participant_id" type="int32"/>
+    <member name="rtps_host_id" type="uint32"/>
+    <member name="rtps_app_id" type="uint32"/>
+    <member name="rtps_instance_id" type="uint32"/>
+    <member name="rtps_well_known_ports" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsWellKnownPorts_t"/>
+    <member name="rtps_reserved_port_mask" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReservedPortKindMask"/>
+    <member name="rtps_auto_id_kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::WireProtocolQosPolicyAutoKind"/>
+    <member name="compute_crc" type="boolean"/>
+    <member name="check_crc" type="boolean"/>
+  </struct>
+  <typedef name="TransportBuiltinKindMask" type="int32"/>
+  <const name="TRANSPORTBUILTIN_UDPv4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportBuiltinKindMask" value="0x0001&lt;&lt;0"/>
+  <const name="TRANSPORTBUILTIN_SHMEM" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportBuiltinKindMask" value="0x0001&lt;&lt;1"/>
+  <const name="TRANSPORTBUILTIN_INTRA" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportBuiltinKindMask" value="0x0001&lt;&lt;2"/>
+  <const name="TRANSPORTBUILTIN_UDPv6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportBuiltinKindMask" value="0x0001&lt;&lt;3"/>
+  <const name="TRANSPORTBUILTIN_MASK_NONE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportBuiltinKindMask" value="0"/>
+  <const name="TRANSPORTBUILTIN_MASK_DEFAULT" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportBuiltinKindMask" value="(DDSMonitoring::TRANSPORTBUILTIN_UDPv4)|(DDSMonitoring::TRANSPORTBUILTIN_SHMEM)"/>
+  <const name="TRANSPORTBUILTIN_MASK_ALL" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportBuiltinKindMask" value="~(DDSMonitoring::TRANSPORTBUILTIN_MASK_NONE)"/>
+  <struct name= "TransportBuiltinQosPolicy" nested="true">
+    <member name="mask" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportBuiltinKindMask"/>
+  </struct>
+  <struct name= "TransportUnicastSettings_t" extensibility= "final" nested="true">
+    <member name="transports" sequenceMaxLength="128" stringMaxLength="128" type="string"/>
+    <member name="receive_port" type="int32"/>
+  </struct>
+  <struct name= "TransportUnicastQosPolicy" nested="true">
+    <member name="value" sequenceMaxLength="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportUnicastSettings_t"/>
+  </struct>
+  <struct name= "DiscoveryQosPolicy" nested="true">
+    <member name="enabled_transports" sequenceMaxLength="128" stringMaxLength="128" type="string"/>
+    <member name="initial_peers" sequenceMaxLength="256" stringMaxLength="60" type="string"/>
+    <member name="multicast_receive_addresses" sequenceMaxLength="4" stringMaxLength="60" type="string"/>
+    <member name="metatraffic_transport_priority" type="int32"/>
+    <member name="accept_unknown_peers" type="boolean"/>
+    <member name="enable_endpoint_discovery" type="boolean"/>
+  </struct>
+  <struct name= "AllocationSettings_t" extensibility= "final" nested="true">
+    <member name="initial_count" type="int32"/>
+    <member name="max_count" type="int32"/>
+    <member name="incremental_count" type="int32"/>
+  </struct>
+  <enum name="DomainParticipantResourceLimitsIgnoredEntityReplacementKind">
+    <enumerator name="NO_REPLACEMENT_IGNORED_ENTITY_REPLACEMENT" value="0"/>
+    <enumerator name="NOT_ALIVE_FIRST_IGNORED_ENTITY_REPLACEMENT"/>
+  </enum> 
+  <struct name= "DomainParticipantResourceLimitsQosPolicy" nested="true">
+    <member name="local_writer_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="local_reader_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="local_publisher_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="local_subscriber_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="local_topic_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="remote_writer_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="remote_reader_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="remote_participant_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="matching_writer_reader_pair_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="matching_reader_writer_pair_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="ignored_entity_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="content_filtered_topic_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="content_filter_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="read_condition_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="query_condition_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="outstanding_asynchronous_sample_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="flow_controller_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="local_writer_hash_buckets" type="int32"/>
+    <member name="local_reader_hash_buckets" type="int32"/>
+    <member name="local_publisher_hash_buckets" type="int32"/>
+    <member name="local_subscriber_hash_buckets" type="int32"/>
+    <member name="local_topic_hash_buckets" type="int32"/>
+    <member name="remote_writer_hash_buckets" type="int32"/>
+    <member name="remote_reader_hash_buckets" type="int32"/>
+    <member name="remote_participant_hash_buckets" type="int32"/>
+    <member name="matching_writer_reader_pair_hash_buckets" type="int32"/>
+    <member name="matching_reader_writer_pair_hash_buckets" type="int32"/>
+    <member name="ignored_entity_hash_buckets" type="int32"/>
+    <member name="content_filtered_topic_hash_buckets" type="int32"/>
+    <member name="content_filter_hash_buckets" type="int32"/>
+    <member name="flow_controller_hash_buckets" type="int32"/>
+    <member name="max_gather_destinations" type="int32"/>
+    <member name="participant_user_data_max_length" type="int32"/>
+    <member name="inter_participant_data_max_length" type="int32"/>
+    <member name="topic_data_max_length" type="int32"/>
+    <member name="publisher_group_data_max_length" type="int32"/>
+    <member name="subscriber_group_data_max_length" type="int32"/>
+    <member name="writer_user_data_max_length" type="int32"/>
+    <member name="reader_user_data_max_length" type="int32"/>
+    <member name="max_partitions" type="int32"/>
+    <member name="max_partition_cumulative_characters" type="int32"/>
+    <member name="default_partition_matches_all" type="boolean"/>
+    <member name="allow_no_partitions" type="boolean"/>
+    <member name="type_code_max_serialized_length" type="int32"/>
+    <member name="type_object_max_serialized_length" type="int32"/>
+    <member name="serialized_type_object_dynamic_allocation_threshold" type="int32"/>
+    <member name="type_object_max_deserialized_length" type="int32"/>
+    <member name="deserialized_type_object_dynamic_allocation_threshold" type="int32"/>
+    <member name="contentfilter_property_max_length" type="int32"/>
+    <member name="channel_seq_max_length" type="int32"/>
+    <member name="channel_filter_expression_max_length" type="int32"/>
+    <member name="participant_property_list_max_length" type="int32"/>
+    <member name="participant_property_string_max_length" type="int32"/>
+    <member name="writer_property_list_max_length" type="int32"/>
+    <member name="writer_property_string_max_length" type="int32"/>
+    <member name="reader_property_list_max_length" type="int32"/>
+    <member name="reader_property_string_max_length" type="int32"/>
+    <member name="plugin_info_parameter_max_length" type="int32"/>
+    <member name="max_endpoint_groups" type="int32"/>
+    <member name="max_endpoint_group_cumulative_characters" type="int32"/>
+    <member name="transport_info_list_max_length" type="int32"/>
+    <member name="ignored_entity_replacement_kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DomainParticipantResourceLimitsIgnoredEntityReplacementKind"/>
+    <member name="remote_topic_query_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="remote_topic_query_hash_buckets" type="int32"/>
+    <member name="writer_data_tag_list_max_length" type="int32"/>
+    <member name="writer_data_tag_string_max_length" type="int32"/>
+    <member name="reader_data_tag_list_max_length" type="int32"/>
+    <member name="reader_data_tag_string_max_length" type="int32"/>
+    <member name="shmem_ref_transfer_mode_max_segments" type="uint32"/>
+  </struct>
+  <typedef name="ThreadSettingsKindMask" type="uint32"/>
+  <enum name="ThreadSettingsKind">
+    <enumerator name="THREAD_SETTINGS_DEFAULT" value="0x00"/>
+    <enumerator name="THREAD_SETTINGS_FLOATING_POINT" value="0x01"/>
+    <enumerator name="THREAD_SETTINGS_STDIO" value="0x02"/>
+    <enumerator name="THREAD_SETTINGS_REALTIME_PRIORITY" value="0x08"/>
+    <enumerator name="THREAD_SETTINGS_PRIORITY_ENFORCE" value="0x10"/>
+    <enumerator name="THREAD_SETTINGS_CANCEL_ASYNCHRONOUS" value="0x20"/>
+  </enum> 
+  <enum name="ThreadSettingsCpuRotationKind">
+    <enumerator name="THREAD_SETTINGS_CPU_NO_ROTATION"/>
+    <enumerator name="THREAD_SETTINGS_CPU_RR_ROTATION"/>
+  </enum> 
+  <struct name= "ThreadSettings_t" nested="true">
+    <member name="mask" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ThreadSettingsKindMask"/>
+    <member name="priority" type="int32"/>
+    <member name="stack_size" type="int32"/>
+    <member name="cpu_list" sequenceMaxLength="1024" type="int32"/>
+    <member name="cpu_rotation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ThreadSettingsCpuRotationKind"/>
+  </struct>
+  <struct name= "EventQosPolicy" extensibility= "mutable" nested="true">
+    <member name="thread" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ThreadSettings_t"/>
+    <member name="initial_count" id="1" type="int32"/>
+    <member name="max_count" id="2" type="int32"/>
+  </struct>
+  <struct name= "ReceiverPoolQosPolicy" extensibility= "mutable" nested="true">
+    <member name="thread" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ThreadSettings_t"/>
+    <member name="initial_receive_threads" id="1" type="int32"/>
+    <member name="max_receive_threads" id="2" type="int32"/>
+    <member name="buffer_size" id="3" type="int32"/>
+    <member name="buffer_alignment" id="4" type="int32"/>
+    <member name="is_timestamp_enabled" id="5" type="boolean"/>
+  </struct>
+  <struct name= "DatabaseQosPolicy" extensibility= "mutable" nested="true">
+    <member name="thread" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ThreadSettings_t"/>
+    <member name="shutdown_timeout" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="cleanup_period" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="shutdown_cleanup_period" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="initial_records" id="4" type="int32"/>
+    <member name="max_skiplist_level" id="5" type="int32"/>
+    <member name="table_allocation_block_size" id="6" type="int32"/>
+    <member name="max_weak_references" id="7" type="int32"/>
+    <member name="initial_weak_references" id="8" type="int32"/>
+  </struct>
+  <enum name="RemoteParticipantPurgeKind">
+    <enumerator name="LIVELINESS_BASED_REMOTE_PARTICIPANT_PURGE"/>
+    <enumerator name="NO_REMOTE_PARTICIPANT_PURGE"/>
+  </enum> 
+  <struct name= "BuiltinTopicReaderResourceLimits_t" nested="true">
+    <member name="initial_samples" type="int32"/>
+    <member name="max_samples" type="int32"/>
+    <member name="initial_infos" type="int32"/>
+    <member name="max_infos" type="int32"/>
+    <member name="initial_outstanding_reads" type="int32"/>
+    <member name="max_outstanding_reads" type="int32"/>
+    <member name="max_samples_per_read" type="int32"/>
+    <member name="disable_fragmentation_support" type="boolean"/>
+    <member name="max_fragmented_samples" type="int32"/>
+    <member name="initial_fragmented_samples" type="int32"/>
+    <member name="max_fragmented_samples_per_remote_writer" type="int32"/>
+    <member name="max_fragments_per_sample" type="int32"/>
+    <member name="dynamically_allocate_fragmented_samples" type="boolean"/>
+  </struct>
+  <struct name= "RtpsReliableReaderProtocol_t" nested="true">
+    <member name="min_heartbeat_response_delay" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="max_heartbeat_response_delay" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="heartbeat_suppression_duration" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="nack_period" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="receive_window_size" type="int32"/>
+    <member name="round_trip_time" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="app_ack_period" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="min_app_ack_response_keep_duration" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="samples_per_app_ack" type="int32"/>
+  </struct>
+  <struct name= "RtpsReliableWriterProtocol_t" nested="true">
+    <member name="low_watermark" type="int32"/>
+    <member name="high_watermark" type="int32"/>
+    <member name="heartbeat_period" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="fast_heartbeat_period" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="late_joiner_heartbeat_period" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="virtual_heartbeat_period" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="samples_per_virtual_heartbeat" type="int32"/>
+    <member name="max_heartbeat_retries" type="int32"/>
+    <member name="inactivate_nonprogressing_readers" type="boolean"/>
+    <member name="heartbeats_per_max_samples" type="int32"/>
+    <member name="min_nack_response_delay" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="max_nack_response_delay" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="nack_suppression_duration" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="max_bytes_per_nack_response" type="int32"/>
+    <member name="disable_positive_acks_min_sample_keep_duration" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="disable_positive_acks_max_sample_keep_duration" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="disable_positive_acks_sample_min_separation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="disable_positive_acks_enable_adaptive_sample_keep_duration" type="boolean"/>
+    <member name="disable_positive_acks_enable_spin_wait" type="boolean"/>
+    <member name="disable_positive_acks_decrease_sample_keep_duration_factor" type="int32"/>
+    <member name="disable_positive_acks_increase_sample_keep_duration_factor" type="int32"/>
+    <member name="min_send_window_size" type="int32"/>
+    <member name="max_send_window_Size" type="int32"/>
+    <member name="send_window_update_period" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="send_window_increase_factor" type="int32"/>
+    <member name="send_window_decrease_factor" type="int32"/>
+    <member name="enable_multicast_periodic_heartbeat" type="boolean"/>
+    <member name="multicast_resend_threshold" type="int32"/>
+  </struct>
+  <typedef name="DiscoveryConfigBuiltinPluginKindMask" type="int32"/>
+  <const name="DISCOVERYCONFIG_BUILTIN_SPDP" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryConfigBuiltinPluginKindMask" value="0x0001&lt;&lt;0"/>
+  <const name="DISCOVERYCONFIG_BUILTIN_SEDP" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryConfigBuiltinPluginKindMask" value="0x0001&lt;&lt;1"/>
+  <const name="DISCOVERYCONFIG_BUILTIN_SDP" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryConfigBuiltinPluginKindMask" value="(DDSMonitoring::DISCOVERYCONFIG_BUILTIN_SPDP)|(DDSMonitoring::DISCOVERYCONFIG_BUILTIN_SEDP)"/>
+  <const name="DISCOVERYCONFIG_BUILTIN_EDS" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryConfigBuiltinPluginKindMask" value="0x0001&lt;&lt;2"/>
+  <const name="DISCOVERYCONFIG_BUILTIN_PLUGIN_MASK_ALL" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryConfigBuiltinPluginKindMask" value="0xefff"/>
+  <const name="DISCOVERYCONFIG_BUILTIN_PLUGIN_MASK_NONE" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryConfigBuiltinPluginKindMask" value="0x0"/>
+  <const name="DISCOVERYCONFIG_BUILTIN_PLUGIN_MASK_DEFAULT" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryConfigBuiltinPluginKindMask" value="(DDSMonitoring::DISCOVERYCONFIG_BUILTIN_SDP)"/>
+  <struct name= "DiscoveryBuiltinReaderFragmentationResourceLimits_t" nested="true">
+    <member name="disable_fragmentation_support" type="boolean"/>
+    <member name="max_fragmented_samples" type="int32"/>
+    <member name="initial_fragmented_samples" type="int32"/>
+    <member name="max_fragmented_samples_per_remote_writer" type="int32"/>
+    <member name="max_fragments_per_sample" type="int32"/>
+    <member name="dynamically_allocate_fragmented_samples" type="boolean"/>
+  </struct>
+  <enum name="PublishModeQosPolicyKind">
+    <enumerator name="SYNCHRONOUS_PUBLISH_MODE_QOS"/>
+    <enumerator name="ASYNCHRONOUS_PUBLISH_MODE_QOS"/>
+  </enum> 
+  <struct name= "PublishModeQosPolicy" nested="true">
+    <member name="kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PublishModeQosPolicyKind"/>
+    <member name="flow_controller_name" stringMaxLength="255" type="string"/>
+    <member name="priority" type="int32"/>
+  </struct>
+  <enum name="DiscoveryPluginPromiscuityKind">
+    <enumerator name="DISCOVERYPLUGIN_DISCOVER_MATCHING_REMOTE_ENTITIES_PROMISCUITY" value="0x0001"/>
+    <enumerator name="DISCOVERYPLUGIN_DISCOVER_ALL_REMOTE_ENTITIES_PROMISCUITY" value="0xFFFF"/>
+  </enum> 
+  <enum name="ThreadBlockingKind">
+    <enumerator name="SEMAPHORE_BLOCKING_KIND"/>
+    <enumerator name="SPIN_BLOCKING_KIND"/>
+  </enum> 
+  <struct name= "AsynchronousPublisherQosPolicy" extensibility= "mutable" nested="true">
+    <member name="disable_asynchronous_write" id="0" type="boolean"/>
+    <member name="thread" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ThreadSettings_t"/>
+    <member name="disable_asynchronous_batch" id="2" type="boolean"/>
+    <member name="asynchronous_batch_thread" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ThreadSettings_t"/>
+    <member name="asynchronous_batch_blocking_kind" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ThreadBlockingKind"/>
+    <member name="disable_topic_query_publication" id="6" type="boolean"/>
+    <member name="topic_query_publication_thread" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ThreadSettings_t"/>
+  </struct>
+  <struct name= "DiscoveryConfigQosPolicy" extensibility= "mutable" nested="true">
+    <member name="participant_liveliness_lease_duration" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="participant_liveliness_assert_period" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="remote_participant_purge_kind" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RemoteParticipantPurgeKind"/>
+    <member name="max_liveliness_loss_detection_period" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="initial_participant_announcements" id="4" type="int32"/>
+    <member name="min_initial_participant_announcement_period" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="max_initial_participant_announcement_period" id="6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="participant_reader_resource_limits" id="7" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicReaderResourceLimits_t"/>
+    <member name="publication_reader" id="8" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableReaderProtocol_t"/>
+    <member name="publication_reader_resource_limits" id="9" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicReaderResourceLimits_t"/>
+    <member name="subscription_reader" id="10" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableReaderProtocol_t"/>
+    <member name="subscription_reader_resource_limits" id="11" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicReaderResourceLimits_t"/>
+    <member name="publication_writer" id="12" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableWriterProtocol_t"/>
+    <member name="publication_writer_data_lifecycle" id="13" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::WriterDataLifecycleQosPolicy"/>
+    <member name="subscription_writer" id="14" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableWriterProtocol_t"/>
+    <member name="subscription_writer_data_lifecycle" id="15" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::WriterDataLifecycleQosPolicy"/>
+    <member name="endpoint_plugin_redundancy_level" id="16" type="int32"/>
+    <member name="builtin_discovery_plugins" id="17" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryConfigBuiltinPluginKindMask"/>
+    <member name="participant_message_reader_reliability_kind" id="37" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliabilityQosPolicyKind"/>
+    <member name="participant_message_reader" id="18" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableReaderProtocol_t"/>
+    <member name="participant_message_writer" id="19" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableWriterProtocol_t"/>
+    <member name="publication_writer_publish_mode" id="20" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PublishModeQosPolicy"/>
+    <member name="subscription_writer_publish_mode" id="21" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PublishModeQosPolicy"/>
+    <member name="asynchronous_publisher" id="22" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AsynchronousPublisherQosPolicy"/>
+    <member name="default_domain_announcement_period" id="23" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="ignore_default_domain_announcements" id="24" type="boolean"/>
+    <member name="service_request_writer" id="38" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableWriterProtocol_t"/>
+    <member name="service_request_writer_data_lifecycle" id="39" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::WriterDataLifecycleQosPolicy"/>
+    <member name="service_request_writer_publish_mode" id="44" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PublishModeQosPolicy"/>
+    <member name="service_request_reader" id="40" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableReaderProtocol_t"/>
+    <member name="locator_reachability_assert_period" id="41" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="locator_reachability_lease_duration" id="42" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="locator_reachability_change_detection_period" id="43" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="secure_volatile_writer_publish_mode" id="45" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PublishModeQosPolicy"/>
+    <member name="endpoint_type_object_lb_serialization_threshold" id="46" type="int32"/>
+    <member name="sedp_rely_on_spdp_only" id="25" type="boolean"/>
+    <member name="publication_writer_latency_budget" id="26" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LatencyBudgetQosPolicy"/>
+    <member name="publication_writer_push_on_write" id="27" type="boolean"/>
+    <member name="subscription_writer_latency_budget" id="28" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LatencyBudgetQosPolicy"/>
+    <member name="subscription_writer_push_on_write" id="29" type="boolean"/>
+    <member name="participant_state_writer" id="30" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableWriterProtocol_t"/>
+    <member name="participant_state_writer_latency_budget" id="31" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LatencyBudgetQosPolicy"/>
+    <member name="participant_state_writer_push_on_write" id="32" type="boolean"/>
+    <member name="participant_state_writer_publish_mode" id="33" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PublishModeQosPolicy"/>
+    <member name="participant_proxy_reader" id="34" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableReaderProtocol_t"/>
+    <member name="participant_proxy_reader_fragmentation_resource_limits" id="35" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryBuiltinReaderFragmentationResourceLimits_t"/>
+    <member name="plugin_promiscuity_kind" id="36" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryPluginPromiscuityKind"/>
+  </struct>
+  <struct name= "Property_t" extensibility= "final" nested="true">
+    <member name="name" stringMaxLength="127" type="string"/>
+    <member name="value" stringMaxLength="511" type="string"/>
+    <member name="propagate" type="boolean"/>
+  </struct>
+  <const name="PROPERTY_LIST_MAX_LENGTH" type="int32" value="64"/>
+  <struct name= "PropertyQosPolicy" nested="true">
+    <member name="value" sequenceMaxLength="DDSMonitoring::PROPERTY_LIST_MAX_LENGTH" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Property_t"/>
+  </struct>
+  <struct name= "Tag" nested="true">
+    <member name="name" stringMaxLength="255" type="string"/>
+    <member name="value" stringMaxLength="511" type="string"/>
+  </struct>
+  <const name="DATA_TAG_LIST_MAX_LENGTH" type="int32" value="64"/>
+  <struct name= "DataTagQosPolicy" nested="true">
+    <member name="tags" sequenceMaxLength="DDSMonitoring::DATA_TAG_LIST_MAX_LENGTH" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Tag"/>
+  </struct>
+  <struct name= "EntityNameQosPolicy" nested="true">
+    <member name="name" stringMaxLength="255" type="string"/>
+    <member name="role_name" stringMaxLength="255" type="string"/>
+  </struct>
+  <const name="TRANSPORT_MULICAST_MAPPING_STRING_MAX_LENGTH" type="int32" value="255"/>
+  <struct name= "TransportMulticastMappingFunction_t" extensibility= "final" nested="true">
+    <member name="dll" stringMaxLength="DDSMonitoring::TRANSPORT_MULICAST_MAPPING_STRING_MAX_LENGTH" type="string"/>
+    <member name="function_name" stringMaxLength="DDSMonitoring::TRANSPORT_MULICAST_MAPPING_STRING_MAX_LENGTH" type="string"/>
+  </struct>
+  <struct name= "TransportMulticastMapping_t" extensibility= "final" nested="true">
+    <member name="addresses" stringMaxLength="DDSMonitoring::TRANSPORT_MULICAST_MAPPING_STRING_MAX_LENGTH" type="string"/>
+    <member name="topic_expression" stringMaxLength="DDSMonitoring::TRANSPORT_MULICAST_MAPPING_STRING_MAX_LENGTH" type="string"/>
+    <member name="mapping_function" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportMulticastMappingFunction_t"/>
+  </struct>
+  <struct name= "TransportMulticastMappingQosPolicy" nested="true">
+    <member name="value" sequenceMaxLength="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportMulticastMapping_t"/>
+  </struct>
+  <enum name="ServiceQosPolicyKind">
+    <enumerator name="NO_SERVICE_QOS"/>
+    <enumerator name="PERSISTENCE_SERVICE_QOS"/>
+    <enumerator name="QUEUING_SERVICE_QOS"/>
+    <enumerator name="ROUTING_SERVICE_QOS"/>
+    <enumerator name="RECORDING_SERVICE_QOS"/>
+    <enumerator name="REPLAY_SERVICE_QOS"/>
+    <enumerator name="DATABASE_INTEGRATION_SERVICE_QOS"/>
+    <enumerator name="WEB_INTEGRATION_SERVICE_QOS"/>
+  </enum> 
+  <struct name= "ServiceQosPolicy" nested="true">
+    <member name="kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ServiceQosPolicyKind"/>
+  </struct>
+  <enum name="CdrPaddingKind">
+    <enumerator name="ZERO_CDR_PADDING"/>
+    <enumerator name="NOT_SET_CDR_PADDING"/>
+    <enumerator name="AUTO_CDR_PADDING"/>
+  </enum> 
+  <struct name= "TypeSupportQosPolicy" nested="true">
+    <member name="plugin_data" type="int64"/>
+    <member name="cdr_padding_kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::CdrPaddingKind"/>
+  </struct>
+  <struct name= "ExclusiveAreaQosPolicy" nested="true">
+    <member name="use_shared_exclusive_area" type="boolean"/>
+    <member name="level" type="int32"/>
+  </struct>
+  <struct name= "UserObjectSettings_t" extensibility= "final" nested="true">
+    <member name="size" type="int32"/>
+    <member name="alignment" type="int32"/>
+  </struct>
+  <struct name= "UserObjectQosPolicy" nested="true">
+    <member name="participant_user_object" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectSettings_t"/>
+    <member name="topic_user_object" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectSettings_t"/>
+    <member name="content_filtered_topic_user_object" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectSettings_t"/>
+    <member name="publisher_user_object" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectSettings_t"/>
+    <member name="data_writer_user_object" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectSettings_t"/>
+    <member name="subscriber_user_object" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectSettings_t"/>
+    <member name="data_reader_user_object" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectSettings_t"/>
+    <member name="read_condition_user_object" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectSettings_t"/>
+    <member name="query_condition_user_object" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectSettings_t"/>
+    <member name="index_condition_user_object" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectSettings_t"/>
+    <member name="flow_controller_user_object" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectSettings_t"/>
+  </struct>
+  <struct name= "DomainParticipantProtocolQosPolicy" nested="true">
+    <member name="vendor_specific_entity" type="boolean"/>
+  </struct>
+  <struct name= "DomainParticipantQos" extensibility= "mutable" nested="true">
+    <member name="user_data" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserDataQosPolicy"/>
+    <member name="entity_factory" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EntityFactoryQosPolicy"/>
+    <member name="wire_protocol" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::WireProtocolQosPolicy"/>
+    <member name="transport_builtin" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportBuiltinQosPolicy"/>
+    <member name="default_unicast" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportUnicastQosPolicy"/>
+    <member name="discovery" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryQosPolicy"/>
+    <member name="resource_limits" id="6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DomainParticipantResourceLimitsQosPolicy"/>
+    <member name="event" id="7" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EventQosPolicy"/>
+    <member name="receiver_pool" id="8" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReceiverPoolQosPolicy"/>
+    <member name="database" id="9" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DatabaseQosPolicy"/>
+    <member name="discovery_config" id="10" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DiscoveryConfigQosPolicy"/>
+    <member name="exclusive_area" id="11" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ExclusiveAreaQosPolicy"/>
+    <member name="property" id="12" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PropertyQosPolicy"/>
+    <member name="participant_name" id="13" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EntityNameQosPolicy"/>
+    <member name="multicast_mapping" id="14" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportMulticastMappingQosPolicy"/>
+    <member name="service" id="18" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ServiceQosPolicy"/>
+    <member name="user_object" id="15" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserObjectQosPolicy"/>
+    <member name="protocol" id="16" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DomainParticipantProtocolQosPolicy"/>
+    <member name="type_support" id="17" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TypeSupportQosPolicy"/>
+  </struct>
+  <struct name= "TopicProtocolQosPolicy" nested="true">
+    <member name="vendor_specific_entity" type="boolean"/>
+  </struct>
+  <struct name= "TopicQos" extensibility= "mutable" nested="true">
+    <member name="topic_data" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TopicDataQosPolicy"/>
+    <member name="durability" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DurabilityQosPolicy"/>
+    <member name="durability_service" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DurabilityServiceQosPolicy"/>
+    <member name="deadline" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DeadlineQosPolicy"/>
+    <member name="latency_budget" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LatencyBudgetQosPolicy"/>
+    <member name="liveliness" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LivelinessQosPolicy"/>
+    <member name="reliability" id="6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliabilityQosPolicy"/>
+    <member name="destination_order" id="7" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DestinationOrderQosPolicy"/>
+    <member name="history" id="8" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::HistoryQosPolicy"/>
+    <member name="resource_limits" id="9" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ResourceLimitsQosPolicy"/>
+    <member name="transport_priority" id="10" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportPriorityQosPolicy"/>
+    <member name="lifespan" id="11" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LifespanQosPolicy"/>
+    <member name="ownership" id="12" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::OwnershipQosPolicy"/>
+    <member name="data_representation" id="14" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataRepresentationQosPolicy"/>
+    <member name="protocol" id="13" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TopicProtocolQosPolicy"/>
+  </struct>
+  <struct name= "GUID_t" extensibility= "final" nested="true">
+    <member name="value" type="byte" arrayDimensions="16"/>
+  </struct>
+  <struct name= "DataWriterProtocolQosPolicy" extensibility= "mutable" nested="true">
+    <member name="virtual_guid" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::GUID_t"/>
+    <member name="rtps_object_id" id="1" type="uint32"/>
+    <member name="push_on_write" id="2" type="boolean"/>
+    <member name="disable_positive_acks" id="3" type="boolean"/>
+    <member name="disable_inline_keyhash" id="4" type="boolean"/>
+    <member name="serialize_key_with_dispose" id="5" type="boolean"/>
+    <member name="propagate_app_ack_with_no_response" id="9" type="boolean"/>
+    <member name="rtps_reliable_writer" id="6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableWriterProtocol_t"/>
+    <member name="initial_virtual_sequence_number" id="7" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="vendor_specific_entity" id="8" type="boolean"/>
+    <member name="meta_entity" id="10" type="boolean"/>
+  </struct>
+  <struct name= "TransportSelectionQosPolicy" nested="true">
+    <member name="enabled_transports" sequenceMaxLength="128" stringMaxLength="128" type="string"/>
+  </struct>
+  <struct name= "BatchQosPolicy" nested="true">
+    <member name="enable" type="boolean"/>
+    <member name="max_data_bytes" type="int32"/>
+    <member name="max_meta_data_bytes" type="int32"/>
+    <member name="max_samples" type="int32"/>
+    <member name="max_flush_delay" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="source_timestamp_resolution" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Duration_t"/>
+    <member name="thread_safe_write" type="boolean"/>
+  </struct>
+  <struct name= "TransportMulticastSettings_t" extensibility= "final" nested="true">
+    <member name="transports" sequenceMaxLength="128" stringMaxLength="128" type="string"/>
+    <member name="receive_address" stringMaxLength="40" type="string"/>
+    <member name="receive_port" type="int32"/>
+  </struct>
+  <struct name= "ChannelSettings_t" nested="true">
+    <member name="multicast_settings" sequenceMaxLength="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportMulticastSettings_t"/>
+    <member name="filter_expression" stringMaxLength="255" type="string"/>
+    <member name="priority" type="int32"/>
+  </struct>
+  <struct name= "MultiChannelQosPolicy" extensibility= "mutable" nested="true">
+    <member name="channels" sequenceMaxLength="32" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ChannelSettings_t"/>
+    <member name="filter_name" stringMaxLength="255" id="1" type="string"/>
+  </struct>
+  <enum name="DataWriterResourceLimitsInstanceReplacementKind">
+    <enumerator name="UNREGISTERED_INSTANCE_REPLACEMENT" value="0"/>
+    <enumerator name="ALIVE_INSTANCE_REPLACEMENT"/>
+    <enumerator name="DISPOSED_INSTANCE_REPLACEMENT"/>
+    <enumerator name="ALIVE_THEN_DISPOSED_INSTANCE_REPLACEMENT"/>
+    <enumerator name="DISPOSED_THEN_ALIVE_INSTANCE_REPLACEMENT"/>
+    <enumerator name="ALIVE_OR_DISPOSED_INSTANCE_REPLACEMENT"/>
+  </enum> 
+  <struct name= "DataWriterResourceLimitsQosPolicy" nested="true">
+    <member name="initial_concurrent_blocking_threads" type="int32"/>
+    <member name="max_concurrent_blocking_threads" type="int32"/>
+    <member name="max_remote_reader_filters" type="int32"/>
+    <member name="initial_batches" type="int32"/>
+    <member name="max_batches" type="int32"/>
+    <member name="cookie_max_length" type="int32"/>
+    <member name="instance_replacement" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataWriterResourceLimitsInstanceReplacementKind"/>
+    <member name="replace_empty_instances" type="boolean"/>
+    <member name="autoregister_instances" type="boolean"/>
+    <member name="initial_virtual_writers" type="int32"/>
+    <member name="max_virtual_writers" type="int32"/>
+    <member name="max_remote_readers" type="int32"/>
+    <member name="max_app_ack_remote_readers" type="int32"/>
+    <member name="initial_active_topic_queries" type="int32"/>
+    <member name="max_active_topic_queries" type="int32"/>
+    <member name="writer_loaned_sample_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+    <member name="initialize_writer_loaned_sample" type="boolean"/>
+  </struct>
+  <struct name= "DataWriterShmemRefTransferModeSettings" nested="true">
+    <member name="enable_data_consistency_check" type="boolean"/>
+    <member name="initialize_data" type="boolean"/>
+  </struct>
+  <struct name= "DataWriterTransferModeQosPolicy" nested="true">
+    <member name="shmem_ref_settings" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataWriterShmemRefTransferModeSettings"/>
+  </struct>
+  <struct name= "TransportEncapsulationSettings_t" extensibility= "final" nested="true">
+    <member name="transports" sequenceMaxLength="128" stringMaxLength="128" type="string"/>
+    <member name="encapsulations" sequenceMaxLength="8" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EncapsulationId_t"/>
+  </struct>
+  <struct name= "TransportEncapsulationQosPolicy" nested="true">
+    <member name="value" sequenceMaxLength="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportEncapsulationSettings_t"/>
+  </struct>
+  <struct name= "DataWriterQos" extensibility= "mutable" nested="true">
+    <member name="durability" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DurabilityQosPolicy"/>
+    <member name="durability_service" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DurabilityServiceQosPolicy"/>
+    <member name="deadline" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DeadlineQosPolicy"/>
+    <member name="latency_budget" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LatencyBudgetQosPolicy"/>
+    <member name="liveliness" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LivelinessQosPolicy"/>
+    <member name="reliability" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliabilityQosPolicy"/>
+    <member name="destination_order" id="6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DestinationOrderQosPolicy"/>
+    <member name="history" id="7" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::HistoryQosPolicy"/>
+    <member name="resource_limits" id="8" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ResourceLimitsQosPolicy"/>
+    <member name="transport_priority" id="9" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportPriorityQosPolicy"/>
+    <member name="lifespan" id="10" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LifespanQosPolicy"/>
+    <member name="user_data" id="11" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserDataQosPolicy"/>
+    <member name="ownership" id="12" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::OwnershipQosPolicy"/>
+    <member name="ownership_strength" id="13" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::OwnershipStrengthQosPolicy"/>
+    <member name="writer_data_lifecycle" id="14" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::WriterDataLifecycleQosPolicy"/>
+    <member name="data_representation" id="30" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataRepresentationQosPolicy"/>
+    <member name="data_tags" id="29" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataTagQosPolicy"/>
+    <member name="writer_resource_limits" id="15" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataWriterResourceLimitsQosPolicy"/>
+    <member name="protocol" id="16" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataWriterProtocolQosPolicy"/>
+    <member name="transport_selection" id="17" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportSelectionQosPolicy"/>
+    <member name="unicast" id="18" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportUnicastQosPolicy"/>
+    <member name="encapsulation" id="19" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportEncapsulationQosPolicy"/>
+    <member name="publish_mode" id="20" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PublishModeQosPolicy"/>
+    <member name="property" id="21" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PropertyQosPolicy"/>
+    <member name="service" id="22" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ServiceQosPolicy"/>
+    <member name="batch" id="23" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BatchQosPolicy"/>
+    <member name="multi_channel" id="24" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::MultiChannelQosPolicy"/>
+    <member name="availability" id="25" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AvailabilityQosPolicy"/>
+    <member name="publication_name" id="26" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EntityNameQosPolicy"/>
+    <member name="topic_query" id="28" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TopicQueryDispatchQosPolicy"/>
+    <member name="transfer_mode" id="31" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataWriterTransferModeQosPolicy"/>
+    <member name="type_support" id="27" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TypeSupportQosPolicy"/>
+  </struct>
+  <struct name= "PublisherProtocolQosPolicy" nested="true">
+    <member name="vendor_specific_entity" type="boolean"/>
+  </struct>
+  <struct name= "PublisherQos" extensibility= "mutable" nested="true">
+    <member name="presentation" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PresentationQosPolicy"/>
+    <member name="partition" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PartitionQosPolicy"/>
+    <member name="group_data" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::GroupDataQosPolicy"/>
+    <member name="entity_factory" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EntityFactoryQosPolicy"/>
+    <member name="asynchronous_publisher" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AsynchronousPublisherQosPolicy"/>
+    <member name="exclusive_area" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ExclusiveAreaQosPolicy"/>
+    <member name="protocol" id="6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PublisherProtocolQosPolicy"/>
+    <member name="publisher_name" id="7" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EntityNameQosPolicy"/>
+  </struct>
+  <const name="AUTO_MAX_TOTAL_INSTANCES" type="int32" value="0"/>
+  <struct name= "DataReaderResourceLimitsQosPolicy" nested="true">
+    <member name="max_remote_writers" type="int32"/>
+    <member name="max_remote_writers_per_instance" type="int32"/>
+    <member name="max_samples_per_remote_writer" type="int32"/>
+    <member name="max_infos" type="int32"/>
+    <member name="initial_remote_writers" type="int32"/>
+    <member name="initial_remote_writers_per_instance" type="int32"/>
+    <member name="initial_infos" type="int32"/>
+    <member name="initial_outstanding_reads" type="int32"/>
+    <member name="max_outstanding_reads" type="int32"/>
+    <member name="max_samples_per_read" type="int32"/>
+    <member name="disable_fragmentation_support" type="boolean"/>
+    <member name="max_fragmented_samples" type="int32"/>
+    <member name="initial_fragmented_samples" type="int32"/>
+    <member name="max_fragmented_samples_per_remote_writer" type="int32"/>
+    <member name="max_fragments_per_sample" type="int32"/>
+    <member name="dynamically_allocate_fragmented_samples" type="boolean"/>
+    <member name="max_total_instances" type="int32"/>
+    <member name="max_remote_virtual_writers" type="int32"/>
+    <member name="intial_remote_virtual_writers" type="int32"/>
+    <member name="max_remote_virtual_writers_per_instance" type="int32"/>
+    <member name="initial_remote_virtual_writers_per_instance" type="int32"/>
+    <member name="max_remote_writers_per_sample" type="int32"/>
+    <member name="max_query_condition_filters" type="int32"/>
+    <member name="max_app_ack_response_length" type="int32"/>
+    <member name="keep_minimum_state_for_instances" type="boolean"/>
+    <member name="initial_topic_queries" type="int32"/>
+    <member name="max_topic_queries" type="int32"/>
+    <member name="shmem_ref_transfer_mode_attached_segment_allocation" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AllocationSettings_t"/>
+  </struct>
+  <struct name= "DataReaderProtocolQosPolicy" extensibility= "mutable" nested="true">
+    <member name="virtual_guid" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::GUID_t"/>
+    <member name="rtps_object_id" id="1" type="uint32"/>
+    <member name="expects_inline_qos" id="2" type="boolean"/>
+    <member name="disable_positive_acks" id="3" type="boolean"/>
+    <member name="propagate_dispose_of_unregistered_instances" id="4" type="boolean"/>
+    <member name="rtps_reliable_reader" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::RtpsReliableReaderProtocol_t"/>
+    <member name="vendor_specific_entity" id="6" type="boolean"/>
+    <member name="propagate_unregister_of_disposed_instances" id="7" type="boolean"/>
+    <member name="meta_entity" id="8" type="boolean"/>
+  </struct>
+  <struct name= "TransportMulticastQosPolicy" nested="true">
+    <member name="value" sequenceMaxLength="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportMulticastSettings_t"/>
+    <member name="kind" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportMulticastQosPolicyKind"/>
+  </struct>
+  <struct name= "DataReaderQos" extensibility= "mutable" nested="true">
+    <member name="durability" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DurabilityQosPolicy"/>
+    <member name="deadline" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DeadlineQosPolicy"/>
+    <member name="latency_budget" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LatencyBudgetQosPolicy"/>
+    <member name="liveliness" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LivelinessQosPolicy"/>
+    <member name="reliability" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliabilityQosPolicy"/>
+    <member name="destination_order" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DestinationOrderQosPolicy"/>
+    <member name="history" id="6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::HistoryQosPolicy"/>
+    <member name="resource_limits" id="7" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ResourceLimitsQosPolicy"/>
+    <member name="user_data" id="8" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserDataQosPolicy"/>
+    <member name="ownership" id="9" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::OwnershipQosPolicy"/>
+    <member name="time_based_filter" id="10" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TimeBasedFilterQosPolicy"/>
+    <member name="reader_data_lifecycle" id="11" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReaderDataLifecycleQosPolicy"/>
+    <member name="data_representation" id="26" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataRepresentationQosPolicy"/>
+    <member name="type_consistency" id="12" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TypeConsistencyEnforcementQosPolicy"/>
+    <member name="data_tags" id="25" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataTagQosPolicy"/>
+    <member name="reader_resource_limits" id="13" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataReaderResourceLimitsQosPolicy"/>
+    <member name="protocol" id="14" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataReaderProtocolQosPolicy"/>
+    <member name="transport_selection" id="15" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportSelectionQosPolicy"/>
+    <member name="unicast" id="16" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportUnicastQosPolicy"/>
+    <member name="multicast" id="17" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportMulticastQosPolicy"/>
+    <member name="encapsulation" id="18" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportEncapsulationQosPolicy"/>
+    <member name="property" id="19" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PropertyQosPolicy"/>
+    <member name="service" id="20" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ServiceQosPolicy"/>
+    <member name="availability" id="21" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::AvailabilityQosPolicy"/>
+    <member name="subscription_name" id="22" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EntityNameQosPolicy"/>
+    <member name="transport_priority" id="24" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportPriorityQosPolicy"/>
+    <member name="type_support" id="23" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TypeSupportQosPolicy"/>
+  </struct>
+  <struct name= "SubscriberProtocolQosPolicy" nested="true">
+    <member name="vendor_specific_entity" type="boolean"/>
+  </struct>
+  <struct name= "SubscriberQos" extensibility= "mutable" nested="true">
+    <member name="presentation" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PresentationQosPolicy"/>
+    <member name="partition" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PartitionQosPolicy"/>
+    <member name="group_data" id="2" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::GroupDataQosPolicy"/>
+    <member name="entity_factory" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EntityFactoryQosPolicy"/>
+    <member name="exclusive_area" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ExclusiveAreaQosPolicy"/>
+    <member name="protocol" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SubscriberProtocolQosPolicy"/>
+    <member name="subscriber_name" id="6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::EntityNameQosPolicy"/>
+  </struct>
+  <struct name= "ParticipantBuiltinTopicData" nested="true">
+    <member name="key" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+    <member name="user_data" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserDataQosPolicy"/>
+  </struct>
+  <const name="BUILTIN_TOPIC_DATA_STRING_MAX_LENGTH" type="int32" value="255"/>
+  <struct name= "TopicBuiltinTopicData" extensibility= "mutable" nested="true">
+    <member name="key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+    <member name="name" stringMaxLength="DDSMonitoring::BUILTIN_TOPIC_DATA_STRING_MAX_LENGTH" id="1" type="string"/>
+    <member name="type_name" stringMaxLength="DDSMonitoring::BUILTIN_TOPIC_DATA_STRING_MAX_LENGTH" id="2" type="string"/>
+    <member name="durability" id="3" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DurabilityQosPolicy"/>
+    <member name="durability_service" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DurabilityServiceQosPolicy"/>
+    <member name="deadline" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DeadlineQosPolicy"/>
+    <member name="latency_budget" id="6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LatencyBudgetQosPolicy"/>
+    <member name="liveliness" id="7" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LivelinessQosPolicy"/>
+    <member name="reliability" id="8" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliabilityQosPolicy"/>
+    <member name="transport_priority" id="9" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TransportPriorityQosPolicy"/>
+    <member name="lifespan" id="10" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LifespanQosPolicy"/>
+    <member name="destination_order" id="11" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DestinationOrderQosPolicy"/>
+    <member name="history" id="12" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::HistoryQosPolicy"/>
+    <member name="resource_limits" id="13" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ResourceLimitsQosPolicy"/>
+    <member name="ownership" id="14" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::OwnershipQosPolicy"/>
+    <member name="topic_data" id="15" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TopicDataQosPolicy"/>
+    <member name="type_consistency" id="16" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TypeConsistencyEnforcementQosPolicy"/>
+    <member name="data_representation" id="17" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataRepresentationQosPolicy"/>
+  </struct>
+  <struct name= "PublicationBuiltinTopicData" extensibility= "mutable" nested="true">
+    <member name="key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+    <member name="participant_key" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+    <member name="topic_name" stringMaxLength="DDSMonitoring::BUILTIN_TOPIC_DATA_STRING_MAX_LENGTH" id="2" type="string"/>
+    <member name="type_name" stringMaxLength="DDSMonitoring::BUILTIN_TOPIC_DATA_STRING_MAX_LENGTH" id="3" type="string"/>
+    <member name="durability" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DurabilityQosPolicy"/>
+    <member name="durability_service" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DurabilityServiceQosPolicy"/>
+    <member name="deadline" id="6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DeadlineQosPolicy"/>
+    <member name="latency_budget" id="7" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LatencyBudgetQosPolicy"/>
+    <member name="liveliness" id="8" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LivelinessQosPolicy"/>
+    <member name="reliability" id="9" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliabilityQosPolicy"/>
+    <member name="lifespan" id="10" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LifespanQosPolicy"/>
+    <member name="user_data" id="11" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserDataQosPolicy"/>
+    <member name="ownership" id="12" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::OwnershipQosPolicy"/>
+    <member name="ownership_strength" id="13" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::OwnershipStrengthQosPolicy"/>
+    <member name="destination_order" id="14" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DestinationOrderQosPolicy"/>
+    <member name="presentation" id="15" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PresentationQosPolicy"/>
+    <member name="partition" id="16" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PartitionQosPolicy"/>
+    <member name="topic_data" id="17" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TopicDataQosPolicy"/>
+    <member name="group_data" id="18" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::GroupDataQosPolicy"/>
+    <member name="type_consistency" id="19" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TypeConsistencyEnforcementQosPolicy"/>
+    <member name="data_representation" id="21" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataRepresentationQosPolicy"/>
+    <member name="data_tags" id="20" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataTagQosPolicy"/>
+  </struct>
+  <struct name= "SubscriptionBuiltinTopicData" extensibility= "mutable" nested="true">
+    <member name="key" id="0" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+    <member name="participant_key" id="1" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::BuiltinTopicKey_t"/>
+    <member name="topic_name" stringMaxLength="DDSMonitoring::BUILTIN_TOPIC_DATA_STRING_MAX_LENGTH" id="2" type="string"/>
+    <member name="type_name" stringMaxLength="DDSMonitoring::BUILTIN_TOPIC_DATA_STRING_MAX_LENGTH" id="3" type="string"/>
+    <member name="durability" id="4" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DurabilityQosPolicy"/>
+    <member name="deadline" id="5" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DeadlineQosPolicy"/>
+    <member name="latency_budget" id="6" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LatencyBudgetQosPolicy"/>
+    <member name="liveliness" id="7" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::LivelinessQosPolicy"/>
+    <member name="reliability" id="8" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ReliabilityQosPolicy"/>
+    <member name="ownership" id="9" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::OwnershipQosPolicy"/>
+    <member name="destination_order" id="10" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DestinationOrderQosPolicy"/>
+    <member name="user_data" id="11" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::UserDataQosPolicy"/>
+    <member name="time_based_filter" id="12" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TimeBasedFilterQosPolicy"/>
+    <member name="presentation" id="13" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PresentationQosPolicy"/>
+    <member name="partition" id="14" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::PartitionQosPolicy"/>
+    <member name="topic_data" id="15" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TopicDataQosPolicy"/>
+    <member name="group_data" id="16" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::GroupDataQosPolicy"/>
+    <member name="type_consistency" id="17" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::TypeConsistencyEnforcementQosPolicy"/>
+    <member name="data_representation" id="19" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataRepresentationQosPolicy"/>
+    <member name="data_tags" id="18" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::DataTagQosPolicy"/>
+  </struct>
+  <struct name= "SampleInfo" nested="true">
+    <member name="sample_state" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SampleStateKind"/>
+    <member name="view_state" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::ViewStateKind"/>
+    <member name="instance_state" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceStateKind"/>
+    <member name="source_timestamp" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Time_t"/>
+    <member name="instance_handle" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t"/>
+    <member name="publication_handle" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::InstanceHandle_t"/>
+    <member name="disposed_generation_count" type="int32"/>
+    <member name="no_writers_generation_count" type="int32"/>
+    <member name="sample_rank" type="int32"/>
+    <member name="generation_rank" type="int32"/>
+    <member name="absolute_generation_rank" type="int32"/>
+    <member name="valid_data" type="boolean"/>
+    <member name="reception_timestamp" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::Time_t"/>
+    <member name="publication_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="reception_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="publication_virtual_guid" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::GUID_t"/>
+    <member name="publication_virtual_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+    <member name="original_publication_virtual_guid" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::GUID_t"/>
+    <member name="original_publication_virtual_sequence_number" type="nonBasic"  nonBasicTypeName= "DDSMonitoring::SequenceNumber_t"/>
+  </struct>
+</module>
+</types>

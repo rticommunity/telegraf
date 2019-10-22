@@ -1,0 +1,452 @@
+/******************************************************************************
+ * (c) Copyright, Real-Time Innovations, Copyright 2010
+ *
+ * All rights reserved.
+ *
+ * No duplications, whole or partial, manual or electronic, may be made
+ * without express written permission.  Any such copies, or
+ * revisions thereof, must display this notice unaltered.
+ * 
+ * This code contains trade secrets of Real-Time Innovations, Inc.
+ *
+ * This file contains the types used by RTI Data Distribution Service to monitor
+ * applications.
+ *
+ * THE CONTENTS OF THIS FILE, AS WELL AS THE EXISTENCE OF THIS FILE, 
+ * ARE SUBJECT TO CHANGE WITHOUT ANY NOTICE.
+ *
+ * For any questions please contact support@rti.com
+ *****************************************************************************/
+
+//@copy-c #if 0
+#include "dds_rtf2_dcps.idl"
+//@copy-c #endif
+
+//@copy-c #include "dds_typedefs.h"
+
+//@copy-c #include "dds_rtf2_dcpsPlugin.h"
+
+module rti {
+    module monitoring {
+		// TODO: Should this be a long or long long. What about platforms
+		// in our PAM that don't support 64 bit types
+		// What about platforms without floating point support.
+        typedef long long DiscreteVariable;
+
+        struct DiscreteVariableStatistics {
+			// The mean of this statistic over the period
+            double mean;
+
+            // The minium over the period
+            DiscreteVariable minimum;
+
+            // The maximum over the period
+            DiscreteVariable maximum;
+
+            // The standard deviation over the period.
+			double variance;
+        }; //@top-level false
+    }; //End of module monitoring
+
+    module dds {
+        module monitoring {
+            const long STRING_MAX_LENGTH = 256;
+
+            struct DomainParticipantDescription {
+		DDSMonitoring::BuiltinTopicKey_t entity_key; //@key
+                                                            //@ID 0
+		// node info
+		long domain_id; //@ID 1
+		unsigned long host_id; //@ID 2
+		unsigned long process_id; //@ID 3
+
+                DDSMonitoring::DomainParticipantQos qos; //@ID 4
+            }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+
+            struct TopicDescription {
+                DDSMonitoring::BuiltinTopicKey_t entity_key; //@key
+                                                             //@ID 0
+		DDSMonitoring::BuiltinTopicKey_t participant_entity_key; //@ID 1
+
+		// node info
+		long domain_id; //@ID 2
+		unsigned long host_id; //@ID 3
+		unsigned long process_id; //@ID 4
+
+                string<STRING_MAX_LENGTH> topic_name; //@ID 5
+                string<STRING_MAX_LENGTH> type_name; //@ID 6
+		unsigned long tc_serialized_size; //@ID 7
+
+                DDSMonitoring::TopicQos qos; //@ID 8
+            }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct PublisherDescription {
+                DDSMonitoring::BuiltinTopicKey_t entity_key; //@key
+                                                             //@ID 0
+		DDSMonitoring::BuiltinTopicKey_t participant_entity_key; //@ID 1
+
+		// node info
+		long domain_id; //@ID 2
+		unsigned long host_id; //@ID 3
+		unsigned long process_id; //@ID 4
+
+                DDSMonitoring::PublisherQos qos; //@ID 5
+            }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct SubscriberDescription {
+		DDSMonitoring::BuiltinTopicKey_t entity_key; //@key
+                                                            //@ID 0
+		DDSMonitoring::BuiltinTopicKey_t participant_entity_key; //@ID 1
+
+		// node info
+		long domain_id; //@ID 2
+		unsigned long host_id; //@ID 3
+		unsigned long process_id; //@ID 4
+
+                DDSMonitoring::SubscriberQos qos; //@ID 5
+            }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct DataReaderDescription {
+                DDSMonitoring::BuiltinTopicKey_t entity_key; //@key
+                                                             //@ID 0
+		DDSMonitoring::BuiltinTopicKey_t subscriber_entity_key; //@ID 1
+                DDSMonitoring::BuiltinTopicKey_t topic_entity_key; //@ID 2
+		boolean is_content_filtered;//@ID 3
+
+		// node info
+		long domain_id; //@ID 4
+		unsigned long host_id; //@ID 5
+		unsigned long process_id; //@ID 6
+
+                string<STRING_MAX_LENGTH> type_name; //@ID 7
+                string<STRING_MAX_LENGTH> topic_name; //@ID 8
+
+		long serialized_sample_max_size; //@ID 9
+		long serialized_sample_min_size; //@ID 10
+		long serialized_key_max_size; //@ID 11
+
+                DDSMonitoring::DataReaderQos qos; //@ID 12
+            }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct DataWriterDescription {
+                DDSMonitoring::BuiltinTopicKey_t entity_key; //@key
+                                                             //@ID 0
+		DDSMonitoring::BuiltinTopicKey_t publisher_entity_key; //@ID 1
+                DDSMonitoring::BuiltinTopicKey_t topic_entity_key; //@ID 2
+
+		// node info
+		long domain_id; //@ID 3
+		unsigned long host_id; //@ID 4		
+		unsigned long process_id; //@ID 5
+
+                string<STRING_MAX_LENGTH> type_name; //@ID 6
+                string<STRING_MAX_LENGTH> topic_name; //@ID 7
+
+		long serialized_sample_max_size; //@ID 8
+		long serialized_sample_min_size; //@ID 9
+		long serialized_key_max_size; //@ID 10
+
+                DDSMonitoring::DataWriterQos qos; //@ID 11
+            }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct LivelinessChangedStatusStatistics {
+                DDSMonitoring::LivelinessChangedStatus status; //@ID 0
+
+#ifdef SHIPPED_NDDS
+                rti::monitoring::DiscreteVariableStatistics alive;
+                rti::monitoring::DiscreteVariableStatistics not_alive;
+#endif
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct SampleRejectedStatusStatistics {
+                DDSMonitoring::SampleRejectedStatus status; //@ID 0
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct RequestedDeadlineMissedStatusStatistics {
+                DDSMonitoring::RequestedDeadlineMissedStatus status; //@ID 0
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct RequestedIncompatibleQosStatusStatistics {
+                DDSMonitoring::RequestedIncompatibleQosStatus status; //@ID 0
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct SampleLostStatusStatistics {
+                DDSMonitoring::SampleLostStatus status; //@ID 0
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct SubscriptionMatchedStatusStatistics {
+                DDSMonitoring::SubscriptionMatchedStatus status; //@ID 0
+#ifdef SHIPPED_NDDS
+                rti::monitoring::DiscreteVariableStatistics matching_subscriptions;
+#endif
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct DataReaderCacheStatusStatistics {
+                DDSMonitoring::DataReaderCacheStatus status; //@ID 0
+#ifdef SHIPPED_NDDS
+                rti::monitoring::DiscreteVariableStatistics cache_samples;
+#endif
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct DataReaderProtocolStatusStatistics {
+                DDSMonitoring::DataReaderProtocolStatus status; //@ID 0
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct DataReaderEntityStatistics {
+                DDSMonitoring::BuiltinTopicKey_t datareader_key; //@key
+                                                                 //@ID 0
+                // The period over which these statuses 
+                // have been calculated
+                DDSMonitoring::Duration_t period; //@key
+                                                  //@ID 1
+		// hierarchy
+		DDSMonitoring::BuiltinTopicKey_t participant_key; //@ID 2
+		DDSMonitoring::BuiltinTopicKey_t subscriber_key; //@ID 3
+                DDSMonitoring::BuiltinTopicKey_t topic_key; //@ID 4
+		boolean is_content_filtered; //@ID 5
+                string<STRING_MAX_LENGTH> topic_name; //@ID 6
+
+		// node info
+		long domain_id; //@ID 7
+		unsigned long host_id; //@ID 8
+		unsigned long process_id; //@ID 9
+
+                // Statuses
+                SampleRejectedStatusStatistics sample_rejected_status; //@ID 10
+                LivelinessChangedStatusStatistics liveliness_changed_status; //@ID 11
+
+                RequestedDeadlineMissedStatusStatistics requested_deadline_missed_status; //@ID 12
+                RequestedIncompatibleQosStatusStatistics requested_incompatible_qos_status; //@ID 13
+                SampleLostStatusStatistics sample_lost_status; //@ID 14
+                SubscriptionMatchedStatusStatistics subscription_matched_status; //@ID 15
+                DataReaderCacheStatusStatistics datareader_cache_status; //@ID 16
+                DataReaderProtocolStatusStatistics datareader_protocol_status; //@ID 17
+            }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+
+            struct DataReaderEntityMatchedPublicationStatistics {
+                DDSMonitoring::BuiltinTopicKey_t datareader_key; //@key
+                                                                 //@ID 0
+		DDSMonitoring::InstanceHandle_t publication_handle; //@key
+                                                                   //@ID 1
+                // The period over which these statuses 
+                // have been calculated
+                DDSMonitoring::Duration_t period; //@key
+                                                  //@ID 2
+		DataReaderProtocolStatusStatistics datareader_protocol_status; //@ID 3
+	    }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct LivelinessLostStatusStatistics {
+                DDSMonitoring::LivelinessLostStatus status; //@ID 0
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct OfferedDeadlineMissedStatusStatistics {
+                DDSMonitoring::OfferedDeadlineMissedStatus status; //@ID 0
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct OfferedIncompatibleQosStatusStatistics {
+                DDSMonitoring::OfferedIncompatibleQosStatus status; //@ID 0
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct PublicationMatchedStatusStatistics {
+                DDSMonitoring::PublicationMatchedStatus status; //@ID 0
+#ifdef SHIPPED_NDDS
+                rti::monitoring::DiscreteVariableStatistics matched_publications;
+#endif
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct ReliableWriterCacheChangedStatusStatistics {
+                DDSMonitoring::ReliableWriterCacheChangedStatus status; //@ID 0
+#ifdef SHIPPED_NDDS
+                rti::monitoring::DiscreteVariableStatistics unacknowledged_samples;
+#endif
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct ReliableReaderActivityChangedStatusStatistics {
+                DDSMonitoring::ReliableReaderActivityChangedStatus status; //@ID 0
+#ifdef SHIPPED_NDDS
+                rti::monitoring::DiscreteVariableStatistics active;
+                rti::monitoring::DiscreteVariableStatistics inactive;
+#endif
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct DataWriterCacheStatusStatistics {
+                DDSMonitoring::DataWriterCacheStatus status; //@ID 0
+#ifdef SHIPPED_NDDS
+                rti::monitoring::DiscreteVariableStatistics cache_samples;
+#endif
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct DataWriterProtocolStatusStatistics {
+                DDSMonitoring::DataWriterProtocolStatus status; //@ID 0
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct DataWriterEntityStatistics {
+                DDSMonitoring::BuiltinTopicKey_t datawriter_key; //@key
+                                                                 //@ID 0
+                // The period over which these statuses 
+                // have been calculated
+                DDSMonitoring::Duration_t period; //@key
+                                                  //@ID 1
+		// hierarchy
+		DDSMonitoring::BuiltinTopicKey_t participant_key; //@ID 2
+		DDSMonitoring::BuiltinTopicKey_t publisher_key; //@ID 3
+                DDSMonitoring::BuiltinTopicKey_t topic_key; //@ID 4
+                string<STRING_MAX_LENGTH> topic_name; //@ID 5
+
+		// node info
+		long domain_id; //@ID 6
+		unsigned long host_id; //@ID 7
+		unsigned long process_id; //@ID 8
+
+                // Statistics
+                LivelinessLostStatusStatistics liveliness_lost_status; //@ID 9
+                OfferedDeadlineMissedStatusStatistics offered_deadline_missed_status; //@ID 10
+                OfferedIncompatibleQosStatusStatistics offered_incompatible_qos_status; //@ID 11
+                PublicationMatchedStatusStatistics publication_matched_status; //@ID 12
+                ReliableWriterCacheChangedStatusStatistics reliable_writer_cache_changed_status; //@ID 13
+                ReliableReaderActivityChangedStatusStatistics reliable_reader_activity_changed_status; //@ID 14
+                DataWriterCacheStatusStatistics datawriter_cache_status; //@ID 15
+                DataWriterProtocolStatusStatistics datawriter_protocol_status; //@ID 16
+            }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+
+            struct DataWriterEntityMatchedSubscriptionStatistics {
+                DDSMonitoring::BuiltinTopicKey_t datawriter_key; //@key
+                                                                 //@ID 0
+		DDSMonitoring::InstanceHandle_t subscription_handle; //@key
+                                                                    //@ID 1
+                // The period over which these statuses 
+                // have been calculated
+                DDSMonitoring::Duration_t period; //@key
+                                                  //@ID 2
+		DataWriterProtocolStatusStatistics datawriter_protocol_status; //@ID 3
+	    }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct DataWriterEntityMatchedSubscriptionWithLocatorStatistics {
+                DDSMonitoring::BuiltinTopicKey_t datawriter_key; //@key 
+                                                                 //@ID 0
+		DDSMonitoring::Locator_t subscription_locator; //@key 
+                                                              //@ID 1
+
+                // The period over which these statuses 
+                // have been calculated
+                DDSMonitoring::Duration_t period; //@key 
+                                                  //@ID 2
+
+		DataWriterProtocolStatusStatistics datawriter_protocol_status; //@ID 3
+	    }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+	    struct ProcessStatistics {
+		DDSMonitoring::Duration_t user_cpu_time;
+		DDSMonitoring::Duration_t user_cpu_time_change;
+		DDSMonitoring::Duration_t kernel_cpu_time;
+		DDSMonitoring::Duration_t kernel_cpu_time_change;
+		unsigned long long physical_memory_bytes;
+		unsigned long long total_memory_bytes;
+	    }; //@top-level false
+	       //@Extensibility EXTENSIBLE_EXTENSIBILITY
+
+            // The statistics for a participant
+            struct DomainParticipantEntityStatistics {
+                DDSMonitoring::BuiltinTopicKey_t participant_key; //@key 
+                                                                  //@ID 0
+
+                // The period over which these statuses 
+                // have been calculated
+                DDSMonitoring::Duration_t period; //@key 
+                                                  //@ID 1
+
+		// node info
+		long domain_id; //@ID 2
+		unsigned long host_id; //@ID 3
+		unsigned long process_id; //@ID 4
+		ProcessStatistics process; //@ID 5
+
+#ifdef SHIPPED_NDDS
+                // Aggregate information inside the participant
+                DataWriterEntityStatistics user_writers;
+                DataReaderEntityStatistics user_readers;
+#endif
+
+#ifdef NOT_SUPPORTED_IN_DDS
+                DataWriterEntityStatistics builtin_writers;
+                DataReaderEntityStatistics builtin_readers;
+#endif
+
+                // Discovery information
+                long remoteParticipantCount; //@ID 6
+#ifdef SHIPPED_NDDS
+                rti::monitoring::DiscreteVariableStatistics remoteParticipants;
+#endif
+                long remoteWriterCount; //@ID 7
+#ifdef SHIPPED_NDDS
+                rti::monitoring::DiscreteVariableStatistics remoteWriters;
+#endif
+                long remoteReaderCount; //@ID 8
+#ifdef SHIPPED_NDDS
+                rti::monitoring::DiscreteVariableStatistics remoteReaders;
+#endif
+            }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct InconsistentTopicStatusStatistics {
+                DDSMonitoring::InconsistentTopicStatus status; //@ID 0
+            }; //@top-level false
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+            struct TopicEntityStatistics {
+                DDSMonitoring::BuiltinTopicKey_t topic_key; //@key 
+                                                            //@ID 0
+
+                // The period over which these statuses 
+                // have been calculated
+                DDSMonitoring::Duration_t period; //@key 
+                                                  //@ID 1
+
+		// hierarchy
+		DDSMonitoring::BuiltinTopicKey_t participant_key; //@ID 2
+                string<STRING_MAX_LENGTH> topic_name; //@ID 3
+                string<STRING_MAX_LENGTH> type_name; //@ID 4
+
+		// node info
+		long domain_id; //@ID 5
+		unsigned long host_id; //@ID 6
+		unsigned long process_id; //@ID 7
+
+                // Statistics
+                InconsistentTopicStatusStatistics inconsistent_topic_status; //@ID 8
+	    }; //@top-level true
+               //@Extensibility MUTABLE_EXTENSIBILITY
+
+        }; // End of module monitoring
+    }; // End of module DDSMonitoring
+}; // End of module rti
