@@ -71,7 +71,7 @@ func (d *DDSConsumer) SampleConfig() string {
 }
 
 func (d *DDSConsumer) Description() string {
-	return "Read metrics from DDS"
+	return "Input plugin for monitoring DDS applications"
 }
 
 func (d *DDSConsumer) SetParser(parser parsers.Parser) {
