@@ -296,3 +296,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/cisco-ie/nx-telemetry-proto"
+
+[[constraint]]
+  name = "github.com/rticommunity/rticonnextdds-connector-go"
+  revision = "1b247473749597e7b5a6e2caa9be56a85d5d11bc"

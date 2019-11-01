@@ -16,6 +16,7 @@ import (
 	"github.com/influxdata/telegraf/plugins/parsers"
 	"github.com/rticommunity/rticonnextdds-connector-go"
 	"log"
+	"time"
 )
 
 type DDSConsumer struct {
@@ -119,6 +120,8 @@ func (d *DDSConsumer) process() {
 			if d.reader.Infos.IsValid(i) {
 				json, err := d.reader.Samples.GetJSON(i)
 				checkError(err)
+				ts, err := d.reader.Infos.GetSourceTimestamp(i)
+				checkError(err)
 				go func(json []byte) {
 					// Parse the JSON object to metrics
 					metrics, err := d.parser.Parse(json)
@@ -127,7 +130,7 @@ func (d *DDSConsumer) process() {
 					// Iterate the metrics
 					for _, metric := range metrics {
 						// Add a metric to an output plugin
-						d.acc.AddFields(metric.Name(), metric.Fields(), metric.Tags(), metric.Time())
+						d.acc.AddFields(metric.Name(), metric.Fields(), metric.Tags(), time.Unix(0, ts))
 					}
 				}(json)
 			}
