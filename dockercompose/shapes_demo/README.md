@@ -1,6 +1,6 @@
 # RTI Shapes demo with TIG
 
-Docker-compose file for running TIG (Telegraf, InfluxDB, and Garafana) with [RTI Shapes demo](https://www.rti.com/free-trial/shapes-demo).
+Docker Compose file for running TIG (Telegraf, InfluxDB, and Garafana) with [RTI Shapes demo](https://www.rti.com/free-trial/shapes-demo).
 This is to demonstrate [Telegraf plugin for RTI Connext DDS](https://www.rti.com/developers/rti-labs/telegraf-plugin-for-connext-dds). 
 This requires installation of Docker and Docker Compose (above version 3).
 
