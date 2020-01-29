@@ -1,0 +1,38 @@
+version: '3'
+services:
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8090:8090"
+    env_file:
+      - 'env.influxdb'
+    volumes:
+      # Data persistency
+      # mkdir -p $HOME/docker/influxdb/data
+      - $HOME/docker/influxdb/data:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    env_file:
+      - 'env.grafana'
+    links:
+      - influxdb
+    volumes:
+      # Data persistency
+      # mkdir -p $HOME/docker/grafana/data; sudo chown 472:472 $HOME/docker/grafana/data
+      - $HOME/docker/grafana/data:/var/lib/grafana
+
+  telegraf:
+    image: kyoungho/telegraf:latest
+    container_name: shapes-telegraf
+    links:
+      - influxdb
+    volumes:
+      - ./dds_to_influx.conf:/app/telegraf.conf:ro
+      - ./ShapeExample.xml:/app/ShapeExample.xml:ro
