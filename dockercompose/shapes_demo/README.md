@@ -11,7 +11,7 @@ Run Docker Compose:
     docker-compose up -d
     
 After running the Docker images, you can run the RTI Shapes demo and create Shapes publishers. 
-Then, you can see Shapes data visualized in a Grafana dashboard (localhost:3000).
+Then, you can see Shapes data visualized in a Grafana dashboard (http://localhost:3000).
 
 The baseline QoS setting used by the DataReaders in Telegraf is `Generic.KeepLastReliable`. 
 The `Square` DataReader uses the default QoS settings. 
