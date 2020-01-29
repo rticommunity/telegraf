@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+(c) 2005-2015 Copyright, Real-Time Innovations.  All rights reserved.
+No duplications, whole or partial, manual or electronic, may be made
+without express written permission.  Any such copies, or revisions thereof,
+must display this notice unaltered.
+This code contains trade secrets of Real-Time Innovations, Inc.
+ -->
+<dds>
+  <!-- Qos Library -->
+  <qos_library name="QosLibrary">
+    <qos_profile name="DefaultProfile" base_name="BuiltinQosLibExp::Generic.KeepLastReliable" is_default_qos="true">
+      <participant_qos>
+        <transport_builtin>
+          <mask>UDPV4 | SHMEM</mask>
+        </transport_builtin>
+      </participant_qos>
+    </qos_profile>
+  </qos_library>
+  <!-- types -->
+  <types>
+    <struct name="ShapeType" extensibility="extensible">
+      <member name="color" stringMaxLength="128" id="0" type="string" key="true"/>
+      <member name="x" id="1" type="long"/>
+      <member name="y" id="2" type="long"/>
+      <member name="shapesize" id="3" type="long"/>
+    </struct>
+    <enum name="ShapeFillKind" extensibility="extensible">
+      <enumerator name="SOLID_FILL" value="0"/>
+      <enumerator name="TRANSPARENT_FILL" value="1"/>
+      <enumerator name="HORIZONTAL_HATCH_FILL" value="2"/>
+      <enumerator name="VERTICAL_HATCH_FILL" value="3"/>
+    </enum>
+    <struct name="ShapeTypeExtended" baseType="ShapeType" extensibility="extensible">
+      <member name="fillKind" id="4" type="nonBasic" nonBasicTypeName="ShapeFillKind"/>
+      <member name="angle" id="5" type="float"/>
+    </struct>
+  </types>
+  <!-- Domain Library -->
+  <domain_library name="MyDomainLibrary">
+    <domain name="MyDomain" domain_id="0">
+      <register_type name="ShapeType" type_ref="ShapeType"/>
+      <topic name="Square" register_type_ref="ShapeType"/>
+      <topic name="Triangle" register_type_ref="ShapeType"/>
+      <topic name="Circle" register_type_ref="ShapeType"/>
+    </domain>
+  </domain_library>
+  <!-- Participant library -->
+  <domain_participant_library name="MyParticipantLibrary">
+    <domain_participant name="Zero" domain_ref="MyDomainLibrary::MyDomain">
+      <subscriber name="MySubscriber">
+        <data_reader name="MySquareReader" topic_ref="Square"/>
+      </subscriber>
+    </domain_participant>
+    <domain_participant name="One" domain_ref="MyDomainLibrary::MyDomain">
+      <subscriber name="MySubscriber">
+        <data_reader name="MyTriangleReader" topic_ref="Triangle">
+          <datareader_qos>
+            <reliability>
+              <kind>RELIABLE_RELIABILITY_QOS</kind>
+            </reliability>
+            <durability>
+              <kind>TRANSIENT_LOCAL_DURABILITY_QOS</kind>
+            </durability>
+            <history>
+              <kind>KEEP_ALL_HISTORY_QOS</kind>
+            </history>
+          </datareader_qos>
+        </data_reader>
+      </subscriber>
+    </domain_participant>
+    <domain_participant name="Two" domain_ref="MyDomainLibrary::MyDomain">
+      <subscriber name="MySubscriber">
+        <data_reader name="MyCircleReader" topic_ref="Circle">
+          <filter name="Circle" kind="builtin.sql">
+            <expression> x > 100 </expression>
+          </filter>
+        </data_reader>
+      </subscriber>
+    </domain_participant>
+  </domain_participant_library>
+</dds>
