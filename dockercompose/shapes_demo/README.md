@@ -6,6 +6,11 @@ This requires installation of Docker and Docker Compose (above version 3).
 
 ## Usage
 
+To persist data for InfluxDB and Grafana, you need to create directories:
+
+    mkdir -p $HOME/docker/influxdb/data
+    mkdir -p $HOME/docker/grafana/data; sudo chown 472:472 $HOME/docker/grafana/data
+
 Run Docker Compose:
   
     docker-compose up -d
