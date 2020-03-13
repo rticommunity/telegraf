@@ -39,7 +39,7 @@ Telegraf requires golang version 1.10 or newer, the Makefile requires GNU make.
 
 ## How to use it:
 
-#### Include RTI Connector C library to the library path
+#### Add RTI Connector C library to the library path
 
 RTI Go Connector dynamically links to RTI Connector C library. The path for Connector C library should be included in the environment variable for library path (e.g. ```LD_LIBRARY_PATH```). After you build Telegraf, the RTI C Connector library is checked out under the vendor directory. You can include the path like the following.
 
