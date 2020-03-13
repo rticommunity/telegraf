@@ -15,7 +15,7 @@ Telegraf is plugin-driven and has the concept of 4 distinct plugin types:
 4. [Output Plugins](#output-plugins) write metrics to various destinations
 
 This repository is a fork of Telegraf adding a DDS input plugin ([dds_consumer](./plugins/inputs/dds_consumer)). 
-It is synced up with [Telegraf v1.11](https://github.com/influxdata/telegraf/tree/release-1.11). 
+It is synced up with the [Telegraf v1.11](https://github.com/influxdata/telegraf/tree/release-1.11) branch. 
 
 ## Installation:
 
@@ -30,7 +30,8 @@ Telegraf requires golang version 1.10 or newer, the Makefile requires GNU make.
    cd $GOPATH/src/github.com/influxdata
    git clone https://github.com/rticommunity/telegraf.git
    ```
-4. Run make from the source directory
+4. [Install Git LFS](https://github.com/git-lfs/git-lfs/wiki/Installation) to properly check out the RTI Connector C library files (used by DDS plugins).
+5. Run make from the source directory
    ```
    cd "$GOPATH/src/github.com/influxdata/telegraf"
    make
