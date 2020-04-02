@@ -30,7 +30,12 @@ Telegraf requires golang version 1.10 or newer, the Makefile requires GNU make.
    cd $GOPATH/src/github.com/influxdata
    git clone https://github.com/rticommunity/telegraf.git
    ```
-4. [Install Git LFS](https://github.com/git-lfs/git-lfs/wiki/Installation) to properly check out the RTI Connector C library files (used by DDS plugins).
+4. [Install Git LFS](https://github.com/git-lfs/git-lfs/wiki/Installation) to check out the RTI Connector C library files (used by DDS plugins).
+   ```
+   curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+   sudo apt-get install git-lfs
+   git lfs install
+   ```
 5. Run make from the source directory
    ```
    cd "$GOPATH/src/github.com/influxdata/telegraf"
