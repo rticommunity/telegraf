@@ -1015,11 +1015,11 @@
   revision = "e2704e165165ec55d062f5919b4b29494e9fa790"
 
 [[projects]]
-  digest = "1:fd31b5472982dce767447e087b63799b357edd4afdca5aade108a62924bc0bfb"
+  digest = "1:e5aa39b180b4935dc4228b979408d3f7cdd8afc062ce308de1428e067340e863"
   name = "github.com/rticommunity/rticonnextdds-connector-go"
   packages = ["."]
   pruneopts = ""
-  revision = "1b247473749597e7b5a6e2caa9be56a85d5d11bc"
+  revision = "37021c720ed43ade23bb77a5de4a22ed0c47f776"
 
 [[projects]]
   branch = "master"
