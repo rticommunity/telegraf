@@ -15,6 +15,7 @@ import (
 	"github.com/influxdata/telegraf/plugins/inputs"
 	"github.com/influxdata/telegraf/plugins/parsers"
 	"github.com/rticommunity/rticonnextdds-connector-go"
+        "github.com/docker/docker/pkg/namesgenerator"
 	"log"
 	"strconv"
 	"strings"
@@ -36,6 +37,11 @@ type DDSConsumer struct {
 	// RTI Connext Connector entities
 	connector *rti.Connector
 	readers   map[string]*rti.Input
+
+	// DDS entity names
+	participantNames map[string]string
+	writerNames      map[string]string
+	readerNames      map[string]string
 
 	// Telegraf entities
 	parser parsers.Parser
@@ -60,12 +66,6 @@ func checkFatalError(err error) {
 	}
 }
 
-func checkError(err error) {
-	if err != nil {
-		log.Println("ERROR:", err)
-	}
-}
-
 func (d *DDSConsumer) SampleConfig() string {
 	return sampleConfig
 }
@@ -84,14 +84,48 @@ func (d *DDSConsumer) Start(acc telegraf.Accumulator) error {
 
 	var xmlString = `
     str://"<dds>
-    <qos_library name="QosLibrary">
-    <qos_profile name="DefaultProfile" is_default_qos="true">
-    </qos_profile>
 
-    </qos_library>
     <types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:////home/kyounghoan/rti_connext_dds-6.0.0/bin/../resource/app/app_support/rtiddsgen/schema/rti_dds_topic_types.xsd">
 	<include file="monitoring.xml"/>
     </types>
+    <qos_library name="RtiMonitorQosLibrary">
+        <qos_profile name="RtiMonitorQosProfile" is_default_qos="true">
+
+            <datareader_qos name="BaseReaderProfile">
+                <protocol>
+                    <!-- This property keeps the Monitor UI's readers from
+                         showing up in the counts of the monitored application's
+                         discovery metrics. -->
+                    <!--vendor_specific_entity>TRUE</vendor_specific_entity-->
+                </protocol>
+                <!-- This property lets the Monitor UI's readers be matched
+                     with both XCDR and XCDR2 DataWriters. -->
+                <representation>
+                    <value>
+                        <element>XCDR_DATA_REPRESENTATION</element>
+                        <element>XCDR2_DATA_REPRESENTATION</element>
+                    </value>
+                </representation>
+            </datareader_qos>
+            <datareader_qos name="KeepLast1DurableReader"
+                base_name="RtiMonitorQosProfile::BaseReaderProfile">
+                <durability>
+                    <kind>TRANSIENT_LOCAL_DURABILITY_QOS</kind>
+                </durability>
+
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>1</depth>
+                </history>
+            </datareader_qos>
+            <datareader_qos base_name="KeepLast1DurableReader"
+                topic_filter="rti/dds/monitoring/*Description"/>
+        </qos_profile>
+    </qos_library>
     <domain_library name="DomainLib">
     <domain name="DDSMonitor" domain_id="
     ` + d.DomainId +
@@ -199,6 +233,10 @@ func (d *DDSConsumer) Start(acc telegraf.Accumulator) error {
 	var err error
 	d.readers = make(map[string]*rti.Input)
 
+	d.participantNames = make(map[string]string)
+	d.writerNames = make(map[string]string)
+	d.readerNames = make(map[string]string)
+
 	if d.DomainId == "" {
 		d.DomainId = defaultDomainId
 	}
@@ -212,8 +250,11 @@ func (d *DDSConsumer) Start(acc telegraf.Accumulator) error {
 
 	// Get a DDS reader
 	d.readers["ParticipantStats"], err = d.connector.GetInput("DDSMonitorSubscriber::DomainParticipantEntityStatisticsReader")
+	d.readers["ParticipantDesc"], err = d.connector.GetInput("DDSMonitorSubscriber::DomainParticipantDescriptionReader")
 	d.readers["WriterStats"], err = d.connector.GetInput("DDSMonitorSubscriber::DataWriterEntityStatisticsReader")
+	d.readers["WriterDesc"], err = d.connector.GetInput("DDSMonitorSubscriber::DataWriterDescriptionReader")
 	d.readers["ReaderStats"], err = d.connector.GetInput("DDSMonitorSubscriber::DataReaderEntityStatisticsReader")
+	d.readers["ReaderDesc"], err = d.connector.GetInput("DDSMonitorSubscriber::DataReaderDescriptionReader")
 	checkFatalError(err)
 
 	// Start a thread for reading and processing DDS metrics
@@ -229,7 +270,10 @@ func (d *DDSConsumer) Stop() {
 func (d *DDSConsumer) process(key string, json []byte) {
 	// Parse the JSON object to metrics
 	metrics, err := d.parser.Parse(json)
-	checkError(err)
+	if err != nil {
+		log.Println("ERROR:", err)
+		return
+	}
 
 	// Iterate the metrics
 	for _, metric := range metrics {
@@ -270,11 +314,44 @@ func (d *DDSConsumer) process(key string, json []byte) {
 			participantId += "." + strValue
 			metric.RemoveField("participant_key_value_3")
 			metric.AddTag("participant_id", participantId)
+			metric.AddTag("participant_name", d.participantNames[participantId])
 
 			// Remove fields not needed
 			metric.RemoveField("period_sec")
 			metric.RemoveField("period_nanosec")
 			metric.RemoveField("host_id")
+
+		case "ParticipantDesc":
+			// Get Participant ID
+			value, _ := metric.GetField("entity_key_value_0")
+			strValue := strconv.FormatFloat(value.(float64), 'f', -1, 64)
+			participantId := strValue
+			metric.RemoveField("entity_key_value_0")
+			value, _ = metric.GetField("entity_key_value_1")
+			strValue = strconv.FormatFloat(value.(float64), 'f', -1, 64)
+			participantId += "." + strValue
+			metric.RemoveField("entity_key_value_1")
+			value, _ = metric.GetField("entity_key_value_2")
+			strValue = strconv.FormatFloat(value.(float64), 'f', -1, 64)
+			participantId += "." + strValue
+			metric.RemoveField("entity_key_value_2")
+			value, _ = metric.GetField("entity_key_value_3")
+			strValue = strconv.FormatFloat(value.(float64), 'f', -1, 64)
+			participantId += "." + strValue
+			metric.RemoveField("entity_key_value_3")
+
+                        value, _ = metric.GetField("qos_participant_name_name")
+                        if value == nil {
+                                log.Println("ERROR: qos_participant_name_name is nil")
+                        } else {
+                                if value == "" {
+                                        d.participantNames[participantId] = namesgenerator.GetRandomName(0)
+                                } else {
+                                        d.participantNames[participantId] = value.(string)
+                                }
+                        }
+			//Skip to add metrics for description topic
+			continue
 
 		case "WriterStats":
 			metricName = "dds_writer_stats"
@@ -309,6 +386,9 @@ func (d *DDSConsumer) process(key string, json []byte) {
 			metric.RemoveField("participant_key_value_3")
 			metric.AddTag("participant_id", participantId)
 
+			// Make Participant name as a tag
+			metric.AddTag("participant_name", d.participantNames[participantId])
+
 			// Make Writer ID as a tag
 			value, _ = metric.GetField("datawriter_key_value_0")
 			strValue = strconv.FormatFloat(value.(float64), 'f', -1, 64)
@@ -328,6 +408,9 @@ func (d *DDSConsumer) process(key string, json []byte) {
 			metric.RemoveField("datawriter_key_value_3")
 			metric.AddTag("datawriter_id", writerId)
 
+			// Make Writer name as a tag
+			metric.AddTag("datawriter_name", d.writerNames[writerId])
+
 			// Remove fields not needed
 			metric.RemoveField("period_sec")
 			metric.RemoveField("period_nanosec")
@@ -340,6 +423,39 @@ func (d *DDSConsumer) process(key string, json []byte) {
 			metric.RemoveField("topic_key_value_1")
 			metric.RemoveField("topic_key_value_2")
 			metric.RemoveField("topic_key_value_3")
+
+		case "WriterDesc":
+			// Get Writer ID
+			value, _ := metric.GetField("entity_key_value_0")
+			strValue := strconv.FormatFloat(value.(float64), 'f', -1, 64)
+			writerId := strValue
+			metric.RemoveField("entity_key_value_0")
+			value, _ = metric.GetField("entity_key_value_1")
+			strValue = strconv.FormatFloat(value.(float64), 'f', -1, 64)
+			writerId += "." + strValue
+			metric.RemoveField("entity_key_value_1")
+			value, _ = metric.GetField("entity_key_value_2")
+			strValue = strconv.FormatFloat(value.(float64), 'f', -1, 64)
+			writerId += "." + strValue
+			metric.RemoveField("entity_key_value_2")
+			value, _ = metric.GetField("entity_key_value_3")
+			strValue = strconv.FormatFloat(value.(float64), 'f', -1, 64)
+			writerId += "." + strValue
+			metric.RemoveField("entity_key_value_3")
+
+			value, _ = metric.GetField("qos_publication_name_name")
+			if value == nil {
+				log.Println("ERROR: qos_publication_name_name is nil")
+			} else {
+				if value == "" {
+					d.writerNames[writerId] = namesgenerator.GetRandomName(0)
+				} else {
+					d.writerNames[writerId] = value.(string)
+				}
+			}
+			//Skip to add metrics for description topic
+			continue
+
 		case "ReaderStats":
 			metricName = "dds_reader_stats"
 
@@ -374,6 +490,9 @@ func (d *DDSConsumer) process(key string, json []byte) {
 			metric.RemoveField("participant_key_value_3")
 			metric.AddTag("participant_id", participantId)
 
+			// Make Participant name as a tag
+			metric.AddTag("participant_name", d.participantNames[participantId])
+
 			// Make Reader ID as a tag
 			value, _ = metric.GetField("datareader_key_value_0")
 			strValue = strconv.FormatFloat(value.(float64), 'f', -1, 64)
@@ -393,6 +512,9 @@ func (d *DDSConsumer) process(key string, json []byte) {
 			metric.RemoveField("datareader_key_value_3")
 			metric.AddTag("datareader_id", readerId)
 
+			// Make Participant name as a tag
+			metric.AddTag("datareader_name", d.readerNames[readerId])
+
 			// Remove fields not needed
 			metric.RemoveField("period_sec")
 			metric.RemoveField("period_nanosec")
@@ -411,6 +533,38 @@ func (d *DDSConsumer) process(key string, json []byte) {
 			metric.RemoveField("datareader_protocol_status_status_last_available_sample_sequence_number_high")
 			metric.RemoveField("datareader_protocol_status_status_last_committed_sample_sequence_number_high")
 			metric.RemoveField("datareader_protocol_status_status_last_committed_sample_sequence_number_low")
+
+                case "ReaderDesc":
+                        // Get Reader ID
+                        value, _ := metric.GetField("entity_key_value_0")
+                        strValue := strconv.FormatFloat(value.(float64), 'f', -1, 64)
+                        readerId := strValue
+                        metric.RemoveField("entity_key_value_0")
+                        value, _ = metric.GetField("entity_key_value_1")
+                        strValue = strconv.FormatFloat(value.(float64), 'f', -1, 64)
+                        readerId += "." + strValue
+                        metric.RemoveField("entity_key_value_1")
+                        value, _ = metric.GetField("entity_key_value_2")
+                        strValue = strconv.FormatFloat(value.(float64), 'f', -1, 64)
+                        readerId += "." + strValue
+                        metric.RemoveField("entity_key_value_2")
+                        value, _ = metric.GetField("entity_key_value_3")
+                        strValue = strconv.FormatFloat(value.(float64), 'f', -1, 64)
+                        readerId += "." + strValue
+                        metric.RemoveField("entity_key_value_3")
+
+                        value, _ = metric.GetField("qos_subscription_name_name")
+                        if value == nil {
+                                log.Println("ERROR: qos_subscription_name_name is nil")
+                        } else {
+                                if value == "" {
+                                        d.readerNames[readerId] = namesgenerator.GetRandomName(0)
+                                } else {
+                                        d.readerNames[readerId] = value.(string)
+                                }
+                        }
+                        //Skip to add metrics for description topic
+                        continue
 		default:
 		}
 
@@ -437,7 +591,10 @@ func (d *DDSConsumer) read() {
 			for i := 0; i < numOfSamples; i++ {
 				if reader.Infos.IsValid(i) {
 					json, err := reader.Samples.GetJSON(i)
-					checkError(err)
+					if err != nil {
+						log.Println("ERROR:", err)
+						continue
+					}
 					go d.process(key, json)
 				}
 			}
