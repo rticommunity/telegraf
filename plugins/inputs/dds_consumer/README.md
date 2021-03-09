@@ -20,7 +20,4 @@ The DDS consumer plugin reads metrics over DDS by creating readers defined in [X
 
   # Override the base name of the measurement
   name_override = "shapes"
-
-  ## Data format to consume.
-  data_format = "json"
 ```
