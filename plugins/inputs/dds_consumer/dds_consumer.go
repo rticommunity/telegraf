@@ -13,7 +13,6 @@ package dds_consumer
 import (
 	"github.com/influxdata/telegraf"
 	"github.com/influxdata/telegraf/plugins/inputs"
-	"github.com/influxdata/telegraf/plugins/parsers"
 	"github.com/rticommunity/rticonnextdds-connector-go"
 	"log"
 	"time"
@@ -26,13 +25,14 @@ type DDSConsumer struct {
 	ParticipantConfig string `toml:"participant_config"`
 	// XML configuration names for DDS Readers
 	ReaderConfig string `toml:"reader_config"`
+        TagKeys []string `toml:"tag_keys"`
 
 	// RTI Connext Connector entities
 	connector *rti.Connector
 	reader    *rti.Input
 
 	// Telegraf entities
-	parser parsers.Parser
+	parser JSONParser
 	acc    telegraf.Accumulator
 }
 
@@ -77,10 +77,6 @@ func (d *DDSConsumer) Description() string {
 	return "Read metrics from DDS"
 }
 
-func (d *DDSConsumer) SetParser(parser parsers.Parser) {
-	d.parser = parser
-}
-
 func (d *DDSConsumer) Start(acc telegraf.Accumulator) error {
 	// Disable logs
 	//log.SetFlags(0)
@@ -98,6 +94,9 @@ func (d *DDSConsumer) Start(acc telegraf.Accumulator) error {
 	// Get a DDS reader
 	d.reader, err = d.connector.GetInput(d.ReaderConfig)
 	checkFatalError(err)
+
+        // Set tag keys
+        d.parser.TagKeys = d.TagKeys
 
 	// Start a thread for ingesting DDS
 	go d.process()
