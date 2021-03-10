@@ -32,7 +32,7 @@ type DDSConsumer struct {
 	reader    *rti.Input
 
 	// Telegraf entities
-	parser JSONParser
+	parser *Parser
 	acc    telegraf.Accumulator
 }
 
@@ -96,7 +96,11 @@ func (d *DDSConsumer) Start(acc telegraf.Accumulator) error {
 	checkFatalError(err)
 
         // Set tag keys
-        d.parser.TagKeys = d.TagKeys
+	var parserConfig Config
+	parserConfig.TagKeys = d.TagKeys
+
+        d.parser, err = New(&parserConfig)
+	checkFatalError(err)
 
 	// Start a thread for ingesting DDS
 	go d.process()
