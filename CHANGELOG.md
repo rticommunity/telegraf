@@ -1,4 +1,23 @@
-## v1.11.3 [unreleased]
+## v1.11.5 [2019-08-27]
+
+- [#6250](https://github.com/influxdata/telegraf/pull/6250): Update go-sql-driver/mysql driver to 1.4.1 to address auth issues.
+- [#6279](https://github.com/influxdata/telegraf/issues/6279): Return error status from --test if input plugins produce an error.
+- [#6309](https://github.com/influxdata/telegraf/issues/6309): Fix with multiple instances only last configuration is used in smart input.
+- [#6303](https://github.com/influxdata/telegraf/pull/6303): Build official packages with Go 1.12.9.
+- [#6234](https://github.com/influxdata/telegraf/issues/6234): Split out -w argument in iptables input.
+- [#6270](https://github.com/influxdata/telegraf/issues/6270): Add support for parked process state on Linux.
+- [#6287](https://github.com/influxdata/telegraf/issues/6287): Remove leading slash from rcon command.
+- [#6313](https://github.com/influxdata/telegraf/pull/6313): Allow jobs with dashes in the name in lustre2 input.
+
+## v1.11.4 [2019-08-06]
+
+#### Bugfixes
+
+- [#6200](https://github.com/influxdata/telegraf/pull/6200): Correct typo in kubernetes logsfs_available_bytes field.
+- [#6191](https://github.com/influxdata/telegraf/issues/6191): Skip floats that are NaN or Inf in Datadog output.
+- [#6209](https://github.com/influxdata/telegraf/issues/6209): Fix reload panic in socket_listener input plugin.
+
+## v1.11.3 [2019-07-23]
 
 #### Bugfixes
 
@@ -9,6 +28,7 @@
 - [#6094](https://github.com/influxdata/telegraf/issues/6094): Add missing rcode and zonestat to bind input.
 - [#6114](https://github.com/influxdata/telegraf/issues/6114): Fix lustre2 input plugin config parse regression.
 - [#5894](https://github.com/influxdata/telegraf/issues/5894): Fix template pattern partial wildcard matching.
+- [#6151](https://github.com/influxdata/telegraf/issues/6151): Fix panic in github input.
 
 ## v1.11.2 [2019-07-09]
 
