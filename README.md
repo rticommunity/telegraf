@@ -15,7 +15,7 @@ Telegraf is plugin-driven and has the concept of 4 distinct plugin types:
 4. [Output Plugins](#output-plugins) write metrics to various destinations
 
 This repository is a fork of Telegraf adding a DDS input plugin ([dds_consumer](./plugins/inputs/dds_consumer)). 
-It is synced up with the [Telegraf v1.11](https://github.com/influxdata/telegraf/tree/release-1.11) branch. 
+It is synced up with the [Telegraf v1.11](https://github.com/influxdata/telegraf/tree/release-1.12) branch. 
 
 ## Installation:
 
