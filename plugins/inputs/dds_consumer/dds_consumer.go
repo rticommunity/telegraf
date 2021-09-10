@@ -117,10 +117,13 @@ func (d *DDSConsumer) process() {
 	for {
 		d.connector.Wait(-1)
 		d.reader.Take()
-		numOfSamples := d.reader.Samples.GetLength()
+		numOfSamples, err := d.reader.Samples.GetLength()
+		checkError(err)
 
 		for i := 0; i < numOfSamples; i++ {
-			if d.reader.Infos.IsValid(i) {
+			valid, err := d.reader.Infos.IsValid(i)
+				checkError(err)
+			if valid {
 				json, err := d.reader.Samples.GetJSON(i)
 				checkError(err)
 				ts, err := d.reader.Infos.GetSourceTimestamp(i)

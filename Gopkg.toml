@@ -302,4 +302,4 @@
 
 [[constraint]]
   name = "github.com/rticommunity/rticonnextdds-connector-go"
-  revision = "37021c720ed43ade23bb77a5de4a22ed0c47f776"
+  revision = "0efc59161e6b47391d53ea14d57b11d4beaa8001"

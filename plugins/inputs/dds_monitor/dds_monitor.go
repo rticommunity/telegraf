@@ -586,10 +586,19 @@ func (d *DDSConsumer) read() {
 	for {
 		for key, reader := range d.readers {
 			reader.Take()
-			numOfSamples := reader.Samples.GetLength()
+			numOfSamples, err := reader.Samples.GetLength()
+			if err != nil {
+				log.Println("ERROR:", err)
+				continue
+			}
 
 			for i := 0; i < numOfSamples; i++ {
-				if reader.Infos.IsValid(i) {
+				valid, err := reader.Infos.IsValid(i)
+				if err != nil {
+					log.Println("ERROR:", err)
+					continue
+				}
+				if valid {
 					json, err := reader.Samples.GetJSON(i)
 					if err != nil {
 						log.Println("ERROR:", err)

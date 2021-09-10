@@ -185,10 +185,11 @@ func (d *DDSConsumer) process() {
 	for {
 		d.connector.Wait(-1)
 		d.reader.Take()
-		numOfSamples := d.reader.Samples.GetLength()
+		numOfSamples,_ := d.reader.Samples.GetLength()
 
 		for i := 0; i < numOfSamples; i++ {
-			if d.reader.Infos.IsValid(i) {
+			valid, _ := d.reader.Infos.IsValid(i)
+			if valid {
 				var m Metric
 				d.reader.Samples.Get(i, &m)
 
