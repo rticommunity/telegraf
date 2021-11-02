@@ -3,8 +3,8 @@ package jenkins
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"sync"
@@ -28,6 +28,8 @@ type Jenkins struct {
 	tls.ClientConfig
 	client *client
 
+	Log telegraf.Logger
+
 	MaxConnections    int               `toml:"max_connections"`
 	MaxBuildAge       internal.Duration `toml:"max_build_age"`
 	MaxSubJobDepth    int               `toml:"max_subjob_depth"`
@@ -42,7 +44,7 @@ type Jenkins struct {
 }
 
 const sampleConfig = `
-  ## The Jenkins URL
+  ## The Jenkins URL in the format "schema://host:port"
   url = "http://my-jenkins-instance:8080"
   # username = "admin"
   # password = "admin"
@@ -189,6 +191,13 @@ func (j *Jenkins) gatherNodeData(n node, acc telegraf.Accumulator) error {
 		tags["status"] = "offline"
 	}
 
+	u, err := url.Parse(j.URL)
+	if err != nil {
+		return err
+	}
+	tags["source"] = u.Hostname()
+	tags["port"] = u.Port()
+
 	fields := make(map[string]interface{})
 	fields["num_executors"] = n.NumExecutors
 
@@ -312,7 +321,7 @@ func (j *Jenkins) getJobDetail(jr jobRequest, acc telegraf.Accumulator) error {
 	}
 
 	if build.Building {
-		log.Printf("D! Ignore running build on %s, build %v", jr.name, number)
+		j.Log.Debugf("Ignore running build on %s, build %v", jr.name, number)
 		return nil
 	}
 

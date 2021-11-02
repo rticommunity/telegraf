@@ -38,7 +38,8 @@ const sampleConfig = `
   ## By default, the host is localhost, listening on default port, TCP 1433.
   ##   for Windows, the user is the currently running AD user (SSO).
   ##   See https://github.com/denisenkom/go-mssqldb for detailed connection
-  ##   parameters.
+  ##   parameters, in particular, tls connections can be created like so:
+  ##   "encrypt=true;certificate=<cert>;hostNameInCertificate=<SqlServer host fqdn>"
   # servers = [
   #  "Server=192.168.1.10;Port=1433;User Id=<user>;Password=<pw>;app name=telegraf;log=1;",
   # ]
@@ -431,8 +432,9 @@ IF SERVERPROPERTY('EngineEdition') = 5  -- Azure SQL DB
 			NULL AS available_storage_mb,  -- Can we find out storage?
 			NULL as uptime
 	FROM	 sys.databases d   
-			JOIN sys.database_service_objectives slo    
-			ON d.database_id = slo.database_id
+		-- sys.databases.database_id may not match current DB_ID on Azure SQL DB
+		CROSS JOIN sys.database_service_objectives slo
+		WHERE d.name = DB_NAME() AND slo.database_id = DB_ID()
 
 ELSE
 BEGIN
@@ -589,11 +591,16 @@ WHERE	(
 				'Background Writer pages/sec',
 				'Percent Log Used',
 				'Log Send Queue KB',
-				'Redo Queue KB'
+				'Redo Queue KB',
+				'Mirrored Write Transactions/sec',
+				'Group Commit Time',
+				'Group Commits/sec'
 			)
 		) OR (
 			object_name LIKE '%User Settable%'
 			OR object_name LIKE '%SQL Errors%'
+		) OR (
+			object_name LIKE '%Batch Resp Statistics%'
 		) OR (
 			instance_name IN ('_Total')
 			AND counter_name IN (
@@ -1401,8 +1408,8 @@ SELECT
 	, qt.objectid
 	, QUOTENAME(OBJECT_SCHEMA_NAME(qt.objectid,qt.dbid)) + '.' +  QUOTENAME(OBJECT_NAME(qt.objectid,qt.dbid)) as stmt_object_name
 	, DB_NAME(qt.dbid) stmt_db_name
-	, r.query_hash
-	, r.query_plan_hash
+	,CONVERT(varchar(20),[query_hash],1) as [query_hash]
+	,CONVERT(varchar(20),[query_plan_hash],1) as [query_plan_hash]
 	FROM	sys.dm_exec_requests r
 		LEFT OUTER JOIN sys.dm_exec_sessions s ON (s.session_id = r.session_id)
 		OUTER APPLY sys.dm_exec_sql_text(sql_handle) AS qt
@@ -2263,7 +2270,7 @@ SELECT DISTINCT RTrim(spi.object_name) object_name
 , spi.cntr_value
 , spi.cntr_type
 FROM sys.dm_os_performance_counters spi
-WHERE spi.object_name NOT LIKE 'SQLServer:Backup Device%'
+WHERE spi.object_name NOT LIKE '%Backup Device%'
 	AND NOT EXISTS (SELECT 1 FROM sys.databases WHERE Name = spi.instance_name);
 
 WAITFOR DELAY '00:00:01';
@@ -2285,7 +2292,7 @@ SELECT DISTINCT RTrim(spi.object_name) object_name
 , spi.cntr_value
 , spi.cntr_type
 FROM sys.dm_os_performance_counters spi
-WHERE spi.object_name NOT LIKE 'SQLServer:Backup Device%'
+WHERE spi.object_name NOT LIKE '%Backup Device%'
 	AND NOT EXISTS (SELECT 1 FROM sys.databases WHERE Name = spi.instance_name);
 
 SELECT
@@ -2321,7 +2328,7 @@ INNER JOIN #PCounters pc On cc.object_name = pc.object_name
         And cc.cntr_type = pc.cntr_type
 LEFT JOIN #CCounters cbc On cc.object_name = cbc.object_name
         And (Case When cc.counter_name Like '%(ms)' Then Replace(cc.counter_name, ' (ms)',' Base')
-                  When cc.object_name = 'SQLServer:FileTable' Then Replace(cc.counter_name, 'Avg ','') + ' base'
+                  When cc.object_name like '%FileTable' Then Replace(cc.counter_name, 'Avg ','') + ' base'
                   When cc.counter_name = 'Worktables From Cache Ratio' Then 'Worktables From Cache Base'
                   When cc.counter_name = 'Avg. Length of Batched Writes' Then 'Avg. Length of Batched Writes BS'
                   Else cc.counter_name + ' base'
@@ -2332,7 +2339,7 @@ LEFT JOIN #CCounters cbc On cc.object_name = cbc.object_name
 LEFT JOIN #PCounters pbc On pc.object_name = pbc.object_name
         And pc.instance_name = pbc.instance_name
         And (Case When pc.counter_name Like '%(ms)' Then Replace(pc.counter_name, ' (ms)',' Base')
-                  When pc.object_name = 'SQLServer:FileTable' Then Replace(pc.counter_name, 'Avg ','') + ' base'
+                  When pc.object_name like '%FileTable' Then Replace(pc.counter_name, 'Avg ','') + ' base'
                   When pc.counter_name = 'Worktables From Cache Ratio' Then 'Worktables From Cache Base'
                   When pc.counter_name = 'Avg. Length of Batched Writes' Then 'Avg. Length of Batched Writes BS'
                   Else pc.counter_name + ' base'

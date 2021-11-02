@@ -84,7 +84,7 @@ type metricEntry struct {
 	fields map[string]interface{}
 }
 
-type objectMap map[string]objectRef
+type objectMap map[string]*objectRef
 
 type objectRef struct {
 	name         string
@@ -100,7 +100,7 @@ type objectRef struct {
 func (e *Endpoint) getParent(obj *objectRef, res *resourceKind) (*objectRef, bool) {
 	if pKind, ok := e.resourceKinds[res.parent]; ok {
 		if p, ok := pKind.objects[obj.parentRef.Value]; ok {
-			return &p, true
+			return p, true
 		}
 	}
 	return nil, false
@@ -250,10 +250,10 @@ func (e *Endpoint) startDiscovery(ctx context.Context) {
 			case <-e.discoveryTicker.C:
 				err := e.discover(ctx)
 				if err != nil && err != context.Canceled {
-					log.Printf("E! [inputs.vsphere]: Error in discovery for %s: %v", e.URL.Host, err)
+					e.Parent.Log.Errorf("Discovery for %s: %s", e.URL.Host, err.Error())
 				}
 			case <-ctx.Done():
-				log.Printf("D! [inputs.vsphere]: Exiting discovery goroutine for %s", e.URL.Host)
+				e.Parent.Log.Debugf("Exiting discovery goroutine for %s", e.URL.Host)
 				e.discoveryTicker.Stop()
 				return
 			}
@@ -264,7 +264,7 @@ func (e *Endpoint) startDiscovery(ctx context.Context) {
 func (e *Endpoint) initalDiscovery(ctx context.Context) {
 	err := e.discover(ctx)
 	if err != nil && err != context.Canceled {
-		log.Printf("E! [inputs.vsphere]: Error in discovery for %s: %v", e.URL.Host, err)
+		e.Parent.Log.Errorf("Discovery for %s: %s", e.URL.Host, err.Error())
 	}
 	e.startDiscovery(ctx)
 }
@@ -279,7 +279,7 @@ func (e *Endpoint) init(ctx context.Context) error {
 	if e.customAttrEnabled {
 		fields, err := client.GetCustomFields(ctx)
 		if err != nil {
-			log.Println("W! [inputs.vsphere] Could not load custom field metadata")
+			e.Parent.Log.Warn("Could not load custom field metadata")
 		} else {
 			e.customFields = fields
 		}
@@ -291,7 +291,7 @@ func (e *Endpoint) init(ctx context.Context) error {
 		// goroutine without waiting for it. This will probably cause us to report an empty
 		// dataset on the first collection, but it solves the issue of the first collection timing out.
 		if e.Parent.ForceDiscoverOnInit {
-			log.Printf("D! [inputs.vsphere]: Running initial discovery and waiting for it to finish")
+			e.Parent.Log.Debug("Running initial discovery and waiting for it to finish")
 			e.initalDiscovery(ctx)
 		} else {
 			// Otherwise, just run it in the background. We'll probably have an incomplete first metric
@@ -322,7 +322,7 @@ func (e *Endpoint) getMetricNameMap(ctx context.Context) (map[int32]string, erro
 	return names, nil
 }
 
-func (e *Endpoint) getMetadata(ctx context.Context, obj objectRef, sampling int32) (performance.MetricList, error) {
+func (e *Endpoint) getMetadata(ctx context.Context, obj *objectRef, sampling int32) (performance.MetricList, error) {
 	client, err := e.clientFactory.GetClient(ctx)
 	if err != nil {
 		return nil, err
@@ -354,7 +354,7 @@ func (e *Endpoint) getDatacenterName(ctx context.Context, client *Client, cache 
 		defer cancel1()
 		err := o.Properties(ctx1, here, []string{"parent", "name"}, &result)
 		if err != nil {
-			log.Printf("W! [inputs.vsphere]: Error while resolving parent. Assuming no parent exists. Error: %s", err)
+			e.Parent.Log.Warnf("Error while resolving parent. Assuming no parent exists. Error: %s", err.Error())
 			break
 		}
 		if result.Reference().Type == "Datacenter" {
@@ -363,7 +363,7 @@ func (e *Endpoint) getDatacenterName(ctx context.Context, client *Client, cache 
 			break
 		}
 		if result.Parent == nil {
-			log.Printf("D! [inputs.vsphere]: No parent found for %s (ascending from %s)", here.Reference(), r.Reference())
+			e.Parent.Log.Debugf("No parent found for %s (ascending from %s)", here.Reference(), r.Reference())
 			break
 		}
 		here = result.Parent.Reference()
@@ -393,7 +393,7 @@ func (e *Endpoint) discover(ctx context.Context) error {
 		return err
 	}
 
-	log.Printf("D! [inputs.vsphere]: Discover new objects for %s", e.URL.Host)
+	e.Parent.Log.Debugf("Discover new objects for %s", e.URL.Host)
 	dcNameCache := make(map[string]string)
 
 	numRes := int64(0)
@@ -401,7 +401,7 @@ func (e *Endpoint) discover(ctx context.Context) error {
 	// Populate resource objects, and endpoint instance info.
 	newObjects := make(map[string]objectMap)
 	for k, res := range e.resourceKinds {
-		log.Printf("D! [inputs.vsphere] Discovering resources for %s", res.name)
+		e.Parent.Log.Debugf("Discovering resources for %s", res.name)
 		// Need to do this for all resource types even if they are not enabled
 		if res.enabled || k != "vm" {
 			rf := ResourceFilter{
@@ -457,7 +457,7 @@ func (e *Endpoint) discover(ctx context.Context) error {
 	if e.customAttrEnabled {
 		fields, err = client.GetCustomFields(ctx)
 		if err != nil {
-			log.Println("W! [inputs.vsphere] Could not load custom field metadata")
+			e.Parent.Log.Warn("Could not load custom field metadata")
 			fields = nil
 		}
 	}
@@ -481,10 +481,10 @@ func (e *Endpoint) discover(ctx context.Context) error {
 }
 
 func (e *Endpoint) simpleMetadataSelect(ctx context.Context, client *Client, res *resourceKind) {
-	log.Printf("D! [inputs.vsphere] Using fast metric metadata selection for %s", res.name)
+	e.Parent.Log.Debugf("Using fast metric metadata selection for %s", res.name)
 	m, err := client.CounterInfoByName(ctx)
 	if err != nil {
-		log.Printf("E! [inputs.vsphere]: Error while getting metric metadata. Discovery will be incomplete. Error: %s", err)
+		e.Parent.Log.Errorf("Getting metric metadata. Discovery will be incomplete. Error: %s", err.Error())
 		return
 	}
 	res.metrics = make(performance.MetricList, 0, len(res.include))
@@ -500,7 +500,7 @@ func (e *Endpoint) simpleMetadataSelect(ctx context.Context, client *Client, res
 			}
 			res.metrics = append(res.metrics, cnt)
 		} else {
-			log.Printf("W! [inputs.vsphere] Metric name %s is unknown. Will not be collected", s)
+			e.Parent.Log.Warnf("Metric name %s is unknown. Will not be collected", s)
 		}
 	}
 }
@@ -508,7 +508,7 @@ func (e *Endpoint) simpleMetadataSelect(ctx context.Context, client *Client, res
 func (e *Endpoint) complexMetadataSelect(ctx context.Context, res *resourceKind, objects objectMap, metricNames map[int32]string) {
 	// We're only going to get metadata from maxMetadataSamples resources. If we have
 	// more resources than that, we pick maxMetadataSamples samples at random.
-	sampledObjects := make([]objectRef, len(objects))
+	sampledObjects := make([]*objectRef, len(objects))
 	i := 0
 	for _, obj := range objects {
 		sampledObjects[i] = obj
@@ -529,11 +529,11 @@ func (e *Endpoint) complexMetadataSelect(ctx context.Context, res *resourceKind,
 	instInfoMux := sync.Mutex{}
 	te := NewThrottledExecutor(e.Parent.DiscoverConcurrency)
 	for _, obj := range sampledObjects {
-		func(obj objectRef) {
+		func(obj *objectRef) {
 			te.Run(ctx, func() {
 				metrics, err := e.getMetadata(ctx, obj, res.sampling)
 				if err != nil {
-					log.Printf("E! [inputs.vsphere]: Error while getting metric metadata. Discovery will be incomplete. Error: %s", err)
+					e.Parent.Log.Errorf("Getting metric metadata. Discovery will be incomplete. Error: %s", err.Error())
 				}
 				mMap := make(map[string]types.PerfMetricId)
 				for _, m := range metrics {
@@ -546,7 +546,7 @@ func (e *Endpoint) complexMetadataSelect(ctx context.Context, res *resourceKind,
 						mMap[strconv.Itoa(int(m.CounterId))+"|"+m.Instance] = m
 					}
 				}
-				log.Printf("D! [inputs.vsphere] Found %d metrics for %s", len(mMap), obj.name)
+				e.Parent.Log.Debugf("Found %d metrics for %s", len(mMap), obj.name)
 				instInfoMux.Lock()
 				defer instInfoMux.Unlock()
 				if len(mMap) > len(res.metrics) {
@@ -573,8 +573,13 @@ func getDatacenters(ctx context.Context, e *Endpoint, filter *ResourceFilter) (o
 	}
 	m := make(objectMap, len(resources))
 	for _, r := range resources {
-		m[r.ExtensibleManagedObject.Reference().Value] = objectRef{
-			name: r.Name, ref: r.ExtensibleManagedObject.Reference(), parentRef: r.Parent, dcname: r.Name}
+		m[r.ExtensibleManagedObject.Reference().Value] = &objectRef{
+			name:         r.Name,
+			ref:          r.ExtensibleManagedObject.Reference(),
+			parentRef:    r.Parent,
+			dcname:       r.Name,
+			customValues: e.loadCustomAttributes(&r.ManagedEntity),
+		}
 	}
 	return m, nil
 }
@@ -605,7 +610,7 @@ func getClusters(ctx context.Context, e *Endpoint, filter *ResourceFilter) (obje
 			defer cancel3()
 			err = o.Properties(ctx3, *r.Parent, []string{"parent"}, &folder)
 			if err != nil {
-				log.Printf("W! [inputs.vsphere] Error while getting folder parent: %e", err)
+				e.Parent.Log.Warnf("Error while getting folder parent: %s", err.Error())
 				p = nil
 			} else {
 				pp := folder.Parent.Reference()
@@ -613,8 +618,12 @@ func getClusters(ctx context.Context, e *Endpoint, filter *ResourceFilter) (obje
 				cache[r.Parent.Value] = p
 			}
 		}
-		m[r.ExtensibleManagedObject.Reference().Value] = objectRef{
-			name: r.Name, ref: r.ExtensibleManagedObject.Reference(), parentRef: p}
+		m[r.ExtensibleManagedObject.Reference().Value] = &objectRef{
+			name:         r.Name,
+			ref:          r.ExtensibleManagedObject.Reference(),
+			parentRef:    p,
+			customValues: e.loadCustomAttributes(&r.ManagedEntity),
+		}
 	}
 	return m, nil
 }
@@ -627,8 +636,12 @@ func getHosts(ctx context.Context, e *Endpoint, filter *ResourceFilter) (objectM
 	}
 	m := make(objectMap)
 	for _, r := range resources {
-		m[r.ExtensibleManagedObject.Reference().Value] = objectRef{
-			name: r.Name, ref: r.ExtensibleManagedObject.Reference(), parentRef: r.Parent}
+		m[r.ExtensibleManagedObject.Reference().Value] = &objectRef{
+			name:         r.Name,
+			ref:          r.ExtensibleManagedObject.Reference(),
+			parentRef:    r.Parent,
+			customValues: e.loadCustomAttributes(&r.ManagedEntity),
+		}
 	}
 	return m, nil
 }
@@ -693,30 +706,13 @@ func getVMs(ctx context.Context, e *Endpoint, filter *ResourceFilter) (objectMap
 			guest = cleanGuestID(r.Config.GuestId)
 			uuid = r.Config.Uuid
 		}
-		cvs := make(map[string]string)
-		if e.customAttrEnabled {
-			for _, cv := range r.Summary.CustomValue {
-				val := cv.(*types.CustomFieldStringValue)
-				if val.Value == "" {
-					continue
-				}
-				key, ok := e.customFields[val.Key]
-				if !ok {
-					log.Printf("W! [inputs.vsphere] Metadata for custom field %d not found. Skipping", val.Key)
-					continue
-				}
-				if e.customAttrFilter.Match(key) {
-					cvs[key] = val.Value
-				}
-			}
-		}
-		m[r.ExtensibleManagedObject.Reference().Value] = objectRef{
+		m[r.ExtensibleManagedObject.Reference().Value] = &objectRef{
 			name:         r.Name,
 			ref:          r.ExtensibleManagedObject.Reference(),
 			parentRef:    r.Runtime.Host,
 			guest:        guest,
 			altID:        uuid,
-			customValues: cvs,
+			customValues: e.loadCustomAttributes(&r.ManagedEntity),
 			lookup:       lookup,
 		}
 	}
@@ -740,10 +736,38 @@ func getDatastores(ctx context.Context, e *Endpoint, filter *ResourceFilter) (ob
 				url = info.Url
 			}
 		}
-		m[r.ExtensibleManagedObject.Reference().Value] = objectRef{
-			name: r.Name, ref: r.ExtensibleManagedObject.Reference(), parentRef: r.Parent, altID: url}
+		m[r.ExtensibleManagedObject.Reference().Value] = &objectRef{
+			name:         r.Name,
+			ref:          r.ExtensibleManagedObject.Reference(),
+			parentRef:    r.Parent,
+			altID:        url,
+			customValues: e.loadCustomAttributes(&r.ManagedEntity),
+		}
 	}
 	return m, nil
+}
+
+func (e *Endpoint) loadCustomAttributes(entity *mo.ManagedEntity) map[string]string {
+	if !e.customAttrEnabled {
+		return map[string]string{}
+	}
+	cvs := make(map[string]string)
+	for _, v := range entity.CustomValue {
+		cv, ok := v.(*types.CustomFieldStringValue)
+		if !ok {
+			e.Parent.Log.Warnf("Metadata for custom field %d not of string type. Skipping", cv.Key)
+			continue
+		}
+		key, ok := e.customFields[cv.Key]
+		if !ok {
+			e.Parent.Log.Warnf("Metadata for custom field %d not found. Skipping", cv.Key)
+			continue
+		}
+		if e.customAttrFilter.Match(key) {
+			cvs[key] = cv.Value
+		}
+	}
+	return cvs
 }
 
 // Close shuts down an Endpoint and releases any resources associated with it.
@@ -847,7 +871,7 @@ func (e *Endpoint) chunkify(ctx context.Context, res *resourceKind, now time.Tim
 			// Make sure endtime is always after start time. We may occasionally see samples from the future
 			// returned from vCenter. This is presumably due to time drift between vCenter and EXSi nodes.
 			if pq.StartTime.After(*pq.EndTime) {
-				log.Printf("D! [inputs.vsphere] Future sample. Res: %s, StartTime: %s, EndTime: %s, Now: %s", pq.Entity, *pq.StartTime, *pq.EndTime, now)
+				e.Parent.Log.Debugf("Future sample. Res: %s, StartTime: %s, EndTime: %s, Now: %s", pq.Entity, *pq.StartTime, *pq.EndTime, now)
 				end := start.Add(time.Second)
 				pq.EndTime = &end
 			}
@@ -861,7 +885,7 @@ func (e *Endpoint) chunkify(ctx context.Context, res *resourceKind, now time.Tim
 			// 2) We are at the last resource and have no more data to process.
 			// 3) The query contains more than 100,000 individual metrics
 			if mr > 0 || nRes >= e.Parent.MaxQueryObjects || len(pqs) > 100000 {
-				log.Printf("D! [inputs.vsphere]: Queueing query: %d objects, %d metrics (%d remaining) of type %s for %s. Processed objects: %d. Total objects %d",
+				e.Parent.Log.Debugf("Queueing query: %d objects, %d metrics (%d remaining) of type %s for %s. Processed objects: %d. Total objects %d",
 					len(pqs), metrics, mr, res.name, e.URL.Host, total+1, len(res.objects))
 
 				// Don't send work items if the context has been cancelled.
@@ -882,7 +906,7 @@ func (e *Endpoint) chunkify(ctx context.Context, res *resourceKind, now time.Tim
 	// Handle final partially filled chunk
 	if len(pqs) > 0 {
 		// Run collection job
-		log.Printf("D! [inputs.vsphere]: Queuing query: %d objects, %d metrics (0 remaining) of type %s for %s. Total objects %d (final chunk)",
+		e.Parent.Log.Debugf("Queuing query: %d objects, %d metrics (0 remaining) of type %s for %s. Total objects %d (final chunk)",
 			len(pqs), metrics, res.name, e.URL.Host, len(res.objects))
 		submitChunkJob(ctx, te, job, pqs)
 	}
@@ -914,18 +938,18 @@ func (e *Endpoint) collectResource(ctx context.Context, resourceType string, acc
 		if estInterval < s {
 			estInterval = s
 		}
-		log.Printf("D! [inputs.vsphere] Raw interval %s, padded: %s, estimated: %s", rawInterval, paddedInterval, estInterval)
+		e.Parent.Log.Debugf("Raw interval %s, padded: %s, estimated: %s", rawInterval, paddedInterval, estInterval)
 	}
-	log.Printf("D! [inputs.vsphere] Interval estimated to %s", estInterval)
+	e.Parent.Log.Debugf("Interval estimated to %s", estInterval)
 	res.lastColl = localNow
 
 	latest := res.latestSample
 	if !latest.IsZero() {
 		elapsed := now.Sub(latest).Seconds() + 5.0 // Allow 5 second jitter.
-		log.Printf("D! [inputs.vsphere]: Latest: %s, elapsed: %f, resource: %s", latest, elapsed, resourceType)
+		e.Parent.Log.Debugf("Latest: %s, elapsed: %f, resource: %s", latest, elapsed, resourceType)
 		if !res.realTime && elapsed < float64(res.sampling) {
 			// No new data would be available. We're outta here!
-			log.Printf("D! [inputs.vsphere]: Sampling period for %s of %d has not elapsed on %s",
+			e.Parent.Log.Debugf("Sampling period for %s of %d has not elapsed on %s",
 				resourceType, res.sampling, e.URL.Host)
 			return nil
 		}
@@ -936,7 +960,7 @@ func (e *Endpoint) collectResource(ctx context.Context, resourceType string, acc
 	internalTags := map[string]string{"resourcetype": resourceType}
 	sw := NewStopwatchWithTags("gather_duration", e.URL.Host, internalTags)
 
-	log.Printf("D! [inputs.vsphere]: Collecting metrics for %d objects of type %s for %s",
+	e.Parent.Log.Debugf("Collecting metrics for %d objects of type %s for %s",
 		len(res.objects), resourceType, e.URL.Host)
 
 	count := int64(0)
@@ -948,9 +972,9 @@ func (e *Endpoint) collectResource(ctx context.Context, resourceType string, acc
 	e.chunkify(ctx, res, now, latest, acc,
 		func(chunk []types.PerfQuerySpec) {
 			n, localLatest, err := e.collectChunk(ctx, chunk, res, acc, now, estInterval)
-			log.Printf("D! [inputs.vsphere] CollectChunk for %s returned %d metrics", resourceType, n)
+			e.Parent.Log.Debugf("CollectChunk for %s returned %d metrics", resourceType, n)
 			if err != nil {
-				acc.AddError(errors.New("While collecting " + res.name + ": " + err.Error()))
+				acc.AddError(errors.New("while collecting " + res.name + ": " + err.Error()))
 			}
 			atomic.AddInt64(&count, int64(n))
 			tsMux.Lock()
@@ -960,7 +984,7 @@ func (e *Endpoint) collectResource(ctx context.Context, resourceType string, acc
 			}
 		})
 
-	log.Printf("D! [inputs.vsphere] Latest sample for %s set to %s", resourceType, latestSample)
+	e.Parent.Log.Debugf("Latest sample for %s set to %s", resourceType, latestSample)
 	if !latestSample.IsZero() {
 		res.latestSample = latestSample
 	}
@@ -1004,12 +1028,11 @@ func alignSamples(info []types.PerfSampleInfo, values []int64, interval time.Dur
 			lastBucket = roundedTs
 		}
 	}
-	//log.Printf("D! [inputs.vsphere] Aligned samples: %d collapsed into %d", len(info), len(rInfo))
 	return rInfo, rValues
 }
 
 func (e *Endpoint) collectChunk(ctx context.Context, pqs []types.PerfQuerySpec, res *resourceKind, acc telegraf.Accumulator, now time.Time, interval time.Duration) (int, time.Time, error) {
-	log.Printf("D! [inputs.vsphere] Query for %s has %d QuerySpecs", res.name, len(pqs))
+	e.Parent.Log.Debugf("Query for %s has %d QuerySpecs", res.name, len(pqs))
 	latestSample := time.Time{}
 	count := 0
 	resourceType := res.name
@@ -1030,14 +1053,14 @@ func (e *Endpoint) collectChunk(ctx context.Context, pqs []types.PerfQuerySpec, 
 		return count, latestSample, err
 	}
 
-	log.Printf("D! [inputs.vsphere] Query for %s returned metrics for %d objects", resourceType, len(ems))
+	e.Parent.Log.Debugf("Query for %s returned metrics for %d objects", resourceType, len(ems))
 
 	// Iterate through results
 	for _, em := range ems {
 		moid := em.Entity.Reference().Value
 		instInfo, found := res.objects[moid]
 		if !found {
-			log.Printf("E! [inputs.vsphere]: MOID %s not found in cache. Skipping! (This should not happen!)", moid)
+			e.Parent.Log.Errorf("MOID %s not found in cache. Skipping! (This should not happen!)", moid)
 			continue
 		}
 		buckets := make(map[string]metricEntry)
@@ -1052,10 +1075,10 @@ func (e *Endpoint) collectChunk(ctx context.Context, pqs []types.PerfQuerySpec, 
 			// Populate tags
 			objectRef, ok := res.objects[moid]
 			if !ok {
-				log.Printf("E! [inputs.vsphere]: MOID %s not found in cache. Skipping", moid)
+				e.Parent.Log.Errorf("MOID %s not found in cache. Skipping", moid)
 				continue
 			}
-			e.populateTags(&objectRef, resourceType, res, t, &v)
+			e.populateTags(objectRef, resourceType, res, t, &v)
 
 			nValues := 0
 			alignedInfo, alignedValues := alignSamples(em.SampleInfo, v.Value, interval)
@@ -1064,7 +1087,7 @@ func (e *Endpoint) collectChunk(ctx context.Context, pqs []types.PerfQuerySpec, 
 				// According to the docs, SampleInfo and Value should have the same length, but we've seen corrupted
 				// data coming back with missing values. Take care of that gracefully!
 				if idx >= len(alignedValues) {
-					log.Printf("D! [inputs.vsphere] len(SampleInfo)>len(Value) %d > %d", len(alignedInfo), len(alignedValues))
+					e.Parent.Log.Debugf("Len(SampleInfo)>len(Value) %d > %d", len(alignedInfo), len(alignedValues))
 					break
 				}
 				ts := sample.Timestamp
@@ -1085,7 +1108,7 @@ func (e *Endpoint) collectChunk(ctx context.Context, pqs []types.PerfQuerySpec, 
 				// Percentage values must be scaled down by 100.
 				info, ok := metricInfo[name]
 				if !ok {
-					log.Printf("E! [inputs.vsphere]: Could not determine unit for %s. Skipping", name)
+					e.Parent.Log.Errorf("Could not determine unit for %s. Skipping", name)
 				}
 				v := alignedValues[idx]
 				if info.UnitInfo.GetElementDescription().Key == "percent" {
@@ -1103,7 +1126,7 @@ func (e *Endpoint) collectChunk(ctx context.Context, pqs []types.PerfQuerySpec, 
 				e.hwMarks.Put(moid, ts)
 			}
 			if nValues == 0 {
-				log.Printf("D! [inputs.vsphere]: Missing value for: %s, %s", name, objectRef.name)
+				e.Parent.Log.Debugf("Missing value for: %s, %s", name, objectRef.name)
 				continue
 			}
 		}

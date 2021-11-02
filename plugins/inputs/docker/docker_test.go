@@ -253,6 +253,7 @@ func TestDocker_WindowsMemoryContainerStats(t *testing.T) {
 	var acc testutil.Accumulator
 
 	d := Docker{
+		Log: testutil.Logger{},
 		newClient: func(string, *tls.Config) (Client, error) {
 			return &MockClient{
 				InfoF: func(ctx context.Context) (types.Info, error) {
@@ -391,6 +392,7 @@ func TestContainerLabels(t *testing.T) {
 			}
 
 			d := Docker{
+				Log:          testutil.Logger{},
 				newClient:    newClientFunc,
 				LabelInclude: tt.include,
 				LabelExclude: tt.exclude,
@@ -512,6 +514,7 @@ func TestContainerNames(t *testing.T) {
 			}
 
 			d := Docker{
+				Log:              testutil.Logger{},
 				newClient:        newClientFunc,
 				ContainerInclude: tt.include,
 				ContainerExclude: tt.exclude,
@@ -574,6 +577,7 @@ func TestContainerStatus(t *testing.T) {
 						"label2":            "test_value_2",
 						"server_version":    "17.09.0-ce",
 						"container_status":  "running",
+						"source":            "e2173b9478a6",
 					},
 					map[string]interface{}{
 						"oomkilled":    false,
@@ -609,6 +613,7 @@ func TestContainerStatus(t *testing.T) {
 						"label2":            "test_value_2",
 						"server_version":    "17.09.0-ce",
 						"container_status":  "running",
+						"source":            "e2173b9478a6",
 					},
 					map[string]interface{}{
 						"oomkilled":    false,
@@ -646,6 +651,7 @@ func TestContainerStatus(t *testing.T) {
 						"label2":            "test_value_2",
 						"server_version":    "17.09.0-ce",
 						"container_status":  "running",
+						"source":            "e2173b9478a6",
 					},
 					map[string]interface{}{
 						"oomkilled":    false,
@@ -681,6 +687,7 @@ func TestContainerStatus(t *testing.T) {
 						"label2":            "test_value_2",
 						"server_version":    "17.09.0-ce",
 						"container_status":  "running",
+						"source":            "e2173b9478a6",
 					},
 					map[string]interface{}{
 						"oomkilled":    false,
@@ -711,7 +718,11 @@ func TestContainerStatus(t *testing.T) {
 
 					return &client, nil
 				}
-				d = Docker{newClient: newClientFunc}
+				d = Docker{
+					Log:              testutil.Logger{},
+					newClient:        newClientFunc,
+					IncludeSourceTag: true,
+				}
 			)
 
 			// mock time
@@ -736,6 +747,7 @@ func TestContainerStatus(t *testing.T) {
 func TestDockerGatherInfo(t *testing.T) {
 	var acc testutil.Accumulator
 	d := Docker{
+		Log:       testutil.Logger{},
 		newClient: newClient,
 		TagEnvironment: []string{"ENVVAR1", "ENVVAR2", "ENVVAR3", "ENVVAR5",
 			"ENVVAR6", "ENVVAR7", "ENVVAR8", "ENVVAR9"},
@@ -911,6 +923,7 @@ func TestDockerGatherInfo(t *testing.T) {
 func TestDockerGatherSwarmInfo(t *testing.T) {
 	var acc testutil.Accumulator
 	d := Docker{
+		Log:       testutil.Logger{},
 		newClient: newClient,
 	}
 
@@ -1018,6 +1031,7 @@ func TestContainerStateFilter(t *testing.T) {
 			}
 
 			d := Docker{
+				Log:                   testutil.Logger{},
 				newClient:             newClientFunc,
 				ContainerStateInclude: tt.include,
 				ContainerStateExclude: tt.exclude,
@@ -1079,6 +1093,7 @@ func TestContainerName(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			d := Docker{
+				Log:       testutil.Logger{},
 				newClient: tt.clientFunc,
 			}
 			var acc testutil.Accumulator
@@ -1093,4 +1108,38 @@ func TestContainerName(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestHostnameFromID(t *testing.T) {
+	tests := []struct {
+		name   string
+		id     string
+		expect string
+	}{
+		{
+			name:   "Real ID",
+			id:     "565e3a55f5843cfdd4aa5659a1a75e4e78d47f73c3c483f782fe4a26fc8caa07",
+			expect: "565e3a55f584",
+		},
+		{
+			name:   "Short ID",
+			id:     "shortid123",
+			expect: "shortid123",
+		},
+		{
+			name:   "No ID",
+			id:     "",
+			expect: "shortid123",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			output := hostnameFromID(test.id)
+			if test.expect != output {
+				t.Logf("Container ID for hostname is wrong. Want: %s, Got: %s", output, test.expect)
+			}
+		})
+	}
+
 }

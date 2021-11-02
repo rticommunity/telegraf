@@ -2,7 +2,6 @@ package vsphere
 
 import (
 	"context"
-	"log"
 	"reflect"
 	"strings"
 
@@ -54,7 +53,7 @@ func (f *Finder) Find(ctx context.Context, resType, path string, dst interface{}
 		return err
 	}
 	objectContentToTypedArray(objs, dst)
-	log.Printf("D! [inputs.vsphere] Find(%s, %s) returned %d objects", resType, path, len(objs))
+	f.client.log.Debugf("Find(%s, %s) returned %d objects", resType, path, len(objs))
 	return nil
 }
 
@@ -234,12 +233,12 @@ func init() {
 	}
 
 	addFields = map[string][]string{
-		"HostSystem": {"parent"},
+		"HostSystem": {"parent", "summary.customValue", "customValue"},
 		"VirtualMachine": {"runtime.host", "config.guestId", "config.uuid", "runtime.powerState",
-			"summary.customValue", "guest.net", "guest.hostName"},
-		"Datastore":              {"parent", "info"},
-		"ClusterComputeResource": {"parent"},
-		"Datacenter":             {"parent"},
+			"summary.customValue", "guest.net", "guest.hostName", "customValue"},
+		"Datastore":              {"parent", "info", "customValue"},
+		"ClusterComputeResource": {"parent", "customValue"},
+		"Datacenter":             {"parent", "customValue"},
 	}
 
 	containers = map[string]interface{}{

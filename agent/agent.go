@@ -196,6 +196,7 @@ func (a *Agent) Test(ctx context.Context, waitDuration time.Duration) error {
 		}
 	}
 
+	hasErrors := false
 	for _, input := range a.Config.Inputs {
 		select {
 		case <-ctx.Done():
@@ -215,20 +216,30 @@ func (a *Agent) Test(ctx context.Context, waitDuration time.Duration) error {
 			nulAcc.SetPrecision(a.Precision())
 			if err := input.Input.Gather(nulAcc); err != nil {
 				acc.AddError(err)
+				hasErrors = true
 			}
 
 			time.Sleep(500 * time.Millisecond)
 			if err := input.Input.Gather(acc); err != nil {
 				acc.AddError(err)
+				hasErrors = true
 			}
 		default:
 			if err := input.Input.Gather(acc); err != nil {
 				acc.AddError(err)
+				hasErrors = true
 			}
 		}
 	}
 
-	if NErrors.Get() > 0 {
+	if hasServiceInputs {
+		log.Printf("D! [agent] Waiting for service inputs")
+		internal.SleepContext(ctx, waitDuration)
+		log.Printf("D! [agent] Stopping service inputs")
+		a.stopServiceInputs()
+	}
+
+	if hasErrors {
 		return fmt.Errorf("One or more input plugins had an error")
 	}
 	return nil
@@ -494,6 +505,12 @@ func (a *Agent) runOutputs(
 		// Overwrite agent flush_interval if this plugin has its own.
 		if output.Config.FlushInterval != 0 {
 			interval = output.Config.FlushInterval
+		}
+
+		jitter := jitter
+		// Overwrite agent flush_jitter if this plugin has its own.
+		if output.Config.FlushJitter != nil {
+			jitter = *output.Config.FlushJitter
 		}
 
 		wg.Add(1)

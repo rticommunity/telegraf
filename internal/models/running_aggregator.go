@@ -29,10 +29,11 @@ func NewRunningAggregator(aggregator telegraf.Aggregator, config *AggregatorConf
 		tags["alias"] = config.Alias
 	}
 
-	logger := &Logger{
-		Name: logName("aggregators", config.Name, config.Alias),
-		Errs: selfstat.Register("aggregate", "errors", tags),
-	}
+	aggErrorsRegister := selfstat.Register("aggregate", "errors", tags)
+	logger := NewLogger("aggregators", config.Name, config.Alias)
+	logger.OnErr(func() {
+		aggErrorsRegister.Incr(1)
+	})
 
 	setLogIfExist(aggregator, logger)
 
@@ -148,7 +149,7 @@ func (r *RunningAggregator) Add(m telegraf.Metric) bool {
 	defer r.Unlock()
 
 	if m.Time().Before(r.periodStart.Add(-r.Config.Grace)) || m.Time().After(r.periodEnd.Add(r.Config.Delay)) {
-		r.log.Debugf("metric is outside aggregation window; discarding. %s: m: %s e: %s g: %s",
+		r.log.Debugf("Metric is outside aggregation window; discarding. %s: m: %s e: %s g: %s",
 			m.Time(), r.periodStart, r.periodEnd, r.Config.Grace)
 		r.MetricsDropped.Incr(1)
 		return r.Config.DropOriginal
@@ -175,4 +176,8 @@ func (r *RunningAggregator) push(acc telegraf.Accumulator) {
 	r.Aggregator.Push(acc)
 	elapsed := time.Since(start)
 	r.PushTime.Incr(elapsed.Nanoseconds())
+}
+
+func (r *RunningAggregator) Log() telegraf.Logger {
+	return r.log
 }
