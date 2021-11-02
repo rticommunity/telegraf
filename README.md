@@ -56,6 +56,7 @@ Telegraf requires Go version 1.12 or newer, the Makefile requires GNU make.
    ```
    cd telegraf
    make
+   ```
 
 ### Changelog
 
@@ -97,7 +98,9 @@ These builds are generated from the master branch:
 RTI Go Connector dynamically links to RTI Connector C library. The path for Connector C library should be included in the environment variable for library path (e.g. ```LD_LIBRARY_PATH```). After you build Telegraf, the RTI C Connector library is checked out under the vendor directory. You can include the path like the following.
 
 ``` 
-$ export LD_LIBRARY_PATH=$GOPATH/src/github.com/influxdata/telegraf/vendor/github.com/rticommunity/rticonnextdds-connector-go/rticonnextdds-connector/lib/x64Linux2.6gcc4.4.5:$LD_LIBRARY_PATH
+$ cd ~/src
+$ git clone https://github.com/rticommunity/rticonnextdds-connector-go.git
+$ export LD_LIBRARY_PATH=~/src/rticonnextdds-connector-go/rticonnextdds-connector/lib/linux-x64:$LD_LIBRARY_PATH
 ```
 
 See usage with:
