@@ -39,10 +39,6 @@ Telegraf shares the same [minimum requirements][] as Go:
 
 ## Installation:
 
-Telegraf requires golang version 1.10 or newer, the Makefile requires GNU make.
-
-Ansible role: https://github.com/rossmcdonald/telegraf
-
 ### From Source:
 
 Telegraf requires Go version 1.12 or newer, the Makefile requires GNU make.
