@@ -1089,7 +1089,7 @@ func buildAggregator(name string, tbl *ast.Table) (*models.AggregatorConfig, err
 				var err error
 				conf.DropOriginal, err = strconv.ParseBool(b.Value)
 				if err != nil {
-					log.Printf("Error parsing boolean value for %s: %s\n", name, err)
+					return nil, fmt.Errorf("error parsing boolean value for %s: %s", name, err)
 				}
 			}
 		}
@@ -1131,7 +1131,7 @@ func buildAggregator(name string, tbl *ast.Table) (*models.AggregatorConfig, err
 	if node, ok := tbl.Fields["tags"]; ok {
 		if subtbl, ok := node.(*ast.Table); ok {
 			if err := toml.UnmarshalTable(subtbl, conf.Tags); err != nil {
-				log.Printf("Could not parse tags for input %s\n", name)
+				return nil, fmt.Errorf("could not parse tags for input %s", name)
 			}
 		}
 	}
@@ -1165,7 +1165,7 @@ func buildProcessor(name string, tbl *ast.Table) (*models.ProcessorConfig, error
 				var err error
 				conf.Order, err = strconv.ParseInt(b.Value, 10, 64)
 				if err != nil {
-					log.Printf("Error parsing int value for %s: %s\n", name, err)
+					return nil, fmt.Errorf("error parsing int value for %s: %s", name, err)
 				}
 			}
 		}
@@ -1380,7 +1380,7 @@ func buildInput(name string, tbl *ast.Table) (*models.InputConfig, error) {
 	if node, ok := tbl.Fields["tags"]; ok {
 		if subtbl, ok := node.(*ast.Table); ok {
 			if err := toml.UnmarshalTable(subtbl, cp.Tags); err != nil {
-				log.Printf("E! Could not parse tags for input %s\n", name)
+				return nil, fmt.Errorf("could not parse tags for input %s\n", name)
 			}
 		}
 	}
@@ -2138,11 +2138,38 @@ func buildOutput(name string, tbl *ast.Table) (*models.OutputConfig, error) {
 		}
 	}
 
+	if node, ok := tbl.Fields["name_override"]; ok {
+		if kv, ok := node.(*ast.KeyValue); ok {
+			if str, ok := kv.Value.(*ast.String); ok {
+				oc.NameOverride = str.Value
+			}
+		}
+	}
+
+	if node, ok := tbl.Fields["name_suffix"]; ok {
+		if kv, ok := node.(*ast.KeyValue); ok {
+			if str, ok := kv.Value.(*ast.String); ok {
+				oc.NameSuffix = str.Value
+			}
+		}
+	}
+
+	if node, ok := tbl.Fields["name_prefix"]; ok {
+		if kv, ok := node.(*ast.KeyValue); ok {
+			if str, ok := kv.Value.(*ast.String); ok {
+				oc.NamePrefix = str.Value
+			}
+		}
+	}
+
 	delete(tbl.Fields, "flush_interval")
 	delete(tbl.Fields, "flush_jitter")
 	delete(tbl.Fields, "metric_buffer_limit")
 	delete(tbl.Fields, "metric_batch_size")
 	delete(tbl.Fields, "alias")
+	delete(tbl.Fields, "name_override")
+	delete(tbl.Fields, "name_suffix")
+	delete(tbl.Fields, "name_prefix")
 
 	return oc, nil
 }

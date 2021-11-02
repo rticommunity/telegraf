@@ -16,6 +16,7 @@ import (
 	"github.com/influxdata/telegraf/plugins/parsers"
 	"github.com/rticommunity/rticonnextdds-connector-go"
 	"time"
+	"log"
 )
 
 type DDSConsumer struct {
@@ -185,10 +186,21 @@ func (d *DDSConsumer) process() {
 	for {
 		d.connector.Wait(-1)
 		d.reader.Take()
-		numOfSamples := d.reader.Samples.GetLength()
+		numOfSamples, err := d.reader.Samples.GetLength()
+                if err != nil {
+			log.Println("ERROR:", err)
+                        continue
+                }
+
 
 		for i := 0; i < numOfSamples; i++ {
-			if d.reader.Infos.IsValid(i) {
+			valid, err := d.reader.Infos.IsValid(i)
+                        if err != nil {
+			        log.Println("ERROR:", err)
+                                continue
+                        }
+
+			if valid {
 				var m Metric
 				d.reader.Samples.Get(i, &m)
 
