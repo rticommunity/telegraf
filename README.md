@@ -46,7 +46,7 @@ Telegraf requires Go version 1.12 or newer, the Makefile requires GNU make.
 1. [Install Go](https://golang.org/doc/install) >=1.12 (1.13 recommended)
 2. Clone the Telegraf repository:
    ```
-   git clone https://github.com/influxdata/telegraf.git
+   git clone https://github.com/rticommunity/telegraf.git
    ```
 3. Run `make` from the source directory
    ```
