@@ -514,6 +514,8 @@ github.com/rticommunity/rticonnextdds-connector-go v0.0.0-20210910025031-0efc591
 github.com/rticommunity/rticonnextdds-connector-go v0.0.0-20210910025031-0efc59161e6b/go.mod h1:CW9SIWT9mMs5xromuUnMq2QpTRcRcZn8tw20VHBYwLs=
 github.com/rticommunity/rticonnextdds-connector-go v0.0.0-20220511144624-17ae0b6cb039 h1:I/o5xSYl8e3qhugvRltOsi1vOZBD1LdAASlYZGfx5LQ=
 github.com/rticommunity/rticonnextdds-connector-go v0.0.0-20220511144624-17ae0b6cb039/go.mod h1:KUklHM+3i9vmtx6Lru3Xw6apkzgyiDqTkyPPrSUYQoM=
+github.com/rticommunity/rticonnextdds-connector-go v0.5.3 h1:LmM9aDDwvyLB5AXw/LxlhD6012rqoJZkV6bqQLcPHrM=
+github.com/rticommunity/rticonnextdds-connector-go v0.5.3/go.mod h1:MNfovH6vHD6+4zOdXNaqRU6ppZXU6SEqSBt4UvDIEnQ=
 github.com/safchain/ethtool v0.0.0-20200218184317-f459e2d13664 h1:gvolwzuDhul9qK6/oHqxCHD5TEYfsWNBGidOeG6kvpk=
 github.com/safchain/ethtool v0.0.0-20200218184317-f459e2d13664/go.mod h1:Z0q5wiBQGYcxhMZ6gUqHn6pYNLypFAvaL3UvgZLR0U4=
 github.com/samuel/go-zookeeper v0.0.0-20180130194729-c4fab1ac1bec h1:6ncX5ko6B9LntYM0YBRXkiSaZMmLYeZ/NWcmeB43mMY=
@@ -868,6 +870,8 @@ gopkg.in/yaml.v2 v2.2.5 h1:ymVxjfMaHvXD8RqPRmzHHsB3VvucivSkIAvJFDI5O3c=
 gopkg.in/yaml.v2 v2.2.5/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c h1:dUUwHk2QECo/6vqA44rthZ8ie2QXMNeKRTHCNY2nXvo=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+gopkg.in/yaml.v3 v3.0.0 h1:hjy8E9ON/egN1tAYqKb61G10WtihqetD4sz2H+8nIeA=
+gopkg.in/yaml.v3 v3.0.0/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 gotest.tools v2.2.0+incompatible h1:VsBPFP1AI068pPrMxtb/S8Zkgf9xEmTLJjfM+P5UIEo=
 gotest.tools v2.2.0+incompatible/go.mod h1:DsYFclhRJ6vuDpmuTbkuFWG+y2sxOXAzmJt81HFBacw=
 honnef.co/go/tools v0.0.0-20180728063816-88497007e858/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
