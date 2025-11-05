@@ -26,27 +26,9 @@
         <domain_participant name="Zero" domain_ref="MyDomainLibrary::MyDomain">
             <subscriber name="MySubscriber">
                 <data_reader name="MySquareReader" topic_ref="Square">
-                    <!-- Optional QoS settings -->
-                    <datareader_qos>
-                        <reliability>
-                            <kind>RELIABLE_RELIABILITY_QOS</kind>
-                        </reliability>
-                        <durability>
-                            <kind>TRANSIENT_LOCAL_DURABILITY_QOS</kind>
-                        </durability>
-                        <history>
-                            <kind>KEEP_LAST_HISTORY_QOS</kind>
-                            <depth>10</depth>
-                        </history>
-                    </datareader_qos>
                 </data_reader>
                 
                 <data_reader name="MyCircleReader" topic_ref="Circle">
-                    <datareader_qos>
-                        <reliability>
-                            <kind>RELIABLE_RELIABILITY_QOS</kind>
-                        </reliability>
-                    </datareader_qos>
                 </data_reader>
             </subscriber>
         </domain_participant>

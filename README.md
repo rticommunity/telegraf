@@ -17,8 +17,7 @@ metrics, logs, and other arbitrary data.
 * **Flexible Configuration**: XML-based DDS configuration supporting participants, topics, and QoS settings
 
 📖 **Quick Start with DDS**: 
-* [Installation Guide](/plugins/inputs/dds_consumer/INSTALL.md) - Setup instructions for RTI Connext DDS
-* [Configuration Guide](/plugins/inputs/dds_consumer/README.md) - Plugin configuration and usage examples
+* [DDS Consumer Plugin Guide](/plugins/inputs/dds_consumer/README.md) - Complete setup and configuration guide
 
 ---
 
