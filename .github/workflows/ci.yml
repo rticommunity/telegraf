@@ -18,9 +18,6 @@ jobs:
           - os: windows-latest
             go-version: '1.25'
             arch: x64
-          - os: macos-13  # Intel-based macOS runner
-            go-version: '1.25'
-            arch: x64
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -61,13 +58,6 @@ jobs:
         echo "Library files in win-x64:"
         dir rticonnextdds-connector\lib\win-x64\ || echo "win-x64 directory not found"
 
-    - name: Verify library installation (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        ls -la rticonnextdds-connector/lib/
-        echo "Library files in osx-x64:"
-        ls -la rticonnextdds-connector/lib/osx-x64/ || echo "osx-x64 directory not found"
-
     - name: Install dependencies
       run: |
         go get -v -t -d ./...
@@ -77,11 +67,6 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         echo "LD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/linux-x64:$LD_LIBRARY_PATH" >> $GITHUB_ENV
-
-    - name: Set library path (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        echo "DYLD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/osx-x64:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
 
     - name: Set library path (Windows)
       if: runner.os == 'Windows'
