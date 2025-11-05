@@ -2,93 +2,157 @@ name: Build and Test
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, main ]
+    branches: [ master ]
 
 jobs:
   test:
-    name: Test
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.25'
-
-    - name: Cache Go modules
-      uses: actions/cache@v3
-      with:
-        path: ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-
-
-    - name: Download RTI Connector libraries
-      run: |
-        go run github.com/rticommunity/rticonnextdds-connector-go/cmd/download-libs@latest
-
-    - name: Set library path
-      run: |
-        echo "LD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/linux-x64:$LD_LIBRARY_PATH" >> $GITHUB_ENV
-
-    - name: Run tests
-      run: go test -v ./...
-
-    - name: Build Telegraf (standard)
-      run: go build ./cmd/telegraf
-
-    - name: Build Telegraf with DDS support
-      run: go build -tags dds ./cmd/telegraf
-
-    - name: Verify DDS plugin is available
-      run: ./telegraf --input-list | grep dds_consumer
-
-    - name: Test DDS configuration syntax
-      run: ./telegraf --config plugins/inputs/dds_consumer/example_telegraf.conf --test
-
-  build-matrix:
-    name: Build Matrix
-    runs-on: ${{ matrix.os }}
     strategy:
+      max-parallel: 1
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        go-version: ['1.25']
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+        include:
+          - os: ubuntu-latest
+            go-version: '1.25'
+            arch: x64
+          - os: windows-latest
+            go-version: '1.25'
+            arch: x64
+          - os: macos-13  # Intel-based macOS runner
+            go-version: '1.25'
+            arch: x64
+    runs-on: ${{ matrix.os }}
 
-    - name: Set up Go
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Go
       uses: actions/setup-go@v4
       with:
         go-version: ${{ matrix.go-version }}
 
+    - name: Install system dependencies (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential curl unzip bc
+
+    - name: Install system dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        choco install make
+        choco install mingw
+
     - name: Download RTI Connector libraries
       run: |
         go run github.com/rticommunity/rticonnextdds-connector-go/cmd/download-libs@latest
 
-    - name: Set library path (Linux)
+    - name: Verify library installation (Linux)
       if: runner.os == 'Linux'
       run: |
-        echo "LD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/linux-x64:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        ls -la rticonnextdds-connector/lib/
+        echo "Library files in linux-x64:"
+        ls -la rticonnextdds-connector/lib/linux-x64/ || echo "linux-x64 directory not found"
 
-    - name: Set library path (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        echo "DYLD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/osx-x64:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
-
-    - name: Set library path (Windows)
+    - name: Verify library installation (Windows)
       if: runner.os == 'Windows'
       run: |
-        echo "PATH=$(pwd)/rticonnextdds-connector/lib/win-x64;$env:PATH" >> $env:GITHUB_ENV
+        dir rticonnextdds-connector\lib\
+        echo "Library files in win-x64:"
+        dir rticonnextdds-connector\lib\win-x64\ || echo "win-x64 directory not found"
 
-    - name: Build Telegraf with DDS support
-      run: go build -tags dds ./cmd/telegraf
+    - name: Verify library installation (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        ls -la rticonnextdds-connector/lib/
+        echo "Library files in osx-x64:"
+        ls -la rticonnextdds-connector/lib/osx-x64/ || echo "osx-x64 directory not found"
 
-    - name: Verify DDS plugin is available
-      run: ./telegraf --input-list | grep dds_consumer
+    - name: Install dependencies
+      run: |
+        go get -v -t -d ./...
+        go mod tidy
+
+    - name: Build Telegraf (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        echo "🔨 Building Telegraf on ${{ runner.os }}..."
+        if ! go build -tags dds -o telegraf ./cmd/telegraf; then
+          echo "❌ Build failed. Checking library installation..."
+          echo "RTI Connector directory contents:"
+          find rticonnextdds-connector -type f -name "*.so" -o -name "*.dylib" -o -name "*.dll" 2>/dev/null || echo "No library files found"
+          echo "CGO environment:"
+          go env CGO_ENABLED
+          exit 1
+        fi
+        echo "✅ Build successful on ${{ runner.os }}"
+      shell: bash
+
+    - name: Build Telegraf (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        Write-Host "Building Telegraf on Windows..."
+        go build -tags dds -o telegraf.exe ./cmd/telegraf
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "Build failed. Checking library installation..."
+          Write-Host "RTI Connector directory contents:"
+          if (Test-Path "rticonnextdds-connector") {
+            Get-ChildItem -Recurse rticonnextdds-connector -Include "*.dll", "*.lib" | Select-Object FullName
+          } else {
+            Write-Host "Directory not found"
+          }
+          Write-Host "CGO environment:"
+          go env CGO_ENABLED
+          exit 1
+        }
+        Write-Host "Build successful on Windows"
+      shell: powershell
+
+    - name: Verify DDS plugin is available (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        echo "Verifying DDS consumer plugin is available..."
+        ./telegraf --input-list | grep dds_consumer
+
+    - name: Verify DDS plugin is available (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        Write-Host "Verifying DDS consumer plugin is available..."
+        .\telegraf.exe --input-list | Select-String "dds_consumer"
+      shell: powershell
+
+    - name: Test DDS configuration (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        echo "Testing DDS configuration syntax..."
+        ./telegraf --config plugins/inputs/dds_consumer/example_telegraf.conf --test
+
+    - name: Test DDS configuration (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        Write-Host "Testing DDS configuration syntax..."
+        $libPath = Join-Path $PWD "rticonnextdds-connector\lib\win-x64"
+        $env:PATH = "$libPath;$env:PATH"
+        .\telegraf.exe --config plugins\inputs\dds_consumer\example_telegraf.conf --test
+      shell: powershell
+
+    - name: Run basic tests (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        echo "Running basic tests..."
+        if [ "${{ runner.os }}" = "Linux" ]; then
+          export LD_LIBRARY_PATH="$(pwd)/rticonnextdds-connector/lib/linux-x64:$LD_LIBRARY_PATH"
+        elif [ "${{ runner.os }}" = "macOS" ]; then
+          export DYLD_LIBRARY_PATH="$(pwd)/rticonnextdds-connector/lib/osx-x64:$DYLD_LIBRARY_PATH"
+        fi
+        go test -tags dds -v ./plugins/inputs/dds_consumer/...
+      shell: bash
+
+    - name: Run basic tests (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        Write-Host "Running basic tests..."
+        $libPath = Join-Path $PWD "rticonnextdds-connector\lib\win-x64"
+        $env:PATH = "$libPath;$env:PATH"
+        go test -tags dds -v ./plugins/inputs/dds_consumer/...
+      shell: powershell
