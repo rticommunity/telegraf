@@ -1,4 +1,4 @@
-# ![tiger](assets/TelegrafTigerSmall.png "tiger") Telegraf with DDS Support
+# ![tiger](assets/TelegrafTigerSmall.png "tiger") Telegraf with Connext DDS Support
 
 [![GoDoc](https://img.shields.io/badge/doc-reference-00ADD8.svg?logo=go)](https://godoc.org/github.com/influxdata/telegraf)
 [![Docker pulls](https://img.shields.io/docker/pulls/library/telegraf.svg)](https://hub.docker.com/_/telegraf/)
