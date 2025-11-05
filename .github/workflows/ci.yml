@@ -73,6 +73,23 @@ jobs:
         go get -v -t -d ./...
         go mod tidy
 
+    - name: Set library path (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        echo "LD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/linux-x64:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+
+    - name: Set library path (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        echo "DYLD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/osx-x64:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
+
+    - name: Set library path (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        $libPath = Join-Path $PWD "rticonnextdds-connector\lib\win-x64"
+        echo "PATH=$libPath;$env:PATH" >> $env:GITHUB_ENV
+      shell: powershell
+
     - name: Build Telegraf (Unix)
       if: runner.os != 'Windows'
       run: |
@@ -131,8 +148,6 @@ jobs:
       if: runner.os == 'Windows'
       run: |
         Write-Host "Testing DDS configuration syntax..."
-        $libPath = Join-Path $PWD "rticonnextdds-connector\lib\win-x64"
-        $env:PATH = "$libPath;$env:PATH"
         .\telegraf.exe --config plugins\inputs\dds_consumer\example_telegraf.conf --test
       shell: powershell
 
@@ -140,11 +155,6 @@ jobs:
       if: runner.os != 'Windows'
       run: |
         echo "Running basic tests..."
-        if [ "${{ runner.os }}" = "Linux" ]; then
-          export LD_LIBRARY_PATH="$(pwd)/rticonnextdds-connector/lib/linux-x64:$LD_LIBRARY_PATH"
-        elif [ "${{ runner.os }}" = "macOS" ]; then
-          export DYLD_LIBRARY_PATH="$(pwd)/rticonnextdds-connector/lib/osx-x64:$DYLD_LIBRARY_PATH"
-        fi
         go test -tags dds -v ./plugins/inputs/dds_consumer/...
       shell: bash
 
@@ -152,7 +162,5 @@ jobs:
       if: runner.os == 'Windows'
       run: |
         Write-Host "Running basic tests..."
-        $libPath = Join-Path $PWD "rticonnextdds-connector\lib\win-x64"
-        $env:PATH = "$libPath;$env:PATH"
         go test -tags dds -v ./plugins/inputs/dds_consumer/...
       shell: powershell
