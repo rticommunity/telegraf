@@ -13,7 +13,9 @@
 package dds_consumer
 
 import (
+	"context"
 	"log"
+	"sync"
 	"time"
 
 	"github.com/influxdata/telegraf"
@@ -41,6 +43,11 @@ type DDSConsumer struct {
 	// Telegraf entities
 	parser *json.Parser
 	acc    telegraf.Accumulator
+
+	// Shutdown coordination
+	ctx    context.Context
+	cancel context.CancelFunc
+	wg     sync.WaitGroup
 }
 
 // Default configurations
@@ -85,15 +92,23 @@ func (d *DDSConsumer) Start(acc telegraf.Accumulator) error {
 	// Keep the Telegraf accumulator internally
 	d.acc = acc
 
+	// Initialize shutdown coordination
+	d.ctx, d.cancel = context.WithCancel(context.Background())
+
 	var err error
 
 	// Create a Connector entity
 	d.connector, err = rti.NewConnector(d.ParticipantConfig, d.ConfigFilePath)
-	checkFatalError(err)
+	if err != nil {
+		return err
+	}
 
 	// Get a DDS reader
 	d.reader, err = d.connector.GetInput(d.ReaderConfig)
-	checkFatalError(err)
+	if err != nil {
+		d.connector.Delete()
+		return err
+	}
 
 	// Initialize JSON parser
 	d.parser = &json.Parser{
@@ -101,23 +116,58 @@ func (d *DDSConsumer) Start(acc telegraf.Accumulator) error {
 		TagKeys:    d.TagKeys,
 	}
 	err = d.parser.Init()
-	checkFatalError(err)
+	if err != nil {
+		d.connector.Delete()
+		return err
+	}
 
 	// Start a thread for ingesting DDS
+	d.wg.Add(1)
 	go d.process()
 
 	return nil
 }
 
 func (d *DDSConsumer) Stop() {
-	d.connector.Delete()
+	// Signal the process goroutine to stop
+	if d.cancel != nil {
+		d.cancel()
+	}
+
+	// Wait for the process goroutine to finish
+	d.wg.Wait()
+
+	// Now safely delete the connector
+	if d.connector != nil {
+		d.connector.Delete()
+		d.connector = nil
+	}
 }
 
 // Take DDS samples from the DataReader and ingest them to Telegraf outputs
 func (d *DDSConsumer) process() {
+	defer d.wg.Done()
+
 	for {
-		d.connector.Wait(-1)
-		d.reader.Take()
+		select {
+		case <-d.ctx.Done():
+			// Shutdown signal received
+			log.Println("DDS Consumer: Stopping processing loop")
+			return
+		default:
+			// Continue processing
+		}
+
+		// Use a timeout for Wait to avoid blocking indefinitely
+		waitTimeout := 1000 // 1 second timeout in milliseconds
+		d.connector.Wait(waitTimeout)
+
+		err := d.reader.Take()
+		if err != nil {
+			checkError(err)
+			continue
+		}
+
 		numOfSamples, err := d.reader.Samples.GetLength()
 		checkError(err)
 		if err != nil {
@@ -133,21 +183,35 @@ func (d *DDSConsumer) process() {
 			if valid {
 				json, err := d.reader.Samples.GetJSON(i)
 				checkError(err)
+				if err != nil {
+					continue
+				}
 				ts, err := d.reader.Infos.GetSourceTimestamp(i)
 				checkError(err)
-				go func(jsonStr string) {
-					// Parse the JSON object to metrics
-					metrics, err := d.parser.Parse([]byte(jsonStr))
-					checkError(err)
+				if err != nil {
+					continue
+				}
 
-					// Iterate the metrics
-					for _, metric := range metrics {
-						// Add a metric to an output plugin
-						d.acc.AddFields(metric.Name(), metric.Fields(), metric.Tags(), time.Unix(0, ts))
-					}
-				}(json)
+				// Process synchronously to avoid goroutine leaks on shutdown
+				d.processMessage(json, ts)
 			}
 		}
+	}
+}
+
+// Helper function to process individual messages
+func (d *DDSConsumer) processMessage(jsonStr string, ts int64) {
+	// Parse the JSON object to metrics
+	metrics, err := d.parser.Parse([]byte(jsonStr))
+	checkError(err)
+	if err != nil {
+		return
+	}
+
+	// Iterate the metrics
+	for _, metric := range metrics {
+		// Add a metric to an output plugin
+		d.acc.AddFields(metric.Name(), metric.Fields(), metric.Tags(), time.Unix(0, ts))
 	}
 }
 
