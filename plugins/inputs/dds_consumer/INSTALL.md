@@ -4,28 +4,37 @@ This guide provides step-by-step instructions for installing and configuring the
 
 ## Prerequisites
 
-**Go Environment**: Ensure Go is properly installed and configured
-   - Go 1.18 or later is recommended
+- **Go Environment**: Ensure Go is properly installed and configured
+  - Go 1.18 or later is recommended
+- **RTI Connector for Go**: This plugin uses RTI Connector libraries instead of requiring a full RTI Connext DDS installation
+- **Network connectivity**: Access to download RTI Connector libraries from GitHub
 
 ## Installation Steps
 
-### 1. Set RTI Environment Variables
+### 1. Download RTI Connector Libraries
 
-Before running Telegraf, ensure RTI environment is configured:
+Download the RTI Connector libraries using the Go command:
 
-#### Linux/macOS:
 ```bash
-# Add to your .bashrc or .profile
-export NDDSHOME=/path/to/rti_connext_dds
-export RTI_LICENSE_FILE=/path/to/rti_license.dat
-export LD_LIBRARY_PATH=$NDDSHOME/lib/<arch>:$LD_LIBRARY_PATH
+go run github.com/rticommunity/rticonnextdds-connector-go/cmd/download-libs@latest
 ```
 
-#### Windows:
-```cmd
-set NDDSHOME=C:\path\to\rti_connext_dds
-set RTI_LICENSE_FILE=C:\path\to\rti_license.dat
-set PATH=%NDDSHOME%\bin;<arch>;%PATH%
+### 2. Set Library Path (for Runtime)
+
+Configure the library path based on your platform:
+
+```bash
+# macOS (Apple Silicon/ARM64)
+export DYLD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/osx-arm64:$DYLD_LIBRARY_PATH
+
+# macOS (Intel/x86_64)  
+export DYLD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/osx-x64:$DYLD_LIBRARY_PATH
+
+# Linux  
+export LD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/linux-x64:$LD_LIBRARY_PATH
+
+# Windows (PowerShell)
+$env:PATH = "$(pwd)\rticonnextdds-connector\lib\win-x64;$env:PATH"
 ```
 
 ### 3. Build Telegraf with DDS Plugin
@@ -85,45 +94,7 @@ Add the DDS consumer plugin to your Telegraf configuration:
 
 ### Common Issues
 
-1. **RTI License Error**: Ensure `RTI_LICENSE_FILE` points to a valid license
-2. **Library Not Found**: Verify `LD_LIBRARY_PATH` includes RTI libraries
-3. **XML Parse Error**: Validate XML syntax and participant/reader names
-4. **Network Issues**: Check DDS domain ID and network connectivity
-
-### Debug Commands
-
-```bash
-# Test DDS connectivity
-rtiddsping -domainId 0
-
-# Check environment
-echo $NDDSHOME
-echo $RTI_LICENSE_FILE
-
-# Validate XML configuration
-rtiddsgen -validate your_config.xml
-```
-
-## Platform-Specific Notes
-
-### Linux
-- May require additional network configuration for multicast
-- Check firewall settings for DDS traffic
-
-### Windows
-- Ensure Visual C++ Redistributable is installed
-- Check Windows Firewall for DDS traffic
-
-### Docker
-- Use host networking mode for DDS multicast
-- Mount RTI installation and license file
-
-## Support
-
-For RTI Connext DDS specific issues:
-- [RTI Community Forums](https://community.rti.com)
-- [RTI Documentation](https://community.rti.com/documentation)
-
-For Telegraf specific issues:
-- [Telegraf GitHub Repository](https://github.com/influxdata/telegraf)
-- [InfluxData Community](https://community.influxdata.com)
+1. **Library Not Found**: Verify library path is correctly set for your platform
+2. **XML Parse Error**: Validate XML syntax and participant/reader names
+3. **Network Issues**: Check DDS domain ID and network connectivity
+4. **Architecture Mismatch**: Ensure you're using the correct library for your platform (ARM64 vs x86_64)
