@@ -1,4 +1,4 @@
-# ![tiger](assets/TelegrafTigerSmall.png "tiger") Telegraf
+# ![tiger](assets/TelegrafTigerSmall.png "tiger") Telegraf with DDS Support
 
 [![GoDoc](https://img.shields.io/badge/doc-reference-00ADD8.svg?logo=go)](https://godoc.org/github.com/influxdata/telegraf)
 [![Docker pulls](https://img.shields.io/docker/pulls/library/telegraf.svg)](https://hub.docker.com/_/telegraf/)
@@ -7,6 +7,22 @@
 
 Telegraf is an agent for collecting, processing, aggregating, and writing
 metrics, logs, and other arbitrary data.
+
+## 🚀 DDS Integration
+
+**This fork includes enhanced DDS (Data Distribution Service) support**, enabling seamless integration with RTI Connext DDS systems for real-time data collection and monitoring.
+
+* **Native DDS Consumer Plugin**: Collect metrics directly from DDS topics using XML-based configuration
+* **Real-time Data Processing**: Stream DDS data into Telegraf's metric pipeline for immediate processing and routing
+* **Flexible Configuration**: XML-based DDS configuration supporting participants, topics, and QoS settings
+
+📖 **Quick Start with DDS**: 
+* [Installation Guide](/plugins/inputs/dds_consumer/INSTALL.md) - Setup instructions for RTI Connext DDS
+* [Configuration Guide](/plugins/inputs/dds_consumer/README.md) - Plugin configuration and usage examples
+
+---
+
+## ⭐ Core Features
 
 * Offers a comprehensive suite of over 300 plugins, covering a wide range of
   functionalities including system monitoring, cloud services, and message
@@ -23,9 +39,9 @@ metrics, logs, and other arbitrary data.
 Users can choose plugins from a wide range of topics, including but not limited
 to:
 
+* **Messaging**: [DDS][], [AMQP][], [Kafka][], [MQTT][]
 * Devices: [OPC UA][], [Modbus][]
 * Logs: [File][], [Tail][], [Directory Monitor][]
-* Messaging: [AMQP][], [Kafka][], [MQTT][]
 * Monitoring: [OpenTelemetry][], [Prometheus][]
 * Networking: [Cisco TelemetryMDT][], [gNMI][]
 * System monitoring: [CPU][], [Memory][], [Disk][], [Network][], [SMART][],
@@ -103,6 +119,7 @@ and feature requests only.
 [Tail]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/tail
 [Directory Monitor]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/directory_monitor
 [AMQP]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/amqp_consumer
+[DDS]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/dds_consumer
 [Kafka]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/kafka_consumer
 [MQTT]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/mqtt_consumer
 [OpenTelemetry]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/opentelemetry
