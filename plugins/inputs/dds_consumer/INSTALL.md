@@ -4,11 +4,7 @@ This guide provides step-by-step instructions for installing and configuring the
 
 ## Prerequisites
 
-1. **RTI Connext DDS**: You must have RTI Connext DDS installed on your system
-   - Download from [RTI Website](https://www.rti.com/free-trial)
-   - Follow RTI's installation instructions for your platform
-
-2. **Go Environment**: Ensure Go is properly installed and configured
+**Go Environment**: Ensure Go is properly installed and configured
    - Go 1.18 or later is recommended
 
 ## Installation Steps
