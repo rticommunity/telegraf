@@ -119,7 +119,7 @@ and feature requests only.
 [Tail]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/tail
 [Directory Monitor]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/directory_monitor
 [AMQP]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/amqp_consumer
-[DDS]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/dds_consumer
+[DDS]: https://github.com/rticommunity/telegraf/tree/master/plugins/inputs/dds_consumer
 [Kafka]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/kafka_consumer
 [MQTT]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/mqtt_consumer
 [OpenTelemetry]: https://github.com/influxdata/telegraf/tree/master/plugins/inputs/opentelemetry
