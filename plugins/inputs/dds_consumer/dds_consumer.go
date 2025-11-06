@@ -76,6 +76,11 @@ func checkFatalError(err error) {
 
 func checkError(err error) {
 	if err != nil {
+		// "No Data" means the waitset timed out - this is expected behavior, not an error
+		if err.Error() == "DDS Exception: No Data" {
+			log.Println("WARNING: Waitset timeout - no DDS data available")
+			return
+		}
 		log.Println("ERROR:", err)
 	}
 }
@@ -158,9 +163,7 @@ func (d *DDSConsumer) process() {
 			// Continue processing
 		}
 
-		// Use a timeout for Wait to avoid blocking indefinitely
-		waitTimeout := 1000 // 1 second timeout in milliseconds
-		d.connector.Wait(waitTimeout)
+		d.connector.Wait(10000) // Wait 10 second for data
 
 		err := d.reader.Take()
 		if err != nil {
