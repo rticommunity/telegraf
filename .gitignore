@@ -21,3 +21,9 @@ process.yml
 resource.syso
 versioninfo.json
 .uuid
+
+# RTI Connector libraries (binary files)
+/rticonnextdds-connector/
+
+# Temporary files
+/tmp/
