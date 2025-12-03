@@ -12,16 +12,16 @@ The DDS consumer plugin reads metrics over DDS by creating readers defined in [X
 2. **Set library path** (choose your platform):
    ```bash
    # macOS (Apple Silicon/ARM64)
-   export DYLD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/osx-arm64/lib:$DYLD_LIBRARY_PATH
+   export DYLD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/osx-arm64:$DYLD_LIBRARY_PATH
    
-   # macOS (Intel/x86_64)  
-   export DYLD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/osx-x64/lib:$DYLD_LIBRARY_PATH
+   # macOS (Intel/x86_64) - requires v1.3.1
+   export DYLD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/osx-x64:$DYLD_LIBRARY_PATH
    
    # Linux  
-   export LD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/linux-x64/lib:$LD_LIBRARY_PATH
+   export LD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/linux-x64:$LD_LIBRARY_PATH
    
    # Windows (PowerShell)
-   $env:PATH = "$(Get-Location)\rticonnextdds-connector\win-x64\lib;$env:PATH"
+   $env:PATH = "$(Get-Location)\rticonnextdds-connector\lib\win-x64;$env:PATH"
    ```
 
 3. **Build Telegraf with DDS support**:
