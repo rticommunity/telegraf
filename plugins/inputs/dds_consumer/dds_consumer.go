@@ -35,6 +35,8 @@ type DDSConsumer struct {
 	// XML configuration names for DDS Readers
 	ReaderConfig string   `toml:"reader_config"`
 	TagKeys      []string `toml:"tag_keys"`
+	// String fields to capture (includes booleans and strings)
+	StringFields []string `toml:"string_fields"`
 
 	// RTI Connext Connector entities
 	connector *rti.Connector
@@ -63,6 +65,11 @@ var sampleConfig = `
 
   ## Tag key is an array of keys that should be added as tags.
   tag_keys = ["color"]
+
+  ## String fields is an array of keys that should be added as string fields.
+  ## Use this to capture boolean and string values from DDS samples.
+  ## Supports wildcard glob matching (e.g., "*" to capture all strings/booleans).
+  string_fields = ["*"]
 
   ## Override the base name of the measurement
   name_override = "shapes"
@@ -115,10 +122,11 @@ func (d *DDSConsumer) Start(acc telegraf.Accumulator) error {
 		return err
 	}
 
-	// Initialize JSON parser
+	// Initialize JSON parser with string fields support for booleans and strings
 	d.parser = &json.Parser{
-		MetricName: "dds",
-		TagKeys:    d.TagKeys,
+		MetricName:   "dds",
+		TagKeys:      d.TagKeys,
+		StringFields: d.StringFields,
 	}
 	err = d.parser.Init()
 	if err != nil {
