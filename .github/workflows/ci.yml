@@ -42,44 +42,10 @@ jobs:
 
     - name: Download RTI Connector libraries
       run: |
-        # Download libraries - specify platform explicitly to avoid misdetection
-        if [ "$RUNNER_OS" == "Linux" ]; then
-          go run github.com/rticommunity/rticonnextdds-connector-go/cmd/download-libs@latest -platform linux-x64
-        elif [ "$RUNNER_OS" == "Windows" ]; then
-          go run github.com/rticommunity/rticonnextdds-connector-go/cmd/download-libs@latest -platform win-x64
-        else
-          go run github.com/rticommunity/rticonnextdds-connector-go/cmd/download-libs@latest
-        fi
-        echo "Listing rticonnextdds-connector directory structure:"
-        find rticonnextdds-connector -type f 2>/dev/null | head -30 || dir rticonnextdds-connector /s 2>nul || echo "Directory listing failed"
-        # Fix nested directory issue if present
-        if [ -d "rticonnextdds-connector/rticonnextdds-connector" ]; then
-          echo "Fixing nested directory structure..."
-          mv rticonnextdds-connector/rticonnextdds-connector/* rticonnextdds-connector/
-          rmdir rticonnextdds-connector/rticonnextdds-connector
-          echo "Fixed directory structure:"
-          find rticonnextdds-connector -type f 2>/dev/null | head -30
-        fi
+        go run github.com/rticommunity/rticonnextdds-connector-go/cmd/download-libs@latest
+        echo "Library files:"
+        find rticonnextdds-connector -type f 2>/dev/null || dir rticonnextdds-connector /s
       shell: bash
-
-    - name: Verify library installation (Linux)
-      if: runner.os == 'Linux'
-      run: |
-        echo "Full directory structure:"
-        find rticonnextdds-connector -type f 2>/dev/null | head -50
-        echo ""
-        echo "Looking for .so files:"
-        find rticonnextdds-connector -name "*.so*" 2>/dev/null || echo "No .so files found"
-
-    - name: Verify library installation (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        Write-Host "Full directory structure:"
-        Get-ChildItem -Recurse rticonnextdds-connector | Select-Object FullName | Select-Object -First 50
-        Write-Host ""
-        Write-Host "Looking for .dll files:"
-        Get-ChildItem -Recurse rticonnextdds-connector -Include "*.dll" | Select-Object FullName
-      shell: powershell
 
     - name: Install dependencies
       run: |
@@ -89,39 +55,16 @@ jobs:
     - name: Set library path (Linux)
       if: runner.os == 'Linux'
       run: |
-        # Find the directory containing .so files (avoid broken pipe with different approach)
-        LIB_DIR=$(find rticonnextdds-connector -name "librtiddsconnector.so" -type f 2>/dev/null | head -1 | xargs -r dirname)
-        if [ -z "$LIB_DIR" ]; then
-          echo "ERROR: Could not find librtiddsconnector.so"
-          echo "Directory structure:"
-          find rticonnextdds-connector -type f
-          exit 1
-        fi
-        echo "Found library directory: $LIB_DIR"
-        # Use absolute path
-        ABS_LIB_DIR=$(cd "$LIB_DIR" && pwd)
-        echo "Absolute path: $ABS_LIB_DIR"
-        echo "LD_LIBRARY_PATH=$ABS_LIB_DIR:$LD_LIBRARY_PATH" >> $GITHUB_ENV
-        # Verify the library exists
-        ls -la "$ABS_LIB_DIR"/librtiddsconnector.so*
+        echo "LD_LIBRARY_PATH=$(pwd)/rticonnextdds-connector/lib/linux-x64:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        ls -la rticonnextdds-connector/lib/linux-x64/
 
     - name: Set library path (Windows)
       if: runner.os == 'Windows'
       run: |
-        # Find the directory containing .dll files
-        $dllFile = Get-ChildItem -Recurse rticonnextdds-connector -Filter "rtiddsconnector.dll" | Select-Object -First 1
-        if ($dllFile) {
-          $libPath = $dllFile.DirectoryName
-          Write-Host "Found library directory: $libPath"
-          Write-Host "Verifying library exists:"
-          Get-ChildItem $libPath -Filter "*.dll"
-          echo "PATH=$libPath;$env:PATH" >> $env:GITHUB_ENV
-        } else {
-          Write-Host "ERROR: Could not find rtiddsconnector.dll"
-          Write-Host "Directory structure:"
-          Get-ChildItem -Recurse rticonnextdds-connector
-          exit 1
-        }
+        $libPath = Join-Path $PWD "rticonnextdds-connector\lib\win-x64"
+        Write-Host "Library path: $libPath"
+        Get-ChildItem $libPath
+        echo "PATH=$libPath;$env:PATH" >> $env:GITHUB_ENV
       shell: powershell
 
     - name: Build Telegraf (Unix)
